@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:dio/dio.dart' show CancelToken;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:openlib/services/share_book.dart';
-// import 'package:flutter_svg/svg.dart';
 
 // Project imports:
 import 'package:openlib/services/annas_archieve.dart' show BookInfoData;
@@ -49,7 +49,7 @@ class BookInfoPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        title: const Text("Openlib"),
+        title: const Text("Megalib"),
         titleTextStyle: Theme.of(context).textTheme.displayLarge,
         actions: [
           bookInfo.maybeWhen(data: (data) {

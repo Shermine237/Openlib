@@ -1,6 +1,6 @@
 {
-    "name": "libgen",
-    "short_name": "libgen",
+    "name": "Megalib",
+    "short_name": "Megalib",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

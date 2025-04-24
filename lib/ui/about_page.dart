@@ -18,7 +18,7 @@ class AboutPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        title: const Text("Openlib"),
+        title: const Text("Megalib"),
         titleTextStyle: Theme.of(context).textTheme.displayLarge,
       ),
       body: const SingleChildScrollView(
@@ -68,7 +68,7 @@ class AboutPage extends StatelessWidget {
                 url: 'https://github.com/dstark5/Openlib',
               ),
               _UrlText(
-                  text: 'Contribute To Openlib',
+                  text: 'Contribute To Megalib',
                   url:
                       'https://github.com/dstark5/Openlib/blob/main/CONTRIBUTING.md'),
               _UrlText(
