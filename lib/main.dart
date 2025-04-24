@@ -94,7 +94,7 @@ class MyApp extends ConsumerWidget {
         );
       },
       debugShowCheckedModeBanner: false,
-      title: 'Openlib',
+      title: 'Megalib',
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: themeMode,
@@ -138,7 +138,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        title: const Text("Openlib"),
+        title: const Text("Megalib"),
         titleTextStyle: Theme.of(context).textTheme.displayLarge,
       ),
       body: _widgetOptions.elementAt(selectedIndex),
