@@ -21,13 +21,13 @@ class MyBook {
   MyBook(
       {required this.id,
       required this.title,
-      required this.author,
-      required this.thumbnail,
+      this.author,
+      this.thumbnail,
       required this.link,
-      required this.publisher,
-      required this.info,
-      required this.format,
-      required this.description});
+      this.publisher,
+      this.info,
+      this.format,
+      this.description});
 
   Map<String, dynamic> toMap() {
     return {
@@ -216,40 +216,50 @@ class MyLibraryDb {
   }
 
   Future<void> savePreference(String name, dynamic value) async {
+    final db = await database;
+    dynamic dbValue;
+    
     switch (value.runtimeType) {
-      case bool:
-        value = value ? 1 : 0;
+      case _ when value is String:
+        dbValue = value;
         break;
-      case int || String:
+      case _ when value is int:
+        dbValue = value;
+        break;
+      case _ when value is bool:
+        dbValue = value ? 1 : 0;
         break;
       default:
         throw 'Invalid type';
     }
-    Database dbInstance = await instance.database;
-    await dbInstance.insert(
+
+    await db.insert(
       'preferences',
-      {'name': name, 'value': value},
+      {'name': name, 'value': dbValue.toString()},
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
   Future<dynamic> getPreference(String name) async {
-    Database dbInstance = await instance.database;
-    List<Map<String, dynamic>> data = await dbInstance
-        .query('preferences', where: 'name = ?', whereArgs: [name]);
-    List<dynamic> dataList = List.generate(data.length, (i) {
-      return {'name': data[i]['name'], 'value': data[i]['value']};
-    });
-    if (dataList.isNotEmpty) {
-      // Convert to int if possible
-      int? preference = int.tryParse(dataList[0]['value']);
-      if (preference != null) {
-        return preference;
-      }
-      // Return string value if not int
-      return dataList[0]['value'];
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'preferences',
+      where: 'name = ?',
+      whereArgs: [name],
+    );
+
+    if (maps.isEmpty) return null;
+    
+    final value = maps.first['value'];
+    if (value == null) return null;
+
+    // Essayer de convertir en int d'abord
+    try {
+      return int.parse(value.toString());
+    } catch (_) {
+      // Si ce n'est pas un int, retourner la valeur telle quelle
+      return value;
     }
-    throw "Preference $name not found";
   }
 
   Future<void> setBrowserOptions(String name, String value) async {

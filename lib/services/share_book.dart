@@ -7,22 +7,24 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-Future<void> shareBook(String title, String link, String path) async {
-  try {
-    String imagePath = await saveAndGetImagePath(path);
-    String message = 'Discover this amazing book: "$title"\nRead more : $link';
-    if (imagePath.isNotEmpty) {
+Future<void> shareBook(String title, String link, String imagePath) async {
+  if (title.isEmpty) return;
+  
+  String message = 'Discover this amazing book: "$title"\nRead more : $link';
+  
+  if (imagePath.isNotEmpty) {
+    final File file = File(imagePath);
+    if (file.existsSync()) {
       await Share.shareXFiles([XFile(imagePath)], text: message);
-    } else {
-      await Share.share(message);
+      return;
     }
-  } catch (e) {
-    debugPrint('Error sharing the book: $e');
   }
+  
+  await Share.share(message);
 }
 
 Future<String> saveAndGetImagePath(String url) async {
-  if (url != null && url.isNotEmpty) {
+  if (url.isNotEmpty) {
     try {
       final imageProvider = CachedNetworkImageProvider(url);
       final imageStream = imageProvider.resolve(const ImageConfiguration());

@@ -2,6 +2,7 @@
 import 'dart:io';
 
 // Package imports:
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -40,21 +41,41 @@ Future<void> moveFilesToAndroidInternalStorage() async {
   }
 }
 
-Future<void> moveFolderContents(
-    String source_path, String destination_path) async {
-  final source = Directory(source_path);
+Future<void> moveFolderContents(String sourcePath, String destinationPath) async {
+  final source = Directory(sourcePath);
   source.listSync(recursive: false).forEach((var entity) {
     if (entity is Directory) {
-      var newDirectory =
-          Directory('${destination_path}/${entity.path.split('/').last}');
+      var newDirectory = Directory('$destinationPath/${entity.path.split('/').last}');
       newDirectory.createSync();
       moveFolderContents(entity.path, newDirectory.path);
       entity.deleteSync();
     } else if (entity is File) {
-      entity.copySync('${destination_path}/${entity.path.split('/').last}');
+      entity.copySync('$destinationPath/${entity.path.split('/').last}');
       entity.deleteSync();
     }
   });
+}
+
+Future<void> moveFile({
+  required String sourcePath,
+  required String destinationPath,
+}) async {
+  try {
+    final File sourceFile = File(sourcePath);
+    final File destinationFile = File(destinationPath);
+
+    if (!await destinationFile.parent.exists()) {
+      await destinationFile.parent.create(recursive: true);
+    }
+
+    if (await sourceFile.exists()) {
+      await sourceFile.copy(destinationPath);
+      await sourceFile.delete();
+      debugPrint('File moved from $sourcePath to $destinationPath');
+    }
+  } catch (e) {
+    debugPrint('Error moving file: $e');
+  }
 }
 
 Future<bool> isFileExists(String filePath) async {

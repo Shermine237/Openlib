@@ -9,7 +9,9 @@ import 'package:flutter/services.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:openlib/l10n/app_localizations.dart';
 import 'package:openlib/services/files.dart';
+import 'package:openlib/state/state.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 // Project imports:
@@ -21,7 +23,8 @@ import 'package:openlib/state/state.dart'
     show
         themeModeProvider,
         openPdfWithExternalAppProvider,
-        openEpubWithExternalAppProvider;
+        openEpubWithExternalAppProvider,
+        localeProvider;
 
 Future<void> requestStoragePermission() async {
   bool permissionGranted = false;
@@ -48,7 +51,7 @@ Future<void> requestStoragePermission() async {
       permissionGranted = false;
     }
   }
-  print("Storage permission status: $permissionGranted");
+  debugPrint("Storage permission status: $permissionGranted"); // Replaced print with debugPrint
 }
 
 class SettingsPage extends ConsumerWidget {
@@ -56,91 +59,74 @@ class SettingsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!; // Non-null assertion car on sait que c'est toujours disponible
+    final locale = ref.watch(localeProvider);
+    final themeMode = ref.watch(themeModeProvider);
     MyLibraryDb dataBase = MyLibraryDb.instance;
-    return Padding(
-      padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const TitleText("Settings"),
-            _PaddedContainer(
-              children: [
-                Text(
-                  "Dark Mode",
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.tertiary,
-                  ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(l10n.settings),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const TitleText("Settings"),
+              ListTile(
+                leading: const Icon(Icons.language),
+                title: Text(l10n.language),
+                subtitle: Text(
+                  locale == null
+                      ? l10n.systemDefault
+                      : locale.languageCode == 'fr'
+                          ? l10n.french
+                          : l10n.english,
                 ),
-                Switch(
-                  // This bool value toggles the switch.
-                  value: ref.watch(themeModeProvider) == ThemeMode.dark,
-                  activeColor: Colors.red,
-                  onChanged: (bool value) {
-                    ref.read(themeModeProvider.notifier).state =
-                        value == true ? ThemeMode.dark : ThemeMode.light;
-                    dataBase.savePreference('darkMode', value);
-                    if (Platform.isAndroid) {
-                      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-                          systemNavigationBarColor:
-                              value ? Colors.black : Colors.grey.shade200));
-                    }
-                  },
-                )
-              ],
-            ),
-            _PaddedContainer(
-              children: [
-                Text(
-                  "Open PDF with External Reader",
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.tertiary,
-                  ),
-                ),
-                Switch(
-                  // This bool value toggles the switch.
-                  value: ref.watch(openPdfWithExternalAppProvider),
-                  activeColor: Colors.red,
-                  onChanged: (bool value) {
-                    ref.read(openPdfWithExternalAppProvider.notifier).state =
-                        value;
-                    dataBase.savePreference('openPdfwithExternalApp', value);
-                  },
-                )
-              ],
-            ),
-            _PaddedContainer(
-              children: [
-                Text(
-                  "Open Epub with External Reader",
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.tertiary,
-                  ),
-                ),
-                Switch(
-                  // This bool value toggles the switch.
-                  value: ref.watch(
-                    openEpubWithExternalAppProvider,
-                  ),
-                  activeColor: Colors.red,
-                  onChanged: (bool value) {
-                    ref.read(openEpubWithExternalAppProvider.notifier).state =
-                        value;
-                    dataBase.savePreference('openEpubwithExternalApp', value);
-                  },
-                )
-              ],
-            ),
-            _PaddedContainer(
-                onClick: () async {
+                onTap: () => _showLanguageDialog(context, ref, l10n),
+              ),
+              SwitchListTile(
+                secondary: const Icon(Icons.dark_mode),
+                title: Text(l10n.darkMode),
+                value: themeMode == ThemeMode.dark,
+                onChanged: (bool value) {
+                  ref.read(themeModeProvider.notifier).state =
+                      value ? ThemeMode.dark : ThemeMode.light;
+                  dataBase.savePreference('darkMode', value);
+                  if (Platform.isAndroid) {
+                    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+                        systemNavigationBarColor:
+                            value ? Colors.black : Colors.grey.shade200));
+                  }
+                },
+              ),
+              SwitchListTile(
+                secondary: const Icon(Icons.picture_as_pdf),
+                title: Text(l10n.openPdfWithExternalApp),
+                value: ref.watch(openPdfWithExternalAppProvider),
+                onChanged: (bool value) async {
+                  debugPrint('Opening PDFs with external app: $value'); // Replaced print with debugPrint
+                  ref.read(openPdfWithExternalAppProvider.notifier).state = value;
+                  await dataBase.savePreference('openPdfwithExternalApp', value);
+                },
+              ),
+              SwitchListTile(
+                secondary: const Icon(Icons.book),
+                title: Text(l10n.openEpubWithExternalApp),
+                value: ref.watch(openEpubWithExternalAppProvider),
+                onChanged: (bool value) {
+                  ref.read(openEpubWithExternalAppProvider.notifier).state =
+                      value;
+                  dataBase.savePreference('openEpubwithExternalApp', value);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.folder),
+                title: Text(l10n.changeStoragePath),
+                onTap: () async {
                   final currentDirectory =
                       await dataBase.getPreference('bookStorageDirectory');
                   String? pickedDirectory =
@@ -154,70 +140,67 @@ class SettingsPage extends ConsumerWidget {
                   dataBase.savePreference(
                       'bookStorageDirectory', pickedDirectory);
                 },
-                children: [
-                  Text(
-                    "Change storage path",
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.tertiary,
-                    ),
-                  ),
-                  Icon(Icons.folder),
-                ]),
-            _PaddedContainer(
-              onClick: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (BuildContext context) {
-                  return const AboutPage();
-                }));
-              },
-              children: [
-                Text(
-                  "About",
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.tertiary,
-                  ),
-                ),
-              ],
-            )
-          ],
+              ),
+              ListTile(
+                leading: const Icon(Icons.info),
+                title: Text(l10n.about),
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (BuildContext context) {
+                    return const AboutPage();
+                  }));
+                },
+              )
+            ],
+          ),
         ),
       ),
     );
   }
-}
 
-class _PaddedContainer extends StatelessWidget {
-  const _PaddedContainer({this.onClick, required this.children});
-
-  final VoidCallback? onClick;
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
-      child: InkWell(
-        onTap: onClick,
-        child: Container(
-          height: 61,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Theme.of(context).colorScheme.tertiaryContainer,
+  void _showLanguageDialog(BuildContext context, WidgetRef ref, AppLocalizations l10n) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(l10n.selectLanguage),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Option langue système
+              ListTile(
+                title: Text(l10n.systemDefault),
+                onTap: () {
+                  ref.read(localeProvider.notifier).state = null;
+                  Navigator.pop(context);
+                },
+              ),
+              // Option anglais
+              ListTile(
+                title: Text(l10n.english),
+                onTap: () {
+                  ref.read(localeProvider.notifier).state = const Locale('en');
+                  Navigator.pop(context);
+                },
+              ),
+              // Option français
+              ListTile(
+                title: Text(l10n.french),
+                onTap: () {
+                  ref.read(localeProvider.notifier).state = const Locale('fr');
+                  Navigator.pop(context);
+                },
+              ),
+            ],
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: children,
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(l10n.cancel),
             ),
-          ),
-        ),
-      ),
+          ],
+        );
+      },
     );
   }
 }

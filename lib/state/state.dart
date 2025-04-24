@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:sqflite/sqflite.dart';
 
 // Project imports:
 import 'package:openlib/services/annas_archieve.dart';
@@ -44,7 +45,61 @@ List<String> fileType = ["All", "PDF", "Epub", "Cbr", "Cbz"];
 final selectedIndexProvider = StateProvider<int>((ref) => 0);
 final homePageSelectedIndexProvider = StateProvider<int>((ref) => 0);
 
-final themeModeProvider = StateProvider<ThemeMode>((ref) => ThemeMode.light);
+// Database provider
+final databaseProvider = Provider<Database>((ref) => throw UnimplementedError('Database must be initialized'));
+
+final themeModeProvider = StateProvider<ThemeMode>((ref) => ThemeMode.system);
+
+final localeProvider = StateProvider<Locale?>((ref) => null);
+
+class LocaleNotifier extends StateNotifier<Locale?> {
+  final Database database;
+  
+  LocaleNotifier(this.database) : super(null) {
+    _loadSavedLocale();
+  }
+
+  Future<void> _loadSavedLocale() async {
+    try {
+      final locale = await database.query(
+        'preferences',
+        where: 'key = ?',
+        whereArgs: ['locale'],
+      );
+      
+      if (locale.isNotEmpty) {
+        state = Locale(locale.first['value'] as String);
+      }
+    } catch (e) {
+      // Ignore les erreurs de base de données
+    }
+  }
+
+  Future<void> setLocale(Locale? newLocale) async {
+    state = newLocale;
+    if (newLocale != null) {
+      await database.insert(
+        'preferences',
+        {
+          'key': 'locale',
+          'value': newLocale.languageCode,
+        },
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } else {
+      await database.delete(
+        'preferences',
+        where: 'key = ?',
+        whereArgs: ['locale'],
+      );
+    }
+  }
+}
+
+final localeNotifierProvider = StateNotifierProvider<LocaleNotifier, Locale?>((ref) {
+  final database = ref.watch(databaseProvider);
+  return LocaleNotifier(database);
+});
 
 final selectedTypeState = StateProvider<String>((ref) => "All");
 

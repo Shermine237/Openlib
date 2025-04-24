@@ -1,25 +1,24 @@
 // Dart imports:
-import 'dart:io' show Platform;
+import 'dart:io';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Package imports:
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:openlib/l10n/app_localizations.dart';
 import 'package:openlib/ui/home_page.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-
-// Project imports:
-import 'package:openlib/services/database.dart' show MyLibraryDb;
 import 'package:openlib/ui/mylibrary_page.dart';
 import 'package:openlib/ui/search_page.dart';
 import 'package:openlib/ui/settings_page.dart';
 import 'package:openlib/ui/themes.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import 'package:openlib/services/files.dart'
-    show moveFilesToAndroidInternalStorage;
+// Project imports:
+import 'package:openlib/services/database.dart' show MyLibraryDb;
 import 'package:openlib/state/state.dart'
     show
         selectedIndexProvider,
@@ -27,47 +26,42 @@ import 'package:openlib/state/state.dart'
         openPdfWithExternalAppProvider,
         openEpubWithExternalAppProvider,
         userAgentProvider,
-        cookieProvider;
+        cookieProvider,
+        localeProvider,
+        databaseProvider;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+  if (Platform.isWindows || Platform.isLinux) {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
   }
 
-  MyLibraryDb dataBase = MyLibraryDb.instance;
-  bool isDarkMode =
-      await dataBase.getPreference('darkMode') == 0 ? false : true;
-  bool openPdfwithExternalapp = await dataBase
-              .getPreference('openPdfwithExternalApp')
-              .catchError((e) => print(e)) ==
-          0
-      ? false
-      : true;
+  final database = MyLibraryDb.instance;
+  await database.database;
 
-  bool openEpubwithExternalapp = await dataBase
-              .getPreference('openEpubwithExternalApp')
-              .catchError((e) => print(e)) ==
-          0
-      ? false
-      : true;
+  final darkModePref = await database.getPreference('darkMode');
+  final pdfExternalPref = await database.getPreference('openPdfwithExternalApp');
+  final epubExternalPref = await database.getPreference('openEpubwithExternalApp');
 
-  String browserUserAgent = await dataBase.getBrowserOptions('userAgent');
-  String browserCookie = await dataBase.getBrowserOptions('cookie');
+  bool isDarkMode = darkModePref == 1;
+  bool openPdfwithExternalapp = pdfExternalPref == 1;
+  bool openEpubwithExternalapp = epubExternalPref == 1;
+
+  String browserUserAgent = await database.getBrowserOptions('userAgent');
+  String browserCookie = await database.getBrowserOptions('cookie');
 
   if (Platform.isAndroid) {
-    //[SystemChrome] Also change colors in settings page Theme colors if any change
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         systemNavigationBarColor:
             isDarkMode ? Colors.black : Colors.grey.shade200));
-    await moveFilesToAndroidInternalStorage();
   }
 
   runApp(
     ProviderScope(
       overrides: [
+        databaseProvider.overrideWithValue(await database.database),
         themeModeProvider.overrideWith(
             (ref) => isDarkMode ? ThemeMode.dark : ThemeMode.light),
         openPdfWithExternalAppProvider
@@ -84,8 +78,12 @@ void main() async {
 
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
+    final themeMode = ref.watch(themeModeProvider);
+
     return MaterialApp(
       builder: (BuildContext context, Widget? child) {
         return MediaQuery(
@@ -99,7 +97,18 @@ class MyApp extends ConsumerWidget {
       title: 'Openlib',
       theme: lightTheme,
       darkTheme: darkTheme,
-      themeMode: ref.watch(themeModeProvider),
+      themeMode: themeMode,
+      locale: locale, // Utilise la langue système si null
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'), // English
+        Locale('fr'), // French
+      ],
       home: const MainScreen(),
     );
   }

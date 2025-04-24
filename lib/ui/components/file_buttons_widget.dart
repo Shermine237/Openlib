@@ -60,13 +60,17 @@ class FileOpenAndDeleteButtons extends ConsumerWidget {
           ),
           TextButton(
             style: ButtonStyle(
-              shape: MaterialStateProperty.all(
+              shape: WidgetStateProperty.all(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50.0),
                   side: BorderSide(
-                      width: 3, color: Theme.of(context).colorScheme.secondary),
+                    color: Theme.of(context).colorScheme.secondary,
+                    width: 3,
+                  ),
                 ),
               ),
+              backgroundColor: WidgetStateProperty.all<Color>(Colors.blue),
+              foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
             ),
             onPressed: () {
               showDialog(
