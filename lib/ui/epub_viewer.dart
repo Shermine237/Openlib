@@ -10,7 +10,6 @@ import 'package:epub_view/epub_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:open_file/open_file.dart';
 import 'package:openlib/services/database.dart';
-import 'package:vocsy_epub_viewer/epub_viewer.dart';
 
 // Project imports:
 import 'package:openlib/services/files.dart' show getFilePath;
@@ -26,57 +25,22 @@ Future<void> launchEpubViewer(
     {required String fileName,
     required BuildContext context,
     required WidgetRef ref}) async {
-  if (Platform.isAndroid || Platform.isIOS) {
-    MyLibraryDb dataBase = MyLibraryDb.instance;
-    String path = await getFilePath(fileName);
-    bool openWithExternalApp = ref.watch(openEpubWithExternalAppProvider);
-    String? epubConfig = await dataBase.getBookState(fileName);
+  String path = await getFilePath(fileName);
+  bool openWithExternalApp = ref.watch(openEpubWithExternalAppProvider);
 
-    if (openWithExternalApp) {
-      await OpenFile.open(path, linuxByProcess: true);
-    } else {
-      try {
-        VocsyEpub.setConfig(
-          // ignore: use_build_context_synchronously
-          themeColor: Theme.of(context).colorScheme.secondary,
-          identifier: "iosBook",
-          scrollDirection: EpubScrollDirection.HORIZONTAL,
-        );
-
-        if ((epubConfig?.isNotEmpty ?? true) &&
-            (epubConfig != null) &&
-            (!(epubConfig.startsWith('epubcfi')))) {
-          VocsyEpub.open(path,
-              lastLocation: EpubLocator.fromJson(json.decode(epubConfig)));
-        } else {
-          VocsyEpub.open(path);
-        }
-
-        VocsyEpub.locatorStream.listen((locator) async {
-          await saveEpubState(fileName, locator, ref);
-          // convert locator from string to json and save to your database to be retrieved later
-        });
-      } catch (e) {
-        try {
-          // ignore: use_build_context_synchronously
-          Navigator.push(context,
-              MaterialPageRoute(builder: (BuildContext context) {
-            return EpubViewerWidget(
-              fileName: fileName,
-            );
-          }));
-        } catch (e) {
-          // ignore: use_build_context_synchronously
-          showSnackBar(context: context, message: 'Unable to open pdf!');
-        }
-      }
-    }
+  if (openWithExternalApp) {
+    await OpenFile.open(path, linuxByProcess: true);
   } else {
-    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-      return EpubViewerWidget(
-        fileName: fileName,
-      );
-    }));
+    try {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (BuildContext context) {
+        return EpubViewerWidget(
+          fileName: fileName,
+        );
+      }));
+    } catch (e) {
+      showSnackBar(context: context, message: 'Unable to open epub!');
+    }
   }
 }
 
@@ -93,128 +57,86 @@ class _EpubViewState extends ConsumerState<EpubViewerWidget> {
   @override
   Widget build(BuildContext context) {
     final filePath = ref.watch(filePathProvider(widget.fileName));
-    return filePath.when(data: (data) {
-      return EpubViewer(filePath: data, fileName: widget.fileName);
-    }, error: (error, stack) {
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          title: const Text("Openlib"),
-          titleTextStyle: Theme.of(context).textTheme.displayLarge,
-        ),
-        body: Center(child: Text(error.toString())),
-      );
-    }, loading: () {
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          title: const Text("Openlib"),
-          titleTextStyle: Theme.of(context).textTheme.displayLarge,
-        ),
-        body: Center(
-          child: SizedBox(
-            width: 25,
-            height: 25,
-            child: CircularProgressIndicator(
-              color: Theme.of(context).colorScheme.secondary,
-            ),
+    return filePath.when(
+      data: (data) {
+        return EpubReader(filePath: data, fileName: widget.fileName);
+      },
+      error: (error, stack) {
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            title: const Text('Error'),
           ),
+          body: const Center(
+            child: Text('Error loading epub file'),
+          ),
+        );
+      },
+      loading: () => const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
         ),
-      );
-    });
+      ),
+    );
   }
 }
 
-class EpubViewer extends ConsumerStatefulWidget {
-  const EpubViewer({super.key, required this.filePath, required this.fileName});
+class EpubReader extends ConsumerStatefulWidget {
+  const EpubReader({
+    super.key,
+    required this.filePath,
+    required this.fileName,
+  });
 
   final String filePath;
   final String fileName;
 
   @override
-  // ignore: library_private_types_in_public_api
-  _EpubViewerState createState() => _EpubViewerState();
+  ConsumerState<EpubReader> createState() => _EpubReaderState();
 }
 
-class _EpubViewerState extends ConsumerState<EpubViewer> {
-  late EpubController _epubReaderController;
-  String? epubConf;
-
+class _EpubReaderState extends ConsumerState<EpubReader> {
+  late EpubController _epubController;
+  
   @override
   void initState() {
-    _epubReaderController = EpubController(
-      document: EpubDocument.openFile(File(widget.filePath)),
-    );
     super.initState();
+    _loadBook();
   }
 
-  @override
-  void deactivate() {
-    if (Platform.isAndroid || Platform.isIOS) {
-      saveEpubState(widget.fileName, epubConf, ref);
-    }
-    super.deactivate();
+  Future<void> _loadBook() async {
+    MyLibraryDb dataBase = MyLibraryDb.instance;
+    String? epubConfig = await dataBase.getBookState(widget.fileName);
+    
+    _epubController = EpubController(
+      document: EpubDocument.openFile(File(widget.filePath)),
+      epubCfi: epubConfig?.startsWith('epubcfi') == true ? epubConfig : null,
+    );
   }
 
   @override
   void dispose() {
-    _epubReaderController.dispose();
+    _epubController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final position = ref.watch(getBookPosition(widget.fileName));
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        title: const Text("Openlib"),
-        titleTextStyle: Theme.of(context).textTheme.displayLarge,
+        title: EpubViewActualChapter(
+          controller: _epubController,
+          builder: (chapterValue) => Text(
+            chapterValue?.chapter?.Title?.replaceAll('\n', '') ?? 'Loading...',
+            textAlign: TextAlign.start,
+          ),
+        ),
       ),
-      endDrawer: Drawer(
-        child: EpubViewTableOfContents(controller: _epubReaderController),
-      ),
-      body: position.when(
-        data: (data) {
-          return EpubView(
-            onDocumentLoaded: (doc) {
-              Future.delayed(const Duration(milliseconds: 20), () {
-                String pos = data ?? "";
-                _epubReaderController.gotoEpubCfi(pos);
-              });
-            },
-            onChapterChanged: (value) {
-              epubConf = _epubReaderController.generateEpubCfi();
-            },
-            builders: EpubViewBuilders<DefaultBuilderOptions>(
-              options: const DefaultBuilderOptions(),
-              chapterDividerBuilder: (_) => const Divider(),
-            ),
-            controller: _epubReaderController,
-          );
-        },
-        error: (err, _) {
-          return EpubView(
-            onChapterChanged: (value) {
-              epubConf = _epubReaderController.generateEpubCfi();
-            },
-            builders: EpubViewBuilders<DefaultBuilderOptions>(
-              options: const DefaultBuilderOptions(),
-              chapterDividerBuilder: (_) => const Divider(),
-            ),
-            controller: _epubReaderController,
-          );
-        },
-        loading: () {
-          return Center(
-            child: SizedBox(
-              width: 25,
-              height: 25,
-              child: CircularProgressIndicator(
-                color: Theme.of(context).colorScheme.secondary,
-              ),
-            ),
-          );
+      body: EpubView(
+        controller: _epubController,
+        onChapterChanged: (chapter) {
+          saveEpubState(widget.fileName, _epubController.generateEpubCfi(), ref);
         },
       ),
     );
