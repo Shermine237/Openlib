@@ -22,7 +22,7 @@ class ShowDeleteDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = AppLocalizations.of(context)!; 
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -44,7 +44,7 @@ class ShowDeleteDialog extends ConsumerWidget {
                   Padding(
                     padding: const EdgeInsets.all(8),
                     child: Text(
-                      l10n!.deleteBookConfirmation,
+                      l10n.deleteBookConfirmation,
                       style: TextStyle(
                           fontSize: 19,
                           fontWeight: FontWeight.bold,
@@ -55,7 +55,7 @@ class ShowDeleteDialog extends ConsumerWidget {
                   Padding(
                     padding: const EdgeInsets.all(8),
                     child: Text(
-                      l10n!.deletionIsPermanent,
+                      l10n.deletionIsPermanent,
                       style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
@@ -94,14 +94,14 @@ class ShowDeleteDialog extends ConsumerWidget {
 
                             showSnackBar(
                                 context: context,
-                                message: l10n!.bookDeletedSuccessfully);
+                                message: l10n.bookDeletedSuccessfully);
 
                             onDelete();
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(5.0),
                             child: Text(
-                              l10n!.delete,
+                              l10n.delete,
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold,
@@ -127,7 +127,7 @@ class ShowDeleteDialog extends ConsumerWidget {
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(5.0),
-                            child: Text(l10n!.cancel),
+                            child: Text(l10n.cancel),
                           ),
                         )
                       ],

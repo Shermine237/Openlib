@@ -22,7 +22,6 @@ class CustomErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     if (error.toString().contains("socketException")) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,

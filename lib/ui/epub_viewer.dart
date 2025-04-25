@@ -17,7 +17,6 @@ import 'package:openlib/state/state.dart'
     show
         filePathProvider,
         saveEpubState,
-        getBookPosition,
         openEpubWithExternalAppProvider;
 import 'package:openlib/l10n/app_localizations.dart';
 
