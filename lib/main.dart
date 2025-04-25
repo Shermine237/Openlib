@@ -27,7 +27,7 @@ import 'package:openlib/state/state.dart'
         openEpubWithExternalAppProvider,
         userAgentProvider,
         cookieProvider,
-        localeProvider,
+        localeNotifierProvider,
         databaseProvider;
 
 void main() async {
@@ -82,7 +82,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
-    final locale = ref.watch(localeProvider);
+    final locale = ref.watch(localeNotifierProvider);
 
     return MaterialApp(
       localizationsDelegates: const [

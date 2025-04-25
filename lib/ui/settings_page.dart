@@ -24,7 +24,7 @@ import 'package:openlib/state/state.dart'
         themeModeProvider,
         openPdfWithExternalAppProvider,
         openEpubWithExternalAppProvider,
-        localeProvider;
+        localeNotifierProvider;
 
 Future<void> requestStoragePermission() async {
   bool permissionGranted = false;
@@ -60,7 +60,7 @@ class SettingsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!; // Non-null assertion car on sait que c'est toujours disponible
-    final locale = ref.watch(localeProvider);
+    final locale = ref.watch(localeNotifierProvider);
     final themeMode = ref.watch(themeModeProvider);
     MyLibraryDb dataBase = MyLibraryDb.instance;
     return Scaffold(
@@ -86,7 +86,45 @@ class SettingsPage extends ConsumerWidget {
                           ? l10n.french
                           : l10n.english,
                 ),
-                onTap: () => _showLanguageDialog(context, ref, l10n),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text(l10n.selectLanguage),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Option langue système
+                            ListTile(
+                              title: Text(l10n.systemDefault),
+                              onTap: () {
+                                ref.read(localeNotifierProvider.notifier).setLocale(null);
+                                Navigator.pop(context);
+                              },
+                            ),
+                            // Option anglais
+                            ListTile(
+                              title: Text(l10n.english),
+                              onTap: () {
+                                ref.read(localeNotifierProvider.notifier).setLocale(const Locale('en'));
+                                Navigator.pop(context);
+                              },
+                            ),
+                            // Option français
+                            ListTile(
+                              title: Text(l10n.french),
+                              onTap: () {
+                                ref.read(localeNotifierProvider.notifier).setLocale(const Locale('fr'));
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
               SwitchListTile(
                 secondary: const Icon(Icons.dark_mode),
@@ -155,52 +193,6 @@ class SettingsPage extends ConsumerWidget {
           ),
         ),
       ),
-    );
-  }
-
-  void _showLanguageDialog(BuildContext context, WidgetRef ref, AppLocalizations l10n) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(l10n.selectLanguage),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Option langue système
-              ListTile(
-                title: Text(l10n.systemDefault),
-                onTap: () {
-                  ref.read(localeProvider.notifier).state = null;
-                  Navigator.pop(context);
-                },
-              ),
-              // Option anglais
-              ListTile(
-                title: Text(l10n.english),
-                onTap: () {
-                  ref.read(localeProvider.notifier).state = const Locale('en');
-                  Navigator.pop(context);
-                },
-              ),
-              // Option français
-              ListTile(
-                title: Text(l10n.french),
-                onTap: () {
-                  ref.read(localeProvider.notifier).state = const Locale('fr');
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(l10n.cancel),
-            ),
-          ],
-        );
-      },
     );
   }
 }

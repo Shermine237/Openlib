@@ -67,14 +67,15 @@ class LocaleNotifier extends StateNotifier<Locale?> {
 
   Future<void> _loadSavedLocale() async {
     try {
-      final locale = await database.query(
+      final result = await database.query(
         'preferences',
-        where: 'key = ?',
+        columns: ['value'],
+        where: 'name = ?',
         whereArgs: ['locale'],
       );
       
-      if (locale.isNotEmpty) {
-        state = Locale(locale.first['value'] as String);
+      if (result.isNotEmpty) {
+        state = Locale(result.first['value'] as String);
       }
     } catch (e) {
       // Ignore les erreurs de base de données
@@ -87,7 +88,7 @@ class LocaleNotifier extends StateNotifier<Locale?> {
       await database.insert(
         'preferences',
         {
-          'key': 'locale',
+          'name': 'locale',
           'value': newLocale.languageCode,
         },
         conflictAlgorithm: ConflictAlgorithm.replace,
@@ -95,7 +96,7 @@ class LocaleNotifier extends StateNotifier<Locale?> {
     } else {
       await database.delete(
         'preferences',
-        where: 'key = ?',
+        where: 'name = ?',
         whereArgs: ['locale'],
       );
     }
