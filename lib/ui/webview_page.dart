@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:openlib/l10n/app_localizations.dart';
 
 class Webview extends ConsumerStatefulWidget {
   const Webview({super.key, required this.url});
@@ -35,7 +36,7 @@ class _WebviewState extends ConsumerState<Webview> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text("Solve Captcha"),
+        title: Text(AppLocalizations.of(context)!.solveCaptcha),
       ),
       body: SafeArea(
         child: Column(

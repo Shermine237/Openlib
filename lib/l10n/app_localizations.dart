@@ -329,23 +329,59 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get delete;
 
-  /// No description provided for @deleteConfirmation.
+  /// No description provided for @deleteBookConfirmation.
   ///
   /// In en, this message translates to:
-  /// **'Are you sure you want to delete this book?'**
-  String get deleteConfirmation;
+  /// **'Delete Book'**
+  String get deleteBookConfirmation;
 
-  /// No description provided for @yes.
+  /// No description provided for @deletionIsPermanent.
   ///
   /// In en, this message translates to:
-  /// **'Yes'**
-  String get yes;
+  /// **'This action is permanent and cannot be undone'**
+  String get deletionIsPermanent;
 
-  /// No description provided for @no.
+  /// No description provided for @bookDeletedSuccessfully.
   ///
   /// In en, this message translates to:
-  /// **'No'**
-  String get no;
+  /// **'Book has been deleted'**
+  String get bookDeletedSuccessfully;
+
+  /// No description provided for @searchResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Results'**
+  String get searchResult;
+
+  /// No description provided for @noResultFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No Results Found!'**
+  String get noResultFound;
+
+  /// No description provided for @myLibraryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Library'**
+  String get myLibraryTitle;
+
+  /// No description provided for @myLibraryIsEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your library is empty'**
+  String get myLibraryIsEmptyMessage;
+
+  /// No description provided for @open.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get open;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
 
   /// No description provided for @share.
   ///
@@ -617,12 +653,6 @@ abstract class AppLocalizations {
   /// **'Genres'**
   String get genres;
 
-  /// No description provided for @fiction.
-  ///
-  /// In en, this message translates to:
-  /// **'Fiction'**
-  String get fiction;
-
   /// No description provided for @sciTech.
   ///
   /// In en, this message translates to:
@@ -664,24 +694,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'MD5'**
   String get md5;
-
-  /// No description provided for @open.
-  ///
-  /// In en, this message translates to:
-  /// **'Open'**
-  String get open;
-
-  /// No description provided for @noResults.
-  ///
-  /// In en, this message translates to:
-  /// **'No results found'**
-  String get noResults;
-
-  /// No description provided for @retry.
-  ///
-  /// In en, this message translates to:
-  /// **'Retry'**
-  String get retry;
 
   /// No description provided for @aboutPageDescription.
   ///
@@ -808,6 +820,186 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Solve Captcha'**
   String get solveCaptcha;
+
+  /// No description provided for @yes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get yes;
+
+  /// No description provided for @no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
+
+  /// No description provided for @deleteConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this book?'**
+  String get deleteConfirmation;
+
+  /// No description provided for @classics.
+  ///
+  /// In en, this message translates to:
+  /// **'Classics'**
+  String get classics;
+
+  /// No description provided for @romance.
+  ///
+  /// In en, this message translates to:
+  /// **'Romance'**
+  String get romance;
+
+  /// No description provided for @fiction.
+  ///
+  /// In en, this message translates to:
+  /// **'Fiction'**
+  String get fiction;
+
+  /// No description provided for @youngAdult.
+  ///
+  /// In en, this message translates to:
+  /// **'Young Adult'**
+  String get youngAdult;
+
+  /// No description provided for @fantasy.
+  ///
+  /// In en, this message translates to:
+  /// **'Fantasy'**
+  String get fantasy;
+
+  /// No description provided for @scienceFiction.
+  ///
+  /// In en, this message translates to:
+  /// **'Science Fiction'**
+  String get scienceFiction;
+
+  /// No description provided for @nonfiction.
+  ///
+  /// In en, this message translates to:
+  /// **'Nonfiction'**
+  String get nonfiction;
+
+  /// No description provided for @children.
+  ///
+  /// In en, this message translates to:
+  /// **'Children'**
+  String get children;
+
+  /// No description provided for @history.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get history;
+
+  /// No description provided for @mystery.
+  ///
+  /// In en, this message translates to:
+  /// **'Mystery'**
+  String get mystery;
+
+  /// No description provided for @covers.
+  ///
+  /// In en, this message translates to:
+  /// **'Covers'**
+  String get covers;
+
+  /// No description provided for @horror.
+  ///
+  /// In en, this message translates to:
+  /// **'Horror'**
+  String get horror;
+
+  /// No description provided for @historicalFiction.
+  ///
+  /// In en, this message translates to:
+  /// **'Historical Fiction'**
+  String get historicalFiction;
+
+  /// No description provided for @best.
+  ///
+  /// In en, this message translates to:
+  /// **'Best'**
+  String get best;
+
+  /// No description provided for @titles.
+  ///
+  /// In en, this message translates to:
+  /// **'Titles'**
+  String get titles;
+
+  /// No description provided for @middleGrade.
+  ///
+  /// In en, this message translates to:
+  /// **'Middle Grade'**
+  String get middleGrade;
+
+  /// No description provided for @paranormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Paranormal'**
+  String get paranormal;
+
+  /// No description provided for @love.
+  ///
+  /// In en, this message translates to:
+  /// **'Love'**
+  String get love;
+
+  /// No description provided for @queer.
+  ///
+  /// In en, this message translates to:
+  /// **'Queer'**
+  String get queer;
+
+  /// No description provided for @historicalRomance.
+  ///
+  /// In en, this message translates to:
+  /// **'Historical Romance'**
+  String get historicalRomance;
+
+  /// No description provided for @contemporary.
+  ///
+  /// In en, this message translates to:
+  /// **'Contemporary'**
+  String get contemporary;
+
+  /// No description provided for @thriller.
+  ///
+  /// In en, this message translates to:
+  /// **'Thriller'**
+  String get thriller;
+
+  /// No description provided for @women.
+  ///
+  /// In en, this message translates to:
+  /// **'Women'**
+  String get women;
+
+  /// No description provided for @biography.
+  ///
+  /// In en, this message translates to:
+  /// **'Biography'**
+  String get biography;
+
+  /// No description provided for @lgbtq.
+  ///
+  /// In en, this message translates to:
+  /// **'LGBTQ'**
+  String get lgbtq;
+
+  /// No description provided for @series.
+  ///
+  /// In en, this message translates to:
+  /// **'Series'**
+  String get series;
+
+  /// No description provided for @titleChallenge.
+  ///
+  /// In en, this message translates to:
+  /// **'Title Challenge'**
+  String get titleChallenge;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

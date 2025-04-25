@@ -20,6 +20,8 @@ import 'package:openlib/state/state.dart'
         sortValues,
         enableFiltersState;
 
+import 'package:openlib/l10n/app_localizations.dart';
+
 class SearchPage extends ConsumerWidget {
   const SearchPage({super.key});
 
@@ -49,7 +51,7 @@ class SearchPage extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const TitleText("Search"),
+            TitleText(AppLocalizations.of(context)!.search),
             Padding(
               padding: const EdgeInsets.only(left: 7, right: 7, top: 10),
               child: TextField(
@@ -78,7 +80,7 @@ class SearchPage extends ConsumerWidget {
                   filled: true,
                   hintStyle: const TextStyle(
                       color: Colors.grey, fontWeight: FontWeight.bold),
-                  hintText: "Search",
+                  hintText: AppLocalizations.of(context)!.searchHint,
                   fillColor: Theme.of(context).colorScheme.primary,
                 ),
                 onSubmitted: (String value) => onSubmit(context, ref),

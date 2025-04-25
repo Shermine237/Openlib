@@ -22,6 +22,8 @@ import 'package:openlib/state/state.dart'
         openPdfWithExternalAppProvider,
         getBookPosition;
 
+import 'package:openlib/l10n/app_localizations.dart';
+
 Future<void> launchPdfViewer(
     {required String fileName,
     required BuildContext context,
@@ -58,7 +60,7 @@ class _PdfViewState extends ConsumerState<PdfView> {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.primary,
-          title: const Text("Megalib"),
+          title: Text(AppLocalizations.of(context)!.appName),
           titleTextStyle: Theme.of(context).textTheme.displayLarge,
         ),
         body: Center(child: Text(error.toString())),
@@ -67,7 +69,7 @@ class _PdfViewState extends ConsumerState<PdfView> {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.primary,
-          title: const Text("Megalib"),
+          title: Text(AppLocalizations.of(context)!.appName),
           titleTextStyle: Theme.of(context).textTheme.displayLarge,
         ),
         body: Center(
@@ -139,7 +141,7 @@ class _PdfViewerState extends ConsumerState<PdfViewer> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        title: const Text("Megalib"),
+        title: Text(AppLocalizations.of(context)!.appName),
         titleTextStyle: Theme.of(context).textTheme.displayLarge,
         actions: isMobile
             ? [

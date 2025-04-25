@@ -126,13 +126,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete => 'Delete';
 
   @override
-  String get deleteConfirmation => 'Are you sure you want to delete this book?';
+  String get deleteBookConfirmation => 'Delete Book';
 
   @override
-  String get yes => 'Yes';
+  String get deletionIsPermanent => 'This action is permanent and cannot be undone';
 
   @override
-  String get no => 'No';
+  String get bookDeletedSuccessfully => 'Book has been deleted';
+
+  @override
+  String get searchResult => 'Results';
+
+  @override
+  String get noResultFound => 'No Results Found!';
+
+  @override
+  String get myLibraryTitle => 'My Library';
+
+  @override
+  String get myLibraryIsEmptyMessage => 'Your library is empty';
+
+  @override
+  String get open => 'Open';
+
+  @override
+  String get retry => 'Retry';
 
   @override
   String get share => 'Share';
@@ -274,9 +292,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get genres => 'Genres';
 
   @override
-  String get fiction => 'Fiction';
-
-  @override
   String get sciTech => 'Sci-Tech';
 
   @override
@@ -296,15 +311,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get md5 => 'MD5';
-
-  @override
-  String get open => 'Open';
-
-  @override
-  String get noResults => 'No results found';
-
-  @override
-  String get retry => 'Retry';
 
   @override
   String get aboutPageDescription => 'Megalib is an open source book search engine that allows you to search and download books from various sources.';
@@ -368,4 +374,94 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get solveCaptcha => 'Solve Captcha';
+
+  @override
+  String get yes => 'Yes';
+
+  @override
+  String get no => 'No';
+
+  @override
+  String get deleteConfirmation => 'Are you sure you want to delete this book?';
+
+  @override
+  String get classics => 'Classics';
+
+  @override
+  String get romance => 'Romance';
+
+  @override
+  String get fiction => 'Fiction';
+
+  @override
+  String get youngAdult => 'Young Adult';
+
+  @override
+  String get fantasy => 'Fantasy';
+
+  @override
+  String get scienceFiction => 'Science Fiction';
+
+  @override
+  String get nonfiction => 'Nonfiction';
+
+  @override
+  String get children => 'Children';
+
+  @override
+  String get history => 'History';
+
+  @override
+  String get mystery => 'Mystery';
+
+  @override
+  String get covers => 'Covers';
+
+  @override
+  String get horror => 'Horror';
+
+  @override
+  String get historicalFiction => 'Historical Fiction';
+
+  @override
+  String get best => 'Best';
+
+  @override
+  String get titles => 'Titles';
+
+  @override
+  String get middleGrade => 'Middle Grade';
+
+  @override
+  String get paranormal => 'Paranormal';
+
+  @override
+  String get love => 'Love';
+
+  @override
+  String get queer => 'Queer';
+
+  @override
+  String get historicalRomance => 'Historical Romance';
+
+  @override
+  String get contemporary => 'Contemporary';
+
+  @override
+  String get thriller => 'Thriller';
+
+  @override
+  String get women => 'Women';
+
+  @override
+  String get biography => 'Biography';
+
+  @override
+  String get lgbtq => 'LGBTQ';
+
+  @override
+  String get series => 'Series';
+
+  @override
+  String get titleChallenge => 'Title Challenge';
 }

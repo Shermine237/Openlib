@@ -75,7 +75,7 @@ class SettingsPage extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const TitleText("Settings"),
+              TitleText(AppLocalizations.of(context)!.settings),
               ListTile(
                 leading: const Icon(Icons.language),
                 title: Text(l10n.language),

@@ -12,12 +12,14 @@ import 'package:openlib/ui/components/error_widget.dart';
 import 'package:openlib/ui/components/page_title_widget.dart';
 import 'package:openlib/ui/extensions.dart';
 import 'package:openlib/ui/mybook_page.dart';
+import 'package:openlib/l10n/app_localizations.dart';
 
 class MyLibraryPage extends ConsumerWidget {
   const MyLibraryPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final myBooks = ref.watch(myLibraryProvider);
     return myBooks.when(
       data: (data) {
@@ -27,8 +29,8 @@ class MyLibraryPage extends ConsumerWidget {
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(),
               slivers: <Widget>[
-                const SliverToBoxAdapter(
-                  child: TitleText("My Library"),
+                SliverToBoxAdapter(
+                  child: TitleText(l10n!.myLibraryTitle),
                 ),
                 SliverPadding(
                   padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
@@ -69,7 +71,7 @@ class MyLibraryPage extends ConsumerWidget {
                 height: 30,
               ),
               Text(
-                "My Library Is Empty!",
+                l10n!.myLibraryIsEmptyMessage,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 18,

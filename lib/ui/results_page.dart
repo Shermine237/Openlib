@@ -12,6 +12,7 @@ import 'package:openlib/ui/components/book_card_widget.dart';
 import 'package:openlib/ui/components/error_widget.dart';
 import 'package:openlib/ui/components/page_title_widget.dart';
 import 'package:openlib/ui/extensions.dart';
+import 'package:openlib/l10n/app_localizations.dart';
 
 class ResultPage extends ConsumerWidget {
   const ResultPage({super.key, required this.searchQuery});
@@ -25,7 +26,7 @@ class ResultPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        title: const Text("Megalib"),
+        title: Text(AppLocalizations.of(context)!.appName),
         titleTextStyle: Theme.of(context).textTheme.displayLarge,
       ),
       body: searchBooks.when(
@@ -35,8 +36,8 @@ class ResultPage extends ConsumerWidget {
               padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
               child: CustomScrollView(
                 slivers: <Widget>[
-                  const SliverToBoxAdapter(
-                    child: TitleText("Results"),
+                  SliverToBoxAdapter(
+                    child: TitleText(AppLocalizations.of(context)!.searchResult),
                   ),
                   SliverPadding(
                     padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
@@ -78,7 +79,7 @@ class ResultPage extends ConsumerWidget {
                   height: 30,
                 ),
                 Text(
-                  "No Results Found !",
+                  AppLocalizations.of(context)!.noResultFound,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,
@@ -105,9 +106,9 @@ class ResultPage extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.only(left: 5, right: 5, top: 10),
-                child: TitleText("Results"),
+              Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
+                child: TitleText(AppLocalizations.of(context)!.searchResult),
               ),
               Expanded(
                 child: Row(

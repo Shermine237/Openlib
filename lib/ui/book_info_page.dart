@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:dio/dio.dart' show CancelToken;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
+import 'package:openlib/l10n/app_localizations.dart';
 import 'package:openlib/services/share_book.dart';
 
 // Project imports:
@@ -48,7 +50,7 @@ class BookInfoPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        title: const Text("Megalib"),
+        title: Text(AppLocalizations.of(context)!.appName),
         titleTextStyle: Theme.of(context).textTheme.displayLarge,
         actions: [
           bookInfo.maybeWhen(data: (data) {
@@ -238,7 +240,7 @@ class _ActionButtonWidgetState extends ConsumerState<ActionButtonWidget> {
                           context: context, message: 'No mirrors available!');
                     }
                   },
-                  child: const Text('Add To My Library'),
+                  child: Text(AppLocalizations.of(context)!.addToLibrary),
                 )
               ],
             ),
@@ -599,9 +601,9 @@ class _ShowDialog extends ConsumerWidget {
                             ref.read(cancelCurrentDownload).cancel();
                             Navigator.of(context).pop();
                           },
-                          child: const Padding(
-                            padding: EdgeInsets.all(3.0),
-                            child: Text('Cancel'),
+                          child: Padding(
+                            padding: const EdgeInsets.all(3.0),
+                            child: Text(AppLocalizations.of(context)!.cancel),
                           ),
                         )
                       ],

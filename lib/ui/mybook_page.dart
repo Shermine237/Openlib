@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Project imports:
+import 'package:openlib/l10n/app_localizations.dart';
 import 'package:openlib/services/database.dart';
 import 'package:openlib/services/share_book.dart';
 import 'package:openlib/ui/components/book_info_widget.dart';
@@ -23,7 +24,7 @@ class BookPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        title: const Text("Megalib"),
+        title: Text(AppLocalizations.of(context)!.appName),
         titleTextStyle: Theme.of(context).textTheme.displayLarge,
         actions: [
           FutureBuilder(

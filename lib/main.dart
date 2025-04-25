@@ -94,7 +94,7 @@ class MyApp extends ConsumerWidget {
         );
       },
       debugShowCheckedModeBanner: false,
-      title: 'Megalib',
+      title: AppLocalizations.of(context)!.appName,
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: themeMode,
@@ -162,7 +162,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           tabs: [
             GButton(
               icon: Icons.trending_up,
-              text: 'Home',
+              text: AppLocalizations.of(context)!.home,
               iconColor: isDarkMode ? Colors.white : Colors.black,
               textStyle: const TextStyle(
                 fontWeight: FontWeight.w900,
@@ -172,7 +172,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             ),
             GButton(
               icon: Icons.search,
-              text: 'Search',
+              text: AppLocalizations.of(context)!.search,
               iconColor: isDarkMode ? Colors.white : Colors.black,
               textStyle: const TextStyle(
                 fontWeight: FontWeight.w900,
@@ -182,7 +182,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             ),
             GButton(
               icon: Icons.collections_bookmark,
-              text: 'My Library',
+              text: AppLocalizations.of(context)!.myLibrary,
               iconColor: isDarkMode ? Colors.white : Colors.black,
               textStyle: const TextStyle(
                 fontWeight: FontWeight.w900,
@@ -192,7 +192,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             ),
             GButton(
               icon: Icons.build,
-              text: 'Settings',
+              text: AppLocalizations.of(context)!.settings,
               iconColor: isDarkMode ? Colors.white : Colors.black,
               textStyle: const TextStyle(
                 fontWeight: FontWeight.w900,

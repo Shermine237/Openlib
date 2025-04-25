@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 
 // Project imports:
 import 'package:openlib/ui/extensions.dart';
+import 'package:openlib/l10n/app_localizations.dart';
 
 // ignore: must_be_immutable
 class CustomErrorWidget extends StatelessWidget {
@@ -21,6 +22,7 @@ class CustomErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     if (error.toString().contains("socketException")) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -59,9 +61,9 @@ class CustomErrorWidget extends StatelessWidget {
                       color: Colors.white,
                     )),
                 onPressed: onRefresh,
-                child: const Padding(
-                  padding: EdgeInsets.fromLTRB(21, 9, 21, 9),
-                  child: Text('Refresh'),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(21, 9, 21, 9),
+                  child: Text(AppLocalizations.of(context)!.retry),
                 ),
               ),
             ),
@@ -102,7 +104,7 @@ class CustomErrorWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 5),
               child: Text(
-                "Error",
+                AppLocalizations.of(context)!.error,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,

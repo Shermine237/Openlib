@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 // Project imports:
 import 'package:openlib/ui/components/page_title_widget.dart';
 import 'package:openlib/ui/components/snack_bar_widget.dart';
+import 'package:openlib/l10n/app_localizations.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({super.key});
@@ -18,19 +19,19 @@ class AboutPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.surface,
-        title: const Text("Megalib"),
+        title: Text(AppLocalizations.of(context)!.appName),
         titleTextStyle: Theme.of(context).textTheme.displayLarge,
       ),
-      body: const SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         scrollDirection: Axis.vertical,
         child: Padding(
-          padding: EdgeInsets.only(left: 5, right: 5, top: 10),
+          padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TitleText("About"),
+              TitleText(AppLocalizations.of(context)!.about),
               Padding(
                 padding:
                     EdgeInsets.only(left: 7, right: 7, top: 13, bottom: 10),

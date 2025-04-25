@@ -4,6 +4,7 @@ import 'package:openlib/state/state.dart';
 import 'package:openlib/ui/categories_page.dart';
 import 'package:openlib/ui/components/page_title_widget.dart';
 import 'package:openlib/ui/trending_page.dart';
+import 'package:openlib/l10n/app_localizations.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -29,7 +30,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TitleText(selectedIndex == 0 ? "Trending" : "Genres"),
+                TitleText(selectedIndex == 0 ? AppLocalizations.of(context)!.trending : AppLocalizations.of(context)!.categories),
                 PelletContainer(
                   selectedIndex: selectedIndex,
                   onTrendingSelected: () => {
@@ -99,7 +100,7 @@ class PelletContainer extends StatelessWidget {
                         ? Theme.of(context).colorScheme.primary
                         : Theme.of(context).colorScheme.tertiary,
                   ),
-                  label: const Text(''), // Empty label
+                  label: Text(AppLocalizations.of(context)!.trending),
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.transparent,
                     padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -138,7 +139,7 @@ class PelletContainer extends StatelessWidget {
                         ? Theme.of(context).colorScheme.primary
                         : Theme.of(context).colorScheme.tertiary,
                   ),
-                  label: const Text(''), // Empty label
+                  label: Text(AppLocalizations.of(context)!.categories),
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.transparent,
                     padding: const EdgeInsets.symmetric(horizontal: 8),

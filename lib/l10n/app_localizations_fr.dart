@@ -57,7 +57,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get openWith => 'Ouvrir avec';
 
   @override
-  String get selectLanguage => 'Choisir la langue';
+  String get selectLanguage => 'Sélectionner la langue';
 
   @override
   String get cancel => 'Annuler';
@@ -66,7 +66,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get ok => 'OK';
 
   @override
-  String get changeStoragePath => 'Changer le dossier de stockage';
+  String get changeStoragePath => 'Changer le chemin de stockage';
 
   @override
   String get errorLoadingEpub => 'Erreur de chargement du fichier epub';
@@ -78,10 +78,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get searchHint => 'Rechercher des livres...';
 
   @override
-  String get all => 'Tous';
+  String get all => 'Tout';
 
   @override
-  String get mostRelevant => 'Plus Pertinent';
+  String get mostRelevant => 'Plus pertinent';
 
   @override
   String get fileNotExists => 'Le fichier n\'existe pas';
@@ -126,13 +126,31 @@ class AppLocalizationsFr extends AppLocalizations {
   String get delete => 'Supprimer';
 
   @override
-  String get deleteConfirmation => 'Êtes-vous sûr de vouloir supprimer ce livre ?';
+  String get deleteBookConfirmation => 'Supprimer le livre';
 
   @override
-  String get yes => 'Oui';
+  String get deletionIsPermanent => 'Cette action est permanente et ne peut pas être annulée';
 
   @override
-  String get no => 'Non';
+  String get bookDeletedSuccessfully => 'Le livre a été supprimé';
+
+  @override
+  String get searchResult => 'Résultats';
+
+  @override
+  String get noResultFound => 'Aucun résultat trouvé !';
+
+  @override
+  String get myLibraryTitle => 'Ma Bibliothèque';
+
+  @override
+  String get myLibraryIsEmptyMessage => 'Votre bibliothèque est vide';
+
+  @override
+  String get open => 'Ouvrir';
+
+  @override
+  String get retry => 'Réessayer';
 
   @override
   String get share => 'Partager';
@@ -168,10 +186,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get oldest => 'Plus ancien';
 
   @override
-  String get bookNotFound => 'Livre introuvable';
+  String get bookNotFound => 'Livre non trouvé';
 
   @override
-  String get networkError => 'Erreur de connexion';
+  String get networkError => 'Erreur réseau';
 
   @override
   String get tryAgain => 'Réessayer';
@@ -225,10 +243,10 @@ class AppLocalizationsFr extends AppLocalizations {
   String get bookmarkRemoved => 'Marque-page supprimé';
 
   @override
-  String get openPdfWithExternalApp => 'Ouvrir les PDF avec une application externe';
+  String get openPdfWithExternalApp => 'Ouvrir le PDF avec une application externe';
 
   @override
-  String get openEpubWithExternalApp => 'Ouvrir les EPUB avec une application externe';
+  String get openEpubWithExternalApp => 'Ouvrir l\'EPUB avec une application externe';
 
   @override
   String pageNumber(int number) {
@@ -241,25 +259,25 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get fontSize => 'Taille de police';
+  String get fontSize => 'Taille de la police';
 
   @override
-  String get small => 'Petite';
+  String get small => 'Petit';
 
   @override
-  String get medium => 'Moyenne';
+  String get medium => 'Moyen';
 
   @override
-  String get large => 'Grande';
+  String get large => 'Grand';
 
   @override
   String get scrollingSpeed => 'Vitesse de défilement';
 
   @override
-  String get slow => 'Lente';
+  String get slow => 'Lent';
 
   @override
-  String get normal => 'Normale';
+  String get normal => 'Normal';
 
   @override
   String get fast => 'Rapide';
@@ -274,10 +292,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get genres => 'Genres';
 
   @override
-  String get fiction => 'Fiction';
-
-  @override
-  String get sciTech => 'Science-Tech';
+  String get sciTech => 'Science et Technologie';
 
   @override
   String get popular => 'Populaire';
@@ -296,15 +311,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get md5 => 'MD5';
-
-  @override
-  String get open => 'Ouvrir';
-
-  @override
-  String get noResults => 'Aucun résultat trouvé';
-
-  @override
-  String get retry => 'Réessayer';
 
   @override
   String get aboutPageDescription => 'Megalib est un moteur de recherche de livres open source qui vous permet de rechercher et de télécharger des livres à partir de différentes sources.';
@@ -368,4 +374,94 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get solveCaptcha => 'Résoudre le Captcha';
+
+  @override
+  String get yes => 'Oui';
+
+  @override
+  String get no => 'Non';
+
+  @override
+  String get deleteConfirmation => 'Êtes-vous sûr de vouloir supprimer ce livre ?';
+
+  @override
+  String get classics => 'Classiques';
+
+  @override
+  String get romance => 'Romance';
+
+  @override
+  String get fiction => 'Fiction';
+
+  @override
+  String get youngAdult => 'Jeunes adultes';
+
+  @override
+  String get fantasy => 'Fantasy';
+
+  @override
+  String get scienceFiction => 'Science-fiction';
+
+  @override
+  String get nonfiction => 'Non-fiction';
+
+  @override
+  String get children => 'Enfants';
+
+  @override
+  String get history => 'Histoire';
+
+  @override
+  String get mystery => 'Mystère';
+
+  @override
+  String get covers => 'Couvertures';
+
+  @override
+  String get horror => 'Horreur';
+
+  @override
+  String get historicalFiction => 'Fiction historique';
+
+  @override
+  String get best => 'Meilleurs';
+
+  @override
+  String get titles => 'Titres';
+
+  @override
+  String get middleGrade => 'Collège';
+
+  @override
+  String get paranormal => 'Paranormal';
+
+  @override
+  String get love => 'Amour';
+
+  @override
+  String get queer => 'Queer';
+
+  @override
+  String get historicalRomance => 'Romance historique';
+
+  @override
+  String get contemporary => 'Contemporain';
+
+  @override
+  String get thriller => 'Thriller';
+
+  @override
+  String get women => 'Femmes';
+
+  @override
+  String get biography => 'Biographie';
+
+  @override
+  String get lgbtq => 'LGBTQ';
+
+  @override
+  String get series => 'Séries';
+
+  @override
+  String get titleChallenge => 'Défi des titres';
 }

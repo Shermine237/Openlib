@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 // Package imports:
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:openlib/l10n/app_localizations.dart';
 import 'package:open_file/open_file.dart';
 
 // Project imports:
@@ -25,6 +26,7 @@ class FileOpenAndDeleteButtons extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.only(top: 21, bottom: 21),
       child: Row(
@@ -50,9 +52,9 @@ class FileOpenAndDeleteButtons extends ConsumerWidget {
                 await openCbrAndCbz(fileName: '$id.$format', context: context);
               }
             },
-            child: const Padding(
-              padding: EdgeInsets.fromLTRB(17, 8, 17, 8),
-              child: Text('Open'),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(17, 8, 17, 8),
+              child: Text(l10n.open),
             ),
           ),
           const SizedBox(
@@ -87,7 +89,7 @@ class FileOpenAndDeleteButtons extends ConsumerWidget {
             child: Padding(
               padding: const EdgeInsets.all(5.3),
               child: Text(
-                'Delete',
+                l10n.delete,
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.bold,

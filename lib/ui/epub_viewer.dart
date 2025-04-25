@@ -19,6 +19,7 @@ import 'package:openlib/state/state.dart'
         saveEpubState,
         getBookPosition,
         openEpubWithExternalAppProvider;
+import 'package:openlib/l10n/app_localizations.dart';
 
 Future<void> launchEpubViewer(
     {required String fileName,
@@ -64,14 +65,14 @@ class _EpubViewState extends ConsumerState<EpubViewerWidget> {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.primary,
-            title: const Text('Error'),
+            title: Text(AppLocalizations.of(context)!.error),
           ),
-          body: const Center(
-            child: Text('Error loading epub file'),
+          body: Center(
+            child: Text(AppLocalizations.of(context)!.errorLoadingEpub),
           ),
         );
       },
-      loading: () => const Scaffold(
+      loading: () => Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
         ),
