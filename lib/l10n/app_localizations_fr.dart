@@ -66,7 +66,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get ok => 'OK';
 
   @override
-  String get changeStoragePath => 'Changer le chemin de stockage';
+  String get changeStoragePath => 'Changer le dossier de stockage';
 
   @override
   String get errorLoadingEpub => 'Erreur de chargement du fichier epub';
@@ -76,6 +76,75 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get searchHint => 'Rechercher des livres...';
+
+  @override
+  String get searchFieldEmpty => 'Le champ de recherche est vide';
+
+  @override
+  String get filterByType => 'Filtrer par type';
+
+  @override
+  String get filterBySort => 'Trier par';
+
+  @override
+  String get filterByFileType => 'Type de fichier';
+
+  @override
+  String get typeAll => 'Tous';
+
+  @override
+  String get typeAnyBooks => 'Tous les livres';
+
+  @override
+  String get typeUnknownBooks => 'Livres inconnus';
+
+  @override
+  String get typeFictionBooks => 'Romans';
+
+  @override
+  String get typeNonFictionBooks => 'Documentaires';
+
+  @override
+  String get typeComicBooks => 'Bandes dessinées';
+
+  @override
+  String get typeMagazine => 'Magazine';
+
+  @override
+  String get typeStandardsDocument => 'Document standard';
+
+  @override
+  String get typeJournalArticle => 'Article de journal';
+
+  @override
+  String get sortMostRelevant => 'Plus pertinent';
+
+  @override
+  String get sortNewest => 'Plus récent';
+
+  @override
+  String get sortOldest => 'Plus ancien';
+
+  @override
+  String get sortLargest => 'Plus grand';
+
+  @override
+  String get sortSmallest => 'Plus petit';
+
+  @override
+  String get fileTypeAll => 'Tous';
+
+  @override
+  String get fileTypePdf => 'PDF';
+
+  @override
+  String get fileTypeEpub => 'EPUB';
+
+  @override
+  String get fileTypeCbr => 'CBR';
+
+  @override
+  String get fileTypeCbz => 'CBZ';
 
   @override
   String get all => 'Tout';
@@ -341,9 +410,6 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get fileType => 'Type de fichier';
-
-  @override
-  String get searchFieldEmpty => 'Le champ de recherche est vide';
 
   @override
   String get couldNotOpenPdf => 'Impossible d\'ouvrir le PDF';

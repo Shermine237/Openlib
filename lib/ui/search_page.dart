@@ -57,6 +57,9 @@ class SearchPage extends ConsumerWidget {
               child: TextField(
                 showCursor: true,
                 cursorColor: Theme.of(context).colorScheme.secondary,
+                onChanged: (value) =>
+                    ref.read(searchQueryProvider.notifier).state = value,
+                onSubmitted: (value) => onSubmit(context, ref),
                 decoration: InputDecoration(
                   enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey, width: 2),
@@ -83,141 +86,114 @@ class SearchPage extends ConsumerWidget {
                   hintText: AppLocalizations.of(context)!.searchHint,
                   fillColor: Theme.of(context).colorScheme.primary,
                 ),
-                onSubmitted: (String value) => onSubmit(context, ref),
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.tertiary,
                   fontWeight: FontWeight.bold,
                   fontSize: 12,
                 ),
-                onChanged: (String value) {
-                  ref.read(searchQueryProvider.notifier).state = value;
-                },
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 7, right: 7, top: 19),
-              child: SizedBox(
-                width: 250,
-                child: DropdownButtonFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Type',
-                    labelStyle: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 2),
-                      borderRadius: BorderRadius.all(Radius.circular(50)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.tertiary,
-                          width: 2),
-                      borderRadius: const BorderRadius.all(Radius.circular(50)),
-                    ),
+              padding: const EdgeInsets.only(left: 7, right: 7, top: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(AppLocalizations.of(context)!.filterByType),
+                  const SizedBox(height: 8),
+                  DropdownButton<String>(
+                    value: dropdownTypeValue,
+                    isExpanded: true,
+                    items: typeValues.keys.map<DropdownMenuItem<String>>((String value) {
+                      String displayText = '';
+                      switch (value) {
+                        case 'typeAll': displayText = AppLocalizations.of(context)!.typeAll;
+                        case 'typeAnyBooks': displayText = AppLocalizations.of(context)!.typeAnyBooks;
+                        case 'typeUnknownBooks': displayText = AppLocalizations.of(context)!.typeUnknownBooks;
+                        case 'typeFictionBooks': displayText = AppLocalizations.of(context)!.typeFictionBooks;
+                        case 'typeNonFictionBooks': displayText = AppLocalizations.of(context)!.typeNonFictionBooks;
+                        case 'typeComicBooks': displayText = AppLocalizations.of(context)!.typeComicBooks;
+                        case 'typeMagazine': displayText = AppLocalizations.of(context)!.typeMagazine;
+                        case 'typeStandardsDocument': displayText = AppLocalizations.of(context)!.typeStandardsDocument;
+                        case 'typeJournalArticle': displayText = AppLocalizations.of(context)!.typeJournalArticle;
+                      }
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(displayText),
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      if (value != null) {
+                        ref.read(selectedTypeState.notifier).state = value;
+                      }
+                    },
                   ),
-                  icon: const Icon(Icons.arrow_drop_down),
-                  value: dropdownTypeValue,
-                  items: typeValues.keys
-                      .toList()
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                        style: const TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold),
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (String? val) {
-                    ref.read(selectedTypeState.notifier).state = val ?? '';
-                  },
-                ),
+                ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 7, right: 7, top: 19),
-              child: SizedBox(
-                width: 210,
-                child: DropdownButtonFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Sort by',
-                    labelStyle: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 2),
-                      borderRadius: BorderRadius.all(Radius.circular(50)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.tertiary,
-                          width: 2),
-                      borderRadius: const BorderRadius.all(Radius.circular(50)),
-                    ),
+              padding: const EdgeInsets.only(left: 7, right: 7, top: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(AppLocalizations.of(context)!.filterBySort),
+                  const SizedBox(height: 8),
+                  DropdownButton<String>(
+                    value: dropdownSortValue,
+                    isExpanded: true,
+                    items: sortValues.keys.map<DropdownMenuItem<String>>((String value) {
+                      String displayText = '';
+                      switch (value) {
+                        case 'sortMostRelevant': displayText = AppLocalizations.of(context)!.sortMostRelevant;
+                        case 'sortNewest': displayText = AppLocalizations.of(context)!.sortNewest;
+                        case 'sortOldest': displayText = AppLocalizations.of(context)!.sortOldest;
+                        case 'sortLargest': displayText = AppLocalizations.of(context)!.sortLargest;
+                        case 'sortSmallest': displayText = AppLocalizations.of(context)!.sortSmallest;
+                      }
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(displayText),
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      if (value != null) {
+                        ref.read(selectedSortState.notifier).state = value;
+                      }
+                    },
                   ),
-                  value: dropdownSortValue,
-                  items: sortValues.keys
-                      .toList()
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                        style: const TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold),
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (String? val) {
-                    ref.read(selectedSortState.notifier).state = val ?? '';
-                  },
-                ),
+                ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 7, right: 7, top: 19),
-              child: SizedBox(
-                width: 165,
-                child: DropdownButtonFormField(
-                  decoration: InputDecoration(
-                    labelText: 'File type',
-                    labelStyle: TextStyle(
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey, width: 2),
-                      borderRadius: BorderRadius.all(Radius.circular(50)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Theme.of(context).colorScheme.tertiary,
-                          width: 2),
-                      borderRadius: const BorderRadius.all(Radius.circular(50)),
-                    ),
+              padding: const EdgeInsets.only(left: 7, right: 7, top: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(AppLocalizations.of(context)!.filterByFileType),
+                  const SizedBox(height: 8),
+                  DropdownButton<String>(
+                    value: dropDownFileTypeValue,
+                    isExpanded: true,
+                    items: fileType.map<DropdownMenuItem<String>>((String value) {
+                      String displayText = '';
+                      switch (value) {
+                        case 'fileTypeAll': displayText = AppLocalizations.of(context)!.fileTypeAll;
+                        case 'fileTypePdf': displayText = AppLocalizations.of(context)!.fileTypePdf;
+                        case 'fileTypeEpub': displayText = AppLocalizations.of(context)!.fileTypeEpub;
+                        case 'fileTypeCbr': displayText = AppLocalizations.of(context)!.fileTypeCbr;
+                        case 'fileTypeCbz': displayText = AppLocalizations.of(context)!.fileTypeCbz;
+                      }
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(displayText),
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      if (value != null) {
+                        ref.read(selectedFileTypeState.notifier).state = value;
+                      }
+                    },
                   ),
-                  value: dropDownFileTypeValue,
-                  items: fileType.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                        style: const TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold),
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (String? val) {
-                    ref.read(selectedFileTypeState.notifier).state =
-                        val ?? 'All';
-                  },
-                ),
+                ],
               ),
             ),
           ],

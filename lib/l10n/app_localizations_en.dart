@@ -78,6 +78,75 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchHint => 'Search books...';
 
   @override
+  String get searchFieldEmpty => 'Search field is empty';
+
+  @override
+  String get filterByType => 'Filter by Type';
+
+  @override
+  String get filterBySort => 'Sort by';
+
+  @override
+  String get filterByFileType => 'File Type';
+
+  @override
+  String get typeAll => 'All';
+
+  @override
+  String get typeAnyBooks => 'Any Books';
+
+  @override
+  String get typeUnknownBooks => 'Unknown Books';
+
+  @override
+  String get typeFictionBooks => 'Fiction Books';
+
+  @override
+  String get typeNonFictionBooks => 'Non-fiction Books';
+
+  @override
+  String get typeComicBooks => 'Comic Books';
+
+  @override
+  String get typeMagazine => 'Magazine';
+
+  @override
+  String get typeStandardsDocument => 'Standards Document';
+
+  @override
+  String get typeJournalArticle => 'Journal Article';
+
+  @override
+  String get sortMostRelevant => 'Most Relevant';
+
+  @override
+  String get sortNewest => 'Newest';
+
+  @override
+  String get sortOldest => 'Oldest';
+
+  @override
+  String get sortLargest => 'Largest';
+
+  @override
+  String get sortSmallest => 'Smallest';
+
+  @override
+  String get fileTypeAll => 'All';
+
+  @override
+  String get fileTypePdf => 'PDF';
+
+  @override
+  String get fileTypeEpub => 'EPUB';
+
+  @override
+  String get fileTypeCbr => 'CBR';
+
+  @override
+  String get fileTypeCbz => 'CBZ';
+
+  @override
   String get all => 'All';
 
   @override
@@ -341,9 +410,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fileType => 'File type';
-
-  @override
-  String get searchFieldEmpty => 'Search field is empty';
 
   @override
   String get couldNotOpenPdf => 'Could not open the PDF';

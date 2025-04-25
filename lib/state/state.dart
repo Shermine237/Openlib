@@ -21,26 +21,32 @@ MyLibraryDb dataBase = MyLibraryDb.instance;
 //Provider for dropdownbutton in search page
 
 Map<String, String> typeValues = {
-  'All': '',
-  'Any Books': 'book_any',
-  'Unknown Books': 'book_unknown',
-  'Fiction Books': 'book_fiction',
-  'Non-fiction Books': 'book_nonfiction',
-  'Comic Books': 'book_comic',
-  'Magazine': 'magazine',
-  'Standards Document': 'standards_document',
-  'Journal Article': 'journal_article'
+  'typeAll': '',
+  'typeAnyBooks': 'book_any',
+  'typeUnknownBooks': 'book_unknown',
+  'typeFictionBooks': 'book_fiction',
+  'typeNonFictionBooks': 'book_nonfiction',
+  'typeComicBooks': 'book_comic',
+  'typeMagazine': 'magazine',
+  'typeStandardsDocument': 'standards_document',
+  'typeJournalArticle': 'journal_article'
 };
 
 Map<String, String> sortValues = {
-  'Most Relevant': '',
-  'Newest': 'newest',
-  'Oldest': 'oldest',
-  'Largest': 'largest',
-  'Smallest': 'smallest',
+  'sortMostRelevant': '',
+  'sortNewest': 'newest',
+  'sortOldest': 'oldest',
+  'sortLargest': 'largest',
+  'sortSmallest': 'smallest',
 };
 
-List<String> fileType = ["All", "PDF", "Epub", "Cbr", "Cbz"];
+List<String> fileType = [
+  'fileTypeAll',
+  'fileTypePdf',
+  'fileTypeEpub',
+  'fileTypeCbr',
+  'fileTypeCbz'
+];
 
 final selectedIndexProvider = StateProvider<int>((ref) => 0);
 final homePageSelectedIndexProvider = StateProvider<int>((ref) => 0);
@@ -101,22 +107,22 @@ final localeNotifierProvider = StateNotifierProvider<LocaleNotifier, Locale?>((r
   return LocaleNotifier(database);
 });
 
-final selectedTypeState = StateProvider<String>((ref) => "All");
+final selectedTypeState = StateProvider<String>((ref) => "typeAll");
 
 final getTypeValue = Provider.autoDispose<String>((ref) {
   return typeValues[ref.read(selectedTypeState)] ?? '';
 });
 
-final selectedSortState = StateProvider<String>((ref) => "Most Relevant");
+final selectedSortState = StateProvider<String>((ref) => "sortMostRelevant");
 
 final getSortValue = Provider.autoDispose<String>((ref) {
   return sortValues[ref.read(selectedSortState)] ?? '';
 });
 
-final selectedFileTypeState = StateProvider<String>((ref) => "All");
+final selectedFileTypeState = StateProvider<String>((ref) => "fileTypeAll");
 
 final getFileTypeValue = Provider.autoDispose<String>((ref) {
-  if (ref.read(selectedFileTypeState) == "All") {
+  if (ref.read(selectedFileTypeState) == "fileTypeAll") {
     return '';
   }
   return ref.read(selectedFileTypeState).toLowerCase();

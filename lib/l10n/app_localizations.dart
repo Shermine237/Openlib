@@ -233,6 +233,144 @@ abstract class AppLocalizations {
   /// **'Search books...'**
   String get searchHint;
 
+  /// No description provided for @searchFieldEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Search field is empty'**
+  String get searchFieldEmpty;
+
+  /// No description provided for @filterByType.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter by Type'**
+  String get filterByType;
+
+  /// No description provided for @filterBySort.
+  ///
+  /// In en, this message translates to:
+  /// **'Sort by'**
+  String get filterBySort;
+
+  /// No description provided for @filterByFileType.
+  ///
+  /// In en, this message translates to:
+  /// **'File Type'**
+  String get filterByFileType;
+
+  /// No description provided for @typeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get typeAll;
+
+  /// No description provided for @typeAnyBooks.
+  ///
+  /// In en, this message translates to:
+  /// **'Any Books'**
+  String get typeAnyBooks;
+
+  /// No description provided for @typeUnknownBooks.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown Books'**
+  String get typeUnknownBooks;
+
+  /// No description provided for @typeFictionBooks.
+  ///
+  /// In en, this message translates to:
+  /// **'Fiction Books'**
+  String get typeFictionBooks;
+
+  /// No description provided for @typeNonFictionBooks.
+  ///
+  /// In en, this message translates to:
+  /// **'Non-fiction Books'**
+  String get typeNonFictionBooks;
+
+  /// No description provided for @typeComicBooks.
+  ///
+  /// In en, this message translates to:
+  /// **'Comic Books'**
+  String get typeComicBooks;
+
+  /// No description provided for @typeMagazine.
+  ///
+  /// In en, this message translates to:
+  /// **'Magazine'**
+  String get typeMagazine;
+
+  /// No description provided for @typeStandardsDocument.
+  ///
+  /// In en, this message translates to:
+  /// **'Standards Document'**
+  String get typeStandardsDocument;
+
+  /// No description provided for @typeJournalArticle.
+  ///
+  /// In en, this message translates to:
+  /// **'Journal Article'**
+  String get typeJournalArticle;
+
+  /// No description provided for @sortMostRelevant.
+  ///
+  /// In en, this message translates to:
+  /// **'Most Relevant'**
+  String get sortMostRelevant;
+
+  /// No description provided for @sortNewest.
+  ///
+  /// In en, this message translates to:
+  /// **'Newest'**
+  String get sortNewest;
+
+  /// No description provided for @sortOldest.
+  ///
+  /// In en, this message translates to:
+  /// **'Oldest'**
+  String get sortOldest;
+
+  /// No description provided for @sortLargest.
+  ///
+  /// In en, this message translates to:
+  /// **'Largest'**
+  String get sortLargest;
+
+  /// No description provided for @sortSmallest.
+  ///
+  /// In en, this message translates to:
+  /// **'Smallest'**
+  String get sortSmallest;
+
+  /// No description provided for @fileTypeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get fileTypeAll;
+
+  /// No description provided for @fileTypePdf.
+  ///
+  /// In en, this message translates to:
+  /// **'PDF'**
+  String get fileTypePdf;
+
+  /// No description provided for @fileTypeEpub.
+  ///
+  /// In en, this message translates to:
+  /// **'EPUB'**
+  String get fileTypeEpub;
+
+  /// No description provided for @fileTypeCbr.
+  ///
+  /// In en, this message translates to:
+  /// **'CBR'**
+  String get fileTypeCbr;
+
+  /// No description provided for @fileTypeCbz.
+  ///
+  /// In en, this message translates to:
+  /// **'CBZ'**
+  String get fileTypeCbz;
+
   /// No description provided for @all.
   ///
   /// In en, this message translates to:
@@ -754,12 +892,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'File type'**
   String get fileType;
-
-  /// No description provided for @searchFieldEmpty.
-  ///
-  /// In en, this message translates to:
-  /// **'Search field is empty'**
-  String get searchFieldEmpty;
 
   /// No description provided for @couldNotOpenPdf.
   ///
