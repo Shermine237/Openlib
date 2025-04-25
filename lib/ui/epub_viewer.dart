@@ -71,7 +71,7 @@ class _EpubViewState extends ConsumerState<EpubViewerWidget> {
           ),
         );
       },
-      loading: () => Scaffold(
+      loading: () => const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
         ),
