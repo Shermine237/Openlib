@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart' show CancelToken;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' as riverpod;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:openlib/l10n/app_localizations.dart';
 import 'package:openlib/services/share_book.dart';
 
@@ -226,18 +227,21 @@ class _ActionButtonWidgetState extends ConsumerState<ActionButtonWidget> {
                   onPressed: () async {
                     if (widget.data.mirror != null &&
                         widget.data.mirror != '') {
-                      final result = await Navigator.push(context,
+                      // Capture context before async operation
+                      final currentContext = context;
+                      final result = await Navigator.push(currentContext,
                           MaterialPageRoute(builder: (BuildContext context) {
                         return Webview(url: widget.data.mirror ?? '');
                       }));
 
-                      if (result != null) {
+                      if (result != null && currentContext.mounted) {
                         await downloadFileWidget(
-                            ref, context, widget.data, result);
+                            ref, currentContext, widget.data, result);
                       }
                     } else {
                       showSnackBar(
-                          context: context, message: 'No mirrors available!');
+                          context: context, 
+                          message: AppLocalizations.of(context)!.noMirrorsAvailable);
                     }
                   },
                   child: Text(AppLocalizations.of(context)!.addToLibrary),
@@ -351,10 +355,13 @@ class _ShowDialog extends ConsumerWidget {
     if (downloadProgress == 1.0 &&
         (checkSumVerifyState == CheckSumProcessState.failed ||
             checkSumVerifyState == CheckSumProcessState.success)) {
+      // Capture context before async operation
+      final currentContext = context;
       Future.delayed(const Duration(seconds: 1), () {
-        Navigator.of(context).pop();
+        if (!currentContext.mounted) return;
+        Navigator.of(currentContext).pop();
         if (checkSumVerifyState == CheckSumProcessState.failed) {
-          _showWarningFileDialog(context);
+          _showWarningFileDialog(currentContext);
         }
       });
     }
