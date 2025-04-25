@@ -269,4 +269,103 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get systemDefault => 'System default';
+
+  @override
+  String get genres => 'Genres';
+
+  @override
+  String get fiction => 'Fiction';
+
+  @override
+  String get sciTech => 'Sci-Tech';
+
+  @override
+  String get popular => 'Popular';
+
+  @override
+  String get title => 'Title';
+
+  @override
+  String get extension => 'Extension';
+
+  @override
+  String get isbn => 'ISBN';
+
+  @override
+  String get ipfs => 'IPFS';
+
+  @override
+  String get md5 => 'MD5';
+
+  @override
+  String get open => 'Open';
+
+  @override
+  String get noResults => 'No results found';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get aboutPageDescription => 'Megalib is an open source book search engine that allows you to search and download books from various sources.';
+
+  @override
+  String get version => 'Version';
+
+  @override
+  String get github => 'Github';
+
+  @override
+  String get openGithubPage => 'Open Github Page';
+
+  @override
+  String get contributeToMegalib => 'Contribute To Megalib';
+
+  @override
+  String get reportAnIssue => 'Report An Issue';
+
+  @override
+  String get licence => 'Licence';
+
+  @override
+  String get gplV30License => 'GPL v3.0 license';
+
+  @override
+  String get type => 'Type';
+
+  @override
+  String get fileType => 'File type';
+
+  @override
+  String get searchFieldEmpty => 'Search field is empty';
+
+  @override
+  String get couldNotOpenPdf => 'Could not open the PDF';
+
+  @override
+  String get couldNotLaunchUrl => 'Could not launch URL';
+
+  @override
+  String get unableToOpenFile => 'Unable to open file';
+
+  @override
+  String get unableToOpenEpub => 'Unable to open epub';
+
+  @override
+  String get bookDownloaded => 'Book has been downloaded!';
+
+  @override
+  String get noMirrorsAvailable => 'No mirrors available';
+
+  @override
+  String get checksumFailed => 'Checksum failed';
+
+  @override
+  String get checksumFailedWarning => 'The downloaded book may be malicious. Delete it and get the same book from another source, or use the book at your own risk.';
+
+  @override
+  String get addToLibrary => 'Add To My Library';
+
+  @override
+  String get solveCaptcha => 'Solve Captcha';
 }

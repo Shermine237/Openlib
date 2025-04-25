@@ -610,6 +610,204 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'System default'**
   String get systemDefault;
+
+  /// No description provided for @genres.
+  ///
+  /// In en, this message translates to:
+  /// **'Genres'**
+  String get genres;
+
+  /// No description provided for @fiction.
+  ///
+  /// In en, this message translates to:
+  /// **'Fiction'**
+  String get fiction;
+
+  /// No description provided for @sciTech.
+  ///
+  /// In en, this message translates to:
+  /// **'Sci-Tech'**
+  String get sciTech;
+
+  /// No description provided for @popular.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular'**
+  String get popular;
+
+  /// No description provided for @title.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get title;
+
+  /// No description provided for @extension.
+  ///
+  /// In en, this message translates to:
+  /// **'Extension'**
+  String get extension;
+
+  /// No description provided for @isbn.
+  ///
+  /// In en, this message translates to:
+  /// **'ISBN'**
+  String get isbn;
+
+  /// No description provided for @ipfs.
+  ///
+  /// In en, this message translates to:
+  /// **'IPFS'**
+  String get ipfs;
+
+  /// No description provided for @md5.
+  ///
+  /// In en, this message translates to:
+  /// **'MD5'**
+  String get md5;
+
+  /// No description provided for @open.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get open;
+
+  /// No description provided for @noResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No results found'**
+  String get noResults;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @aboutPageDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Megalib is an open source book search engine that allows you to search and download books from various sources.'**
+  String get aboutPageDescription;
+
+  /// No description provided for @version.
+  ///
+  /// In en, this message translates to:
+  /// **'Version'**
+  String get version;
+
+  /// No description provided for @github.
+  ///
+  /// In en, this message translates to:
+  /// **'Github'**
+  String get github;
+
+  /// No description provided for @openGithubPage.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Github Page'**
+  String get openGithubPage;
+
+  /// No description provided for @contributeToMegalib.
+  ///
+  /// In en, this message translates to:
+  /// **'Contribute To Megalib'**
+  String get contributeToMegalib;
+
+  /// No description provided for @reportAnIssue.
+  ///
+  /// In en, this message translates to:
+  /// **'Report An Issue'**
+  String get reportAnIssue;
+
+  /// No description provided for @licence.
+  ///
+  /// In en, this message translates to:
+  /// **'Licence'**
+  String get licence;
+
+  /// No description provided for @gplV30License.
+  ///
+  /// In en, this message translates to:
+  /// **'GPL v3.0 license'**
+  String get gplV30License;
+
+  /// No description provided for @type.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get type;
+
+  /// No description provided for @fileType.
+  ///
+  /// In en, this message translates to:
+  /// **'File type'**
+  String get fileType;
+
+  /// No description provided for @searchFieldEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Search field is empty'**
+  String get searchFieldEmpty;
+
+  /// No description provided for @couldNotOpenPdf.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the PDF'**
+  String get couldNotOpenPdf;
+
+  /// No description provided for @couldNotLaunchUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not launch URL'**
+  String get couldNotLaunchUrl;
+
+  /// No description provided for @unableToOpenFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open file'**
+  String get unableToOpenFile;
+
+  /// No description provided for @unableToOpenEpub.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to open epub'**
+  String get unableToOpenEpub;
+
+  /// No description provided for @bookDownloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Book has been downloaded!'**
+  String get bookDownloaded;
+
+  /// No description provided for @noMirrorsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No mirrors available'**
+  String get noMirrorsAvailable;
+
+  /// No description provided for @checksumFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Checksum failed'**
+  String get checksumFailed;
+
+  /// No description provided for @checksumFailedWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'The downloaded book may be malicious. Delete it and get the same book from another source, or use the book at your own risk.'**
+  String get checksumFailedWarning;
+
+  /// No description provided for @addToLibrary.
+  ///
+  /// In en, this message translates to:
+  /// **'Add To My Library'**
+  String get addToLibrary;
+
+  /// No description provided for @solveCaptcha.
+  ///
+  /// In en, this message translates to:
+  /// **'Solve Captcha'**
+  String get solveCaptcha;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

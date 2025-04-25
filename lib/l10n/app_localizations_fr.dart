@@ -269,4 +269,103 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get systemDefault => 'Système par défaut';
+
+  @override
+  String get genres => 'Genres';
+
+  @override
+  String get fiction => 'Fiction';
+
+  @override
+  String get sciTech => 'Science-Tech';
+
+  @override
+  String get popular => 'Populaire';
+
+  @override
+  String get title => 'Titre';
+
+  @override
+  String get extension => 'Extension';
+
+  @override
+  String get isbn => 'ISBN';
+
+  @override
+  String get ipfs => 'IPFS';
+
+  @override
+  String get md5 => 'MD5';
+
+  @override
+  String get open => 'Ouvrir';
+
+  @override
+  String get noResults => 'Aucun résultat trouvé';
+
+  @override
+  String get retry => 'Réessayer';
+
+  @override
+  String get aboutPageDescription => 'Megalib est un moteur de recherche de livres open source qui vous permet de rechercher et de télécharger des livres à partir de différentes sources.';
+
+  @override
+  String get version => 'Version';
+
+  @override
+  String get github => 'Github';
+
+  @override
+  String get openGithubPage => 'Ouvrir la page Github';
+
+  @override
+  String get contributeToMegalib => 'Contribuer à Megalib';
+
+  @override
+  String get reportAnIssue => 'Signaler un problème';
+
+  @override
+  String get licence => 'Licence';
+
+  @override
+  String get gplV30License => 'Licence GPL v3.0';
+
+  @override
+  String get type => 'Type';
+
+  @override
+  String get fileType => 'Type de fichier';
+
+  @override
+  String get searchFieldEmpty => 'Le champ de recherche est vide';
+
+  @override
+  String get couldNotOpenPdf => 'Impossible d\'ouvrir le PDF';
+
+  @override
+  String get couldNotLaunchUrl => 'Impossible d\'ouvrir l\'URL';
+
+  @override
+  String get unableToOpenFile => 'Impossible d\'ouvrir le fichier';
+
+  @override
+  String get unableToOpenEpub => 'Impossible d\'ouvrir l\'epub';
+
+  @override
+  String get bookDownloaded => 'Le livre a été téléchargé !';
+
+  @override
+  String get noMirrorsAvailable => 'Aucun miroir disponible';
+
+  @override
+  String get checksumFailed => 'La vérification a échoué';
+
+  @override
+  String get checksumFailedWarning => 'Le livre téléchargé peut être malveillant. Supprimez-le et téléchargez le même livre depuis une autre source, ou utilisez-le à vos risques et périls.';
+
+  @override
+  String get addToLibrary => 'Ajouter à ma bibliothèque';
+
+  @override
+  String get solveCaptcha => 'Résoudre le Captcha';
 }
