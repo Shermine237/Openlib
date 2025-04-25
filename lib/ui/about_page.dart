@@ -32,22 +32,21 @@ class AboutPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TitleText(AppLocalizations.of(context)!.about),
-              Padding(
-                padding:
-                    EdgeInsets.only(left: 7, right: 7, top: 13, bottom: 10),
+              const Padding(
+                padding: EdgeInsets.only(left: 7, right: 7, top: 13, bottom: 10),
                 child: Text(
                   "An Open source app to download and read books from shadow library (Anna`s Archive)",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
-              Padding(
+              const Padding(
                 padding: EdgeInsets.only(left: 7, right: 7, top: 10),
                 child: Text(
                   "Version",
                   style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
                 ),
               ),
-              Padding(
+              const Padding(
                 padding: EdgeInsets.only(left: 7, right: 7, top: 5),
                 child: Text(
                   version,
@@ -57,34 +56,36 @@ class AboutPage extends StatelessWidget {
                       color: Colors.grey),
                 ),
               ),
-              Padding(
+              const Padding(
                 padding: EdgeInsets.only(left: 7, right: 7, top: 15),
                 child: Text(
                   "Github",
                   style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
                 ),
               ),
-              _UrlText(
+              const _UrlText(
                 text: 'Open Github Page',
                 url: 'https://github.com/dstark5/Openlib',
               ),
-              _UrlText(
-                  text: 'Contribute To Megalib',
-                  url:
-                      'https://github.com/dstark5/Openlib/blob/main/CONTRIBUTING.md'),
-              _UrlText(
-                  text: 'Report An Issue',
-                  url: 'https://github.com/dstark5/Openlib/issues'),
-              Padding(
+              const _UrlText(
+                text: 'Contribute To Megalib',
+                url: 'https://github.com/dstark5/Openlib/blob/main/CONTRIBUTING.md',
+              ),
+              const _UrlText(
+                text: 'Report An Issue',
+                url: 'https://github.com/dstark5/Openlib/issues',
+              ),
+              const Padding(
                 padding: EdgeInsets.only(left: 7, right: 7, top: 15),
                 child: Text(
                   "Licence",
                   style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
                 ),
               ),
-              _UrlText(
-                  text: "GPL v3.0 license",
-                  url: 'https://www.gnu.org/licenses/gpl-3.0.en.html'),
+              const _UrlText(
+                text: "GPL v3.0 license",
+                url: 'https://www.gnu.org/licenses/gpl-3.0.en.html',
+              ),
             ],
           ),
         ),
