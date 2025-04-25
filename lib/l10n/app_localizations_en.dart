@@ -454,80 +454,161 @@ class AppLocalizationsEn extends AppLocalizations {
   String get classics => 'Classics';
 
   @override
+  String get classicsDescription => 'Timeless literary works often revered for their artistic merit and cultural significance.';
+
+  @override
   String get romance => 'Romance';
+
+  @override
+  String get romanceDescription => 'Stories focused on romantic relationships, exploring love, passion, and emotional connections.';
 
   @override
   String get fiction => 'Fiction';
 
   @override
+  String get fictionDescription => 'Narrative literature created from the imagination, not based on real events.';
+
+  @override
   String get youngAdult => 'Young Adult';
+
+  @override
+  String get youngAdultDescription => 'Literature aimed at adolescents and young adults, often dealing with coming-of-age themes.';
 
   @override
   String get fantasy => 'Fantasy';
 
   @override
+  String get fantasyDescription => 'Literature featuring magical elements, mythical creatures, and imaginary worlds.';
+
+  @override
   String get scienceFiction => 'Science Fiction';
+
+  @override
+  String get scienceFictionDescription => 'Literature based on scientific concepts, technological advancement, and futuristic scenarios.';
 
   @override
   String get nonfiction => 'Nonfiction';
 
   @override
+  String get nonfictionDescription => 'Literature based on facts, real events, and real people.';
+
+  @override
   String get children => 'Children';
+
+  @override
+  String get childrenDescription => 'Literature written for and marketed to children.';
 
   @override
   String get history => 'History';
 
   @override
+  String get historyDescription => 'Literature about past events, people, and societies.';
+
+  @override
   String get mystery => 'Mystery';
+
+  @override
+  String get mysteryDescription => 'Literature involving crime, suspense, and detective work.';
 
   @override
   String get covers => 'Covers';
 
   @override
+  String get coversDescription => 'Book covers and artwork.';
+
+  @override
   String get horror => 'Horror';
+
+  @override
+  String get horrorDescription => 'Literature designed to frighten and unsettle readers.';
 
   @override
   String get historicalFiction => 'Historical Fiction';
 
   @override
+  String get historicalFictionDescription => 'Fiction set in the past, often during significant historical periods.';
+
+  @override
   String get best => 'Best';
+
+  @override
+  String get bestDescription => 'Highly rated and popular books.';
 
   @override
   String get titles => 'Titles';
 
   @override
+  String get titlesDescription => 'Books organized by their titles.';
+
+  @override
   String get middleGrade => 'Middle Grade';
+
+  @override
+  String get middleGradeDescription => 'Literature for readers between children\'s and young adult levels.';
 
   @override
   String get paranormal => 'Paranormal';
 
   @override
+  String get paranormalDescription => 'Literature featuring supernatural and paranormal elements.';
+
+  @override
   String get love => 'Love';
+
+  @override
+  String get loveDescription => 'Literature focusing on romantic love and relationships.';
 
   @override
   String get queer => 'Queer';
 
   @override
+  String get queerDescription => 'Literature featuring LGBTQ+ themes and characters.';
+
+  @override
   String get historicalRomance => 'Historical Romance';
+
+  @override
+  String get historicalRomanceDescription => 'Romance novels set in historical periods.';
 
   @override
   String get contemporary => 'Contemporary';
 
   @override
+  String get contemporaryDescription => 'Literature set in the present day.';
+
+  @override
   String get thriller => 'Thriller';
+
+  @override
+  String get thrillerDescription => 'Literature designed to create suspense and excitement.';
 
   @override
   String get women => 'Women';
 
   @override
+  String get womenDescription => 'Literature focusing on women\'s experiences and perspectives.';
+
+  @override
   String get biography => 'Biography';
+
+  @override
+  String get biographyDescription => 'Non-fiction accounts of people\'s lives.';
 
   @override
   String get lgbtq => 'LGBTQ';
 
   @override
+  String get lgbtqDescription => 'Literature with LGBTQ+ themes and representation.';
+
+  @override
   String get series => 'Series';
 
   @override
+  String get seriesDescription => 'Books that are part of a series.';
+
+  @override
   String get titleChallenge => 'Title Challenge';
+
+  @override
+  String get titleChallengeDescription => 'Books participating in the title challenge.';
 }

@@ -41,218 +41,164 @@ class CategoryBook {
 List<CategoryBook> getCategoriesTypeValues(BuildContext context) {
   return [
     CategoryBook(
-      info:
-          "Timeless literary works often revered for their artistic merit and cultural significance.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/1%20classic.jpeg",
+      info: AppLocalizations.of(context)!.classicsDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/1%20classic.jpeg",
       title: AppLocalizations.of(context)!.classics,
       tag: "list/tag/classics",
     ),
     CategoryBook(
-      info:
-          "Stories focused on romantic relationships, exploring love, passion, and emotional connections.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/2%20romance.jpeg",
+      info: AppLocalizations.of(context)!.romanceDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/2%20romance.jpeg",
       title: AppLocalizations.of(context)!.romance,
       tag: "list/tag/romance",
     ),
     CategoryBook(
-      info:
-          "Narrative literature created from the imagination, not based on real events.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/3%20fiction.jpeg",
+      info: AppLocalizations.of(context)!.fictionDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/3%20fiction.jpeg",
       title: AppLocalizations.of(context)!.fiction,
       tag: "list/tag/fiction",
     ),
     CategoryBook(
-      info:
-          "Literature aimed at adolescents and young adults, often dealing with coming-of-age themes.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/4%20young%20adult.jpeg",
+      info: AppLocalizations.of(context)!.youngAdultDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/4%20young%20adult.jpeg",
       title: AppLocalizations.of(context)!.youngAdult,
       tag: "list/tag/young-adult",
     ),
     CategoryBook(
-      info:
-          "Literature featuring magical elements, mythical creatures, and imaginary worlds.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/5%20fantasy%20book.jpeg",
+      info: AppLocalizations.of(context)!.fantasyDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/5%20fantasy%20book.jpeg",
       title: AppLocalizations.of(context)!.fantasy,
       tag: "list/tag/fantasy",
     ),
     CategoryBook(
-      info:
-          "Literature based on scientific concepts, technological advancement, and futuristic scenarios.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/6%20science%20fiction.jpeg",
+      info: AppLocalizations.of(context)!.scienceFictionDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/6%20science%20fiction.jpeg",
       title: AppLocalizations.of(context)!.scienceFiction,
       tag: "list/tag/science-fiction",
     ),
     CategoryBook(
-      info:
-          "Literature based on facts, real events, and real people.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/7%20non%20fiction.jpeg",
+      info: AppLocalizations.of(context)!.nonfictionDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/7%20non%20fiction.jpeg",
       title: AppLocalizations.of(context)!.nonfiction,
       tag: "list/tag/non-fiction",
     ),
     CategoryBook(
-      info:
-          "Literature written for and marketed to children.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/8%20children.jpeg",
+      info: AppLocalizations.of(context)!.childrenDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/8%20children.jpeg",
       title: AppLocalizations.of(context)!.children,
       tag: "list/tag/children",
     ),
     CategoryBook(
-      info:
-          "Literature about past events, people, and societies.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/9%20history.jpeg",
+      info: AppLocalizations.of(context)!.historyDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/9%20history.jpeg",
       title: AppLocalizations.of(context)!.history,
       tag: "list/tag/history",
     ),
     CategoryBook(
-      info:
-          "Literature involving crime, suspense, and detective work.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/10%20mystery.jpeg",
+      info: AppLocalizations.of(context)!.mysteryDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/10%20mystery.jpeg",
       title: AppLocalizations.of(context)!.mystery,
       tag: "list/tag/mystery",
     ),
     CategoryBook(
-      info:
-          "Book covers and artwork.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/11%20covers.jpeg",
+      info: AppLocalizations.of(context)!.coversDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/11%20covers.jpeg",
       title: AppLocalizations.of(context)!.covers,
       tag: "list/tag/covers",
     ),
     CategoryBook(
-      info:
-          "Literature designed to frighten and unsettle readers.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/12%20horror.jpeg",
+      info: AppLocalizations.of(context)!.horrorDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/12%20horror.jpeg",
       title: AppLocalizations.of(context)!.horror,
       tag: "list/tag/horror",
     ),
     CategoryBook(
-      info:
-          "Fiction set in the past, often during significant historical periods.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/13%20historical%20fiction.jpeg",
+      info: AppLocalizations.of(context)!.historicalFictionDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/13%20historical%20fiction.jpeg",
       title: AppLocalizations.of(context)!.historicalFiction,
       tag: "list/tag/historical-fiction",
     ),
     CategoryBook(
-      info:
-          "Highly rated and popular books.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/15%20best%20.jpeg",
+      info: AppLocalizations.of(context)!.bestDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/15%20best%20.jpeg",
       title: AppLocalizations.of(context)!.best,
       tag: "list/tag/best",
     ),
     CategoryBook(
-      info:
-          "Books organized by their titles.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/16%20titles.jpeg",
+      info: AppLocalizations.of(context)!.titlesDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/16%20titles.jpeg",
       title: AppLocalizations.of(context)!.titles,
       tag: "list/tag/titles",
     ),
     CategoryBook(
-      info:
-          "Literature for readers between children's and young adult levels.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/17%20middle%20grade.jpeg",
+      info: AppLocalizations.of(context)!.middleGradeDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/17%20middle%20grade.jpeg",
       title: AppLocalizations.of(context)!.middleGrade,
       tag: "list/tag/middle-grade",
     ),
     CategoryBook(
-      info:
-          "Literature featuring supernatural and paranormal elements.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/18%20paranormal.jpeg",
+      info: AppLocalizations.of(context)!.paranormalDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/18%20paranormal.jpeg",
       title: AppLocalizations.of(context)!.paranormal,
       tag: "list/tag/paranormal",
     ),
     CategoryBook(
-      info:
-          "Literature focusing on romantic love and relationships.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/19%20love.jpeg",
+      info: AppLocalizations.of(context)!.loveDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/19%20love.jpeg",
       title: AppLocalizations.of(context)!.love,
       tag: "list/tag/love",
     ),
     CategoryBook(
-      info:
-          "Literature featuring LGBTQ+ themes and characters.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/20%20queer.jpeg",
+      info: AppLocalizations.of(context)!.queerDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/20%20queer.jpeg",
       title: AppLocalizations.of(context)!.queer,
       tag: "list/tag/queer",
     ),
     CategoryBook(
-      info:
-          "Romance novels set in historical periods.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/22%20historical%20romance.jpeg",
+      info: AppLocalizations.of(context)!.historicalRomanceDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/22%20historical%20romance.jpeg",
       title: AppLocalizations.of(context)!.historicalRomance,
       tag: "list/tag/historical-romance",
     ),
     CategoryBook(
-      info:
-          "Literature set in the present day.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/24%20contemporary.jpeg",
+      info: AppLocalizations.of(context)!.contemporaryDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/24%20contemporary.jpeg",
       title: AppLocalizations.of(context)!.contemporary,
       tag: "list/tag/contemporary",
     ),
     CategoryBook(
-      info:
-          "Literature designed to create suspense and excitement.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/25%20thriller.jpeg",
+      info: AppLocalizations.of(context)!.thrillerDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/25%20thriller.jpeg",
       title: AppLocalizations.of(context)!.thriller,
       tag: "list/tag/thriller",
     ),
     CategoryBook(
-      info:
-          "Literature focusing on women's experiences and perspectives.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/26%20women.jpeg",
+      info: AppLocalizations.of(context)!.womenDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/26%20women.jpeg",
       title: AppLocalizations.of(context)!.women,
       tag: "list/tag/women",
     ),
     CategoryBook(
-      info:
-          "Non-fiction accounts of people's lives.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/27%20biography.jpeg",
+      info: AppLocalizations.of(context)!.biographyDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/27%20biography.jpeg",
       title: AppLocalizations.of(context)!.biography,
       tag: "list/tag/biography",
     ),
     CategoryBook(
-      info:
-          "Literature with LGBTQ+ themes and representation.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/28%20lgbtq.jpeg",
+      info: AppLocalizations.of(context)!.lgbtqDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/28%20lgbtq.jpeg",
       title: AppLocalizations.of(context)!.lgbtq,
       tag: "list/tag/lgbtq",
     ),
     CategoryBook(
-      info:
-          "Books that are part of a series.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/29%20series%20.jpeg",
+      info: AppLocalizations.of(context)!.seriesDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/29%20series%20.jpeg",
       title: AppLocalizations.of(context)!.series,
       tag: "list/tag/series",
     ),
     CategoryBook(
-      info:
-          "Books participating in the title challenge.",
-      thumbnail:
-          "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/30%20title%20chhallenge.jpeg",
+      info: AppLocalizations.of(context)!.titleChallengeDescription,
+      thumbnail: "https://raw.githubusercontent.com/Nav-jangra/images/refs/heads/main/30%20title%20chhallenge.jpeg",
       title: AppLocalizations.of(context)!.titleChallenge,
       tag: "list/tag/title-challenge",
     ),

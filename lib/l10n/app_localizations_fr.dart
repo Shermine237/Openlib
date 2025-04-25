@@ -454,80 +454,161 @@ class AppLocalizationsFr extends AppLocalizations {
   String get classics => 'Classiques';
 
   @override
+  String get classicsDescription => 'Œuvres littéraires intemporelles souvent révérées pour leur mérite artistique et leur importance culturelle.';
+
+  @override
   String get romance => 'Romance';
+
+  @override
+  String get romanceDescription => 'Histoires centrées sur les relations amoureuses, explorant l\'amour, la passion et les liens émotionnels.';
 
   @override
   String get fiction => 'Fiction';
 
   @override
+  String get fictionDescription => 'Littérature narrative créée à partir de l\'imagination, non basée sur des événements réels.';
+
+  @override
   String get youngAdult => 'Jeunes adultes';
+
+  @override
+  String get youngAdultDescription => 'Littérature destinée aux adolescents et jeunes adultes, traitant souvent de thèmes liés au passage à l\'âge adulte.';
 
   @override
   String get fantasy => 'Fantasy';
 
   @override
+  String get fantasyDescription => 'Littérature mettant en scène des éléments magiques, des créatures mythiques et des mondes imaginaires.';
+
+  @override
   String get scienceFiction => 'Science-fiction';
+
+  @override
+  String get scienceFictionDescription => 'Littérature basée sur des concepts scientifiques, l\'avancement technologique et des scénarios futuristes.';
 
   @override
   String get nonfiction => 'Non-fiction';
 
   @override
+  String get nonfictionDescription => 'Littérature basée sur des faits, des événements réels et des personnes réelles.';
+
+  @override
   String get children => 'Enfants';
+
+  @override
+  String get childrenDescription => 'Littérature écrite pour et destinée aux enfants.';
 
   @override
   String get history => 'Histoire';
 
   @override
+  String get historyDescription => 'Littérature sur les événements passés, les personnes et les sociétés.';
+
+  @override
   String get mystery => 'Mystère';
+
+  @override
+  String get mysteryDescription => 'Littérature impliquant le crime, le suspense et le travail de détective.';
 
   @override
   String get covers => 'Couvertures';
 
   @override
+  String get coversDescription => 'Couvertures et illustrations de livres.';
+
+  @override
   String get horror => 'Horreur';
+
+  @override
+  String get horrorDescription => 'Littérature conçue pour effrayer et déstabiliser les lecteurs.';
 
   @override
   String get historicalFiction => 'Fiction historique';
 
   @override
+  String get historicalFictionDescription => 'Fiction se déroulant dans le passé, souvent pendant des périodes historiques importantes.';
+
+  @override
   String get best => 'Meilleurs';
+
+  @override
+  String get bestDescription => 'Livres très bien notés et populaires.';
 
   @override
   String get titles => 'Titres';
 
   @override
+  String get titlesDescription => 'Livres organisés par leurs titres.';
+
+  @override
   String get middleGrade => 'Collège';
+
+  @override
+  String get middleGradeDescription => 'Littérature pour les lecteurs entre le niveau enfant et jeune adulte.';
 
   @override
   String get paranormal => 'Paranormal';
 
   @override
+  String get paranormalDescription => 'Littérature mettant en scène des éléments surnaturels et paranormaux.';
+
+  @override
   String get love => 'Amour';
+
+  @override
+  String get loveDescription => 'Littérature centrée sur l\'amour romantique et les relations.';
 
   @override
   String get queer => 'Queer';
 
   @override
+  String get queerDescription => 'Littérature mettant en scène des thèmes et des personnages LGBTQ+.';
+
+  @override
   String get historicalRomance => 'Romance historique';
+
+  @override
+  String get historicalRomanceDescription => 'Romans d\'amour se déroulant dans des périodes historiques.';
 
   @override
   String get contemporary => 'Contemporain';
 
   @override
+  String get contemporaryDescription => 'Littérature se déroulant à l\'époque actuelle.';
+
+  @override
   String get thriller => 'Thriller';
+
+  @override
+  String get thrillerDescription => 'Littérature conçue pour créer du suspense et de l\'excitation.';
 
   @override
   String get women => 'Femmes';
 
   @override
+  String get womenDescription => 'Littérature centrée sur les expériences et les perspectives des femmes.';
+
+  @override
   String get biography => 'Biographie';
+
+  @override
+  String get biographyDescription => 'Récits non fictionnels de la vie des gens.';
 
   @override
   String get lgbtq => 'LGBTQ';
 
   @override
+  String get lgbtqDescription => 'Littérature avec des thèmes et une représentation LGBTQ+.';
+
+  @override
   String get series => 'Séries';
 
   @override
+  String get seriesDescription => 'Livres qui font partie d\'une série.';
+
+  @override
   String get titleChallenge => 'Défi des titres';
+
+  @override
+  String get titleChallengeDescription => 'Livres participant au défi des titres.';
 }

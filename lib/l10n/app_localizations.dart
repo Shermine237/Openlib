@@ -977,11 +977,23 @@ abstract class AppLocalizations {
   /// **'Classics'**
   String get classics;
 
+  /// No description provided for @classicsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Timeless literary works often revered for their artistic merit and cultural significance.'**
+  String get classicsDescription;
+
   /// No description provided for @romance.
   ///
   /// In en, this message translates to:
   /// **'Romance'**
   String get romance;
+
+  /// No description provided for @romanceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Stories focused on romantic relationships, exploring love, passion, and emotional connections.'**
+  String get romanceDescription;
 
   /// No description provided for @fiction.
   ///
@@ -989,11 +1001,23 @@ abstract class AppLocalizations {
   /// **'Fiction'**
   String get fiction;
 
+  /// No description provided for @fictionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Narrative literature created from the imagination, not based on real events.'**
+  String get fictionDescription;
+
   /// No description provided for @youngAdult.
   ///
   /// In en, this message translates to:
   /// **'Young Adult'**
   String get youngAdult;
+
+  /// No description provided for @youngAdultDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Literature aimed at adolescents and young adults, often dealing with coming-of-age themes.'**
+  String get youngAdultDescription;
 
   /// No description provided for @fantasy.
   ///
@@ -1001,11 +1025,23 @@ abstract class AppLocalizations {
   /// **'Fantasy'**
   String get fantasy;
 
+  /// No description provided for @fantasyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Literature featuring magical elements, mythical creatures, and imaginary worlds.'**
+  String get fantasyDescription;
+
   /// No description provided for @scienceFiction.
   ///
   /// In en, this message translates to:
   /// **'Science Fiction'**
   String get scienceFiction;
+
+  /// No description provided for @scienceFictionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Literature based on scientific concepts, technological advancement, and futuristic scenarios.'**
+  String get scienceFictionDescription;
 
   /// No description provided for @nonfiction.
   ///
@@ -1013,11 +1049,23 @@ abstract class AppLocalizations {
   /// **'Nonfiction'**
   String get nonfiction;
 
+  /// No description provided for @nonfictionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Literature based on facts, real events, and real people.'**
+  String get nonfictionDescription;
+
   /// No description provided for @children.
   ///
   /// In en, this message translates to:
   /// **'Children'**
   String get children;
+
+  /// No description provided for @childrenDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Literature written for and marketed to children.'**
+  String get childrenDescription;
 
   /// No description provided for @history.
   ///
@@ -1025,11 +1073,23 @@ abstract class AppLocalizations {
   /// **'History'**
   String get history;
 
+  /// No description provided for @historyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Literature about past events, people, and societies.'**
+  String get historyDescription;
+
   /// No description provided for @mystery.
   ///
   /// In en, this message translates to:
   /// **'Mystery'**
   String get mystery;
+
+  /// No description provided for @mysteryDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Literature involving crime, suspense, and detective work.'**
+  String get mysteryDescription;
 
   /// No description provided for @covers.
   ///
@@ -1037,11 +1097,23 @@ abstract class AppLocalizations {
   /// **'Covers'**
   String get covers;
 
+  /// No description provided for @coversDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Book covers and artwork.'**
+  String get coversDescription;
+
   /// No description provided for @horror.
   ///
   /// In en, this message translates to:
   /// **'Horror'**
   String get horror;
+
+  /// No description provided for @horrorDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Literature designed to frighten and unsettle readers.'**
+  String get horrorDescription;
 
   /// No description provided for @historicalFiction.
   ///
@@ -1049,11 +1121,23 @@ abstract class AppLocalizations {
   /// **'Historical Fiction'**
   String get historicalFiction;
 
+  /// No description provided for @historicalFictionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Fiction set in the past, often during significant historical periods.'**
+  String get historicalFictionDescription;
+
   /// No description provided for @best.
   ///
   /// In en, this message translates to:
   /// **'Best'**
   String get best;
+
+  /// No description provided for @bestDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Highly rated and popular books.'**
+  String get bestDescription;
 
   /// No description provided for @titles.
   ///
@@ -1061,11 +1145,23 @@ abstract class AppLocalizations {
   /// **'Titles'**
   String get titles;
 
+  /// No description provided for @titlesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Books organized by their titles.'**
+  String get titlesDescription;
+
   /// No description provided for @middleGrade.
   ///
   /// In en, this message translates to:
   /// **'Middle Grade'**
   String get middleGrade;
+
+  /// No description provided for @middleGradeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Literature for readers between children\'s and young adult levels.'**
+  String get middleGradeDescription;
 
   /// No description provided for @paranormal.
   ///
@@ -1073,11 +1169,23 @@ abstract class AppLocalizations {
   /// **'Paranormal'**
   String get paranormal;
 
+  /// No description provided for @paranormalDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Literature featuring supernatural and paranormal elements.'**
+  String get paranormalDescription;
+
   /// No description provided for @love.
   ///
   /// In en, this message translates to:
   /// **'Love'**
   String get love;
+
+  /// No description provided for @loveDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Literature focusing on romantic love and relationships.'**
+  String get loveDescription;
 
   /// No description provided for @queer.
   ///
@@ -1085,11 +1193,23 @@ abstract class AppLocalizations {
   /// **'Queer'**
   String get queer;
 
+  /// No description provided for @queerDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Literature featuring LGBTQ+ themes and characters.'**
+  String get queerDescription;
+
   /// No description provided for @historicalRomance.
   ///
   /// In en, this message translates to:
   /// **'Historical Romance'**
   String get historicalRomance;
+
+  /// No description provided for @historicalRomanceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Romance novels set in historical periods.'**
+  String get historicalRomanceDescription;
 
   /// No description provided for @contemporary.
   ///
@@ -1097,11 +1217,23 @@ abstract class AppLocalizations {
   /// **'Contemporary'**
   String get contemporary;
 
+  /// No description provided for @contemporaryDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Literature set in the present day.'**
+  String get contemporaryDescription;
+
   /// No description provided for @thriller.
   ///
   /// In en, this message translates to:
   /// **'Thriller'**
   String get thriller;
+
+  /// No description provided for @thrillerDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Literature designed to create suspense and excitement.'**
+  String get thrillerDescription;
 
   /// No description provided for @women.
   ///
@@ -1109,11 +1241,23 @@ abstract class AppLocalizations {
   /// **'Women'**
   String get women;
 
+  /// No description provided for @womenDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Literature focusing on women\'s experiences and perspectives.'**
+  String get womenDescription;
+
   /// No description provided for @biography.
   ///
   /// In en, this message translates to:
   /// **'Biography'**
   String get biography;
+
+  /// No description provided for @biographyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Non-fiction accounts of people\'s lives.'**
+  String get biographyDescription;
 
   /// No description provided for @lgbtq.
   ///
@@ -1121,17 +1265,35 @@ abstract class AppLocalizations {
   /// **'LGBTQ'**
   String get lgbtq;
 
+  /// No description provided for @lgbtqDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Literature with LGBTQ+ themes and representation.'**
+  String get lgbtqDescription;
+
   /// No description provided for @series.
   ///
   /// In en, this message translates to:
   /// **'Series'**
   String get series;
 
+  /// No description provided for @seriesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Books that are part of a series.'**
+  String get seriesDescription;
+
   /// No description provided for @titleChallenge.
   ///
   /// In en, this message translates to:
   /// **'Title Challenge'**
   String get titleChallenge;
+
+  /// No description provided for @titleChallengeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Books participating in the title challenge.'**
+  String get titleChallengeDescription;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
