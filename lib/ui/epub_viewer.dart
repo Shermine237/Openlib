@@ -20,25 +20,39 @@ import 'package:openlib/state/state.dart'
         openEpubWithExternalAppProvider;
 import 'package:openlib/l10n/app_localizations.dart';
 
-Future<void> launchEpubViewer(
-    {required String fileName,
-    required BuildContext context,
-    required WidgetRef ref}) async {
-  String path = await getFilePath(fileName);
-  bool openWithExternalApp = ref.watch(openEpubWithExternalAppProvider);
-
-  if (openWithExternalApp) {
+Future<void> launchEpubViewer({
+  required String fileName,
+  required BuildContext context,
+  required WidgetRef ref,
+}) async {
+  // Capture the context before async operation
+  final currentContext = context;
+  
+  final path = await getFilePath(fileName);
+  
+  if (ref.read(openEpubWithExternalAppProvider)) {
     await OpenFile.open(path, linuxByProcess: true);
   } else {
     try {
-      Navigator.push(context,
+      // Check if the widget is still mounted before using context
+      if (currentContext.mounted) {
+        Navigator.push(
+          currentContext,
           MaterialPageRoute(builder: (BuildContext context) {
-        return EpubViewerWidget(
-          fileName: fileName,
+            return EpubViewerWidget(
+              fileName: fileName,
+            );
+          }),
         );
-      }));
+      }
     } catch (e) {
-      showSnackBar(context: context, message: 'Unable to open epub!');
+      // Check if the widget is still mounted before showing snackbar
+      if (currentContext.mounted) {
+        showSnackBar(
+          context: currentContext,
+          message: AppLocalizations.of(currentContext)!.couldNotOpenPdf,
+        );
+      }
     }
   }
 }
