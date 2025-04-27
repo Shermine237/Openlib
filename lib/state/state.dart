@@ -42,9 +42,29 @@ List<String> fileType = [
   'all',
   'pdf',
   'epub',
+  'doc',
+  'docx',
   'cbr',
   'cbz'
 ];
+
+Map<String, String> sourceValues = {
+  'all': '',
+  'zlib': 'zlib',
+  'zlibzh': 'zlibzh',
+  'libgen': 'libgen',
+  'lgli': 'lgli',
+  'lgrs': 'lgrs',
+  'scihub': 'scihub',
+  'magzdb': 'magzdb',
+  'duxiu': 'duxiu',
+  'nexusstc': 'nexusstc',
+  'hathi': 'hathi',
+  'ia': 'ia',
+  'upload': 'upload',
+  'ipfs_infura': 'ipfs_infura',
+  'ipfs_cloudflare': 'ipfs_cloudflare'
+};
 
 final selectedIndexProvider = StateProvider<int>((ref) => 0);
 final homePageSelectedIndexProvider = StateProvider<int>((ref) => 0);
@@ -127,6 +147,10 @@ final getFileTypeValue = Provider.autoDispose<String>((ref) {
       return "pdf";
     case "epub":
       return "epub";
+    case "doc":
+      return "doc";
+    case "docx":
+      return "docx";
     case "cbr":
       return "cbr";
     case "cbz":
@@ -134,6 +158,12 @@ final getFileTypeValue = Provider.autoDispose<String>((ref) {
     default:
       return "";
   }
+});
+
+final selectedSourceState = StateProvider<String>((ref) => "all");
+
+final getSourceValue = Provider.autoDispose<String>((ref) {
+  return sourceValues[ref.watch(selectedSourceState)] ?? '';
 });
 
 //searchQueryProvider
@@ -186,6 +216,7 @@ final searchProvider = FutureProvider.family
       content: ref.watch(getTypeValue),
       sort: ref.watch(getSortValue),
       fileType: ref.watch(getFileTypeValue),
+      source: ref.watch(getSourceValue),
       language: ref.watch(getLanguageValue),
       enableFilters: ref.watch(enableFiltersState));
   return data;

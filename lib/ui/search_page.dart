@@ -20,7 +20,9 @@ import 'package:openlib/state/state.dart'
         sortValues,
         enableFiltersState,
         selectedLanguageState,
-        languageValues;
+        languageValues,
+        selectedSourceState,
+        sourceValues;
 
 import 'package:openlib/l10n/app_localizations.dart';
 
@@ -45,6 +47,7 @@ class SearchPage extends ConsumerWidget {
     final dropdownSortValue = ref.watch(selectedSortState);
     final dropDownFileTypeValue = ref.watch(selectedFileTypeState);
     final dropDownLanguageValue = ref.watch(selectedLanguageState);
+    final dropDownSourceValue = ref.watch(selectedSourceState);
 
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
@@ -180,6 +183,8 @@ class SearchPage extends ConsumerWidget {
                         case 'all': displayText = AppLocalizations.of(context)!.fileTypeAll;
                         case 'pdf': displayText = AppLocalizations.of(context)!.fileTypePdf;
                         case 'epub': displayText = AppLocalizations.of(context)!.fileTypeEpub;
+                        case 'doc': displayText = AppLocalizations.of(context)!.fileTypeDoc;
+                        case 'docx': displayText = AppLocalizations.of(context)!.fileTypeDocx;
                         case 'cbr': displayText = AppLocalizations.of(context)!.fileTypeCbr;
                         case 'cbz': displayText = AppLocalizations.of(context)!.fileTypeCbz;
                       }
@@ -228,6 +233,49 @@ class SearchPage extends ConsumerWidget {
                     onChanged: (String? value) {
                       if (value != null) {
                         ref.read(selectedLanguageState.notifier).state = value;
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 7, right: 7, top: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(AppLocalizations.of(context)!.filterBySource),
+                  const SizedBox(height: 8),
+                  DropdownButton<String>(
+                    value: dropDownSourceValue,
+                    isExpanded: true,
+                    items: sourceValues.keys.map<DropdownMenuItem<String>>((String value) {
+                      String displayText = '';
+                      switch (value) {
+                        case 'all': displayText = AppLocalizations.of(context)!.sourceAll;
+                        case 'zlib': displayText = AppLocalizations.of(context)!.sourceZlib;
+                        case 'zlibzh': displayText = AppLocalizations.of(context)!.sourceZlibzh;
+                        case 'libgen': displayText = AppLocalizations.of(context)!.sourceLibgen;
+                        case 'lgli': displayText = AppLocalizations.of(context)!.sourceLgli;
+                        case 'lgrs': displayText = AppLocalizations.of(context)!.sourceLgrs;
+                        case 'scihub': displayText = AppLocalizations.of(context)!.sourceScihub;
+                        case 'magzdb': displayText = AppLocalizations.of(context)!.sourceMagzdb;
+                        case 'duxiu': displayText = AppLocalizations.of(context)!.sourceDuxiu;
+                        case 'nexusstc': displayText = AppLocalizations.of(context)!.sourceNexusstc;
+                        case 'hathi': displayText = AppLocalizations.of(context)!.sourceHathi;
+                        case 'ia': displayText = AppLocalizations.of(context)!.sourceIa;
+                        case 'upload': displayText = AppLocalizations.of(context)!.sourceUpload;
+                        case 'ipfs_infura': displayText = AppLocalizations.of(context)!.sourceIpfsInfura;
+                        case 'ipfs_cloudflare': displayText = AppLocalizations.of(context)!.sourceIpfsCloudflare;
+                      }
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(displayText),
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      if (value != null) {
+                        ref.read(selectedSourceState.notifier).state = value;
                       }
                     },
                   ),
