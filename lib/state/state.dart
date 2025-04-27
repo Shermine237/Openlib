@@ -123,10 +123,19 @@ final getSortValue = Provider.autoDispose<String>((ref) {
 final selectedFileTypeState = StateProvider<String>((ref) => "fileTypeAll");
 
 final getFileTypeValue = Provider.autoDispose<String>((ref) {
-  if (ref.read(selectedFileTypeState) == "fileTypeAll") {
-    return '';
+  final selectedType = ref.read(selectedFileTypeState);
+  switch (selectedType) {
+    case "fileTypePdf":
+      return "pdf";
+    case "fileTypeEpub":
+      return "epub";
+    case "fileTypeCbr":
+      return "cbr";
+    case "fileTypeCbz":
+      return "cbz";
+    default:
+      return "";
   }
-  return ref.read(selectedFileTypeState).toLowerCase();
 });
 
 //searchQueryProvider
