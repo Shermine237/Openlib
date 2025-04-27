@@ -21,29 +21,29 @@ MyLibraryDb dataBase = MyLibraryDb.instance;
 //Provider for dropdownbutton in search page
 
 Map<String, String> typeValues = {
-  'typeAll': '',
-  'typeFiction': 'book_fiction',
-  'typeNonFiction': 'book_nonfiction',
-  'typeScientific': 'scientific_article',
-  'typeMagazine': 'magazine',
-  'typeComic': 'comic',
-  'typeStandard': 'standards_document',
+  'all': '',
+  'fiction': 'book_fiction',
+  'nonfiction': 'book_nonfiction',
+  'scientific': 'scientific_article',
+  'magazine': 'magazine',
+  'comic': 'comic',
+  'standard': 'standards_document',
 };
 
 Map<String, String> sortValues = {
-  'sortMostRelevant': '',
-  'sortNewest': 'newest',
-  'sortOldest': 'oldest',
-  'sortLargest': 'largest',
-  'sortSmallest': 'smallest',
+  'mostRelevant': '',
+  'newest': 'newest',
+  'oldest': 'oldest',
+  'largest': 'largest',
+  'smallest': 'smallest',
 };
 
 List<String> fileType = [
-  'fileTypeAll',
-  'fileTypePdf',
-  'fileTypeEpub',
-  'fileTypeCbr',
-  'fileTypeCbz'
+  'all',
+  'pdf',
+  'epub',
+  'cbr',
+  'cbz'
 ];
 
 final selectedIndexProvider = StateProvider<int>((ref) => 0);
@@ -106,30 +106,30 @@ final localeNotifierProvider = StateNotifierProvider<LocaleNotifier, Locale?>((r
   return LocaleNotifier(database);
 });
 
-final selectedTypeState = StateProvider<String>((ref) => "typeAll");
+final selectedTypeState = StateProvider<String>((ref) => "all");
 
 final getTypeValue = Provider.autoDispose<String>((ref) {
   return typeValues[ref.read(selectedTypeState)] ?? '';
 });
 
-final selectedSortState = StateProvider<String>((ref) => "sortMostRelevant");
+final selectedSortState = StateProvider<String>((ref) => "mostRelevant");
 
 final getSortValue = Provider.autoDispose<String>((ref) {
   return sortValues[ref.read(selectedSortState)] ?? '';
 });
 
-final selectedFileTypeState = StateProvider<String>((ref) => "fileTypeAll");
+final selectedFileTypeState = StateProvider<String>((ref) => "all");
 
 final getFileTypeValue = Provider.autoDispose<String>((ref) {
   final selectedType = ref.read(selectedFileTypeState);
   switch (selectedType) {
-    case "fileTypePdf":
+    case "pdf":
       return "pdf";
-    case "fileTypeEpub":
+    case "epub":
       return "epub";
-    case "fileTypeCbr":
+    case "cbr":
       return "cbr";
-    case "fileTypeCbz":
+    case "cbz":
       return "cbz";
     default:
       return "";
@@ -291,18 +291,18 @@ final filePathProvider =
 });
 
 Map<String, String> languageValues = {
-  'langAll': '',
-  'langEnglish': 'en',
-  'langFrench': 'fr',
-  'langGerman': 'de',
-  'langSpanish': 'es',
-  'langItalian': 'it',
-  'langRussian': 'ru',
-  'langChinese': 'zh',
-  'langJapanese': 'ja',
+  'all': '',
+  'english': 'en',
+  'french': 'fr',
+  'german': 'de',
+  'spanish': 'es',
+  'italian': 'it',
+  'russian': 'ru',
+  'chinese': 'zh',
+  'japanese': 'ja',
 };
 
-final selectedLanguageState = StateProvider<String>((ref) => "langAll");
+final selectedLanguageState = StateProvider<String>((ref) => "all");
 
 final getLanguageValue = Provider.autoDispose<String>((ref) {
   return languageValues[ref.watch(selectedLanguageState)] ?? '';

@@ -109,13 +109,13 @@ class SearchPage extends ConsumerWidget {
                     items: typeValues.keys.map<DropdownMenuItem<String>>((String value) {
                       String displayText = '';
                       switch (value) {
-                        case 'typeAll': displayText = AppLocalizations.of(context)!.typeAll;
-                        case 'typeFiction': displayText = AppLocalizations.of(context)!.typeFiction;
-                        case 'typeNonFiction': displayText = AppLocalizations.of(context)!.typeNonFiction;
-                        case 'typeScientific': displayText = AppLocalizations.of(context)!.typeScientific;
-                        case 'typeMagazine': displayText = AppLocalizations.of(context)!.typeMagazine;
-                        case 'typeComic': displayText = AppLocalizations.of(context)!.typeComic;
-                        case 'typeStandard': displayText = AppLocalizations.of(context)!.typeStandard;
+                        case 'all': displayText = AppLocalizations.of(context)!.typeAll;
+                        case 'fiction': displayText = AppLocalizations.of(context)!.typeFiction;
+                        case 'nonfiction': displayText = AppLocalizations.of(context)!.typeNonFiction;
+                        case 'scientific': displayText = AppLocalizations.of(context)!.typeScientific;
+                        case 'magazine': displayText = AppLocalizations.of(context)!.typeMagazine;
+                        case 'comic': displayText = AppLocalizations.of(context)!.typeComic;
+                        case 'standard': displayText = AppLocalizations.of(context)!.typeStandard;
                       }
                       return DropdownMenuItem<String>(
                         value: value,
@@ -144,11 +144,11 @@ class SearchPage extends ConsumerWidget {
                     items: sortValues.keys.map<DropdownMenuItem<String>>((String value) {
                       String displayText = '';
                       switch (value) {
-                        case 'sortMostRelevant': displayText = AppLocalizations.of(context)!.sortMostRelevant;
-                        case 'sortNewest': displayText = AppLocalizations.of(context)!.sortNewest;
-                        case 'sortOldest': displayText = AppLocalizations.of(context)!.sortOldest;
-                        case 'sortLargest': displayText = AppLocalizations.of(context)!.sortLargest;
-                        case 'sortSmallest': displayText = AppLocalizations.of(context)!.sortSmallest;
+                        case 'mostRelevant': displayText = AppLocalizations.of(context)!.sortMostRelevant;
+                        case 'newest': displayText = AppLocalizations.of(context)!.sortNewest;
+                        case 'oldest': displayText = AppLocalizations.of(context)!.sortOldest;
+                        case 'largest': displayText = AppLocalizations.of(context)!.sortLargest;
+                        case 'smallest': displayText = AppLocalizations.of(context)!.sortSmallest;
                       }
                       return DropdownMenuItem<String>(
                         value: value,
@@ -177,11 +177,11 @@ class SearchPage extends ConsumerWidget {
                     items: fileType.map<DropdownMenuItem<String>>((String value) {
                       String displayText = '';
                       switch (value) {
-                        case 'fileTypeAll': displayText = AppLocalizations.of(context)!.fileTypeAll;
-                        case 'fileTypePdf': displayText = AppLocalizations.of(context)!.fileTypePdf;
-                        case 'fileTypeEpub': displayText = AppLocalizations.of(context)!.fileTypeEpub;
-                        case 'fileTypeCbr': displayText = AppLocalizations.of(context)!.fileTypeCbr;
-                        case 'fileTypeCbz': displayText = AppLocalizations.of(context)!.fileTypeCbz;
+                        case 'all': displayText = AppLocalizations.of(context)!.fileTypeAll;
+                        case 'pdf': displayText = AppLocalizations.of(context)!.fileTypePdf;
+                        case 'epub': displayText = AppLocalizations.of(context)!.fileTypeEpub;
+                        case 'cbr': displayText = AppLocalizations.of(context)!.fileTypeCbr;
+                        case 'cbz': displayText = AppLocalizations.of(context)!.fileTypeCbz;
                       }
                       return DropdownMenuItem<String>(
                         value: value,
@@ -210,15 +210,15 @@ class SearchPage extends ConsumerWidget {
                     items: languageValues.keys.map<DropdownMenuItem<String>>((String value) {
                       String displayText = '';
                       switch (value) {
-                        case 'langAll': displayText = AppLocalizations.of(context)!.langAll;
-                        case 'langEnglish': displayText = AppLocalizations.of(context)!.langEnglish;
-                        case 'langFrench': displayText = AppLocalizations.of(context)!.langFrench;
-                        case 'langGerman': displayText = AppLocalizations.of(context)!.langGerman;
-                        case 'langSpanish': displayText = AppLocalizations.of(context)!.langSpanish;
-                        case 'langItalian': displayText = AppLocalizations.of(context)!.langItalian;
-                        case 'langRussian': displayText = AppLocalizations.of(context)!.langRussian;
-                        case 'langChinese': displayText = AppLocalizations.of(context)!.langChinese;
-                        case 'langJapanese': displayText = AppLocalizations.of(context)!.langJapanese;
+                        case 'all': displayText = AppLocalizations.of(context)!.langAll;
+                        case 'english': displayText = AppLocalizations.of(context)!.langEnglish;
+                        case 'french': displayText = AppLocalizations.of(context)!.langFrench;
+                        case 'german': displayText = AppLocalizations.of(context)!.langGerman;
+                        case 'spanish': displayText = AppLocalizations.of(context)!.langSpanish;
+                        case 'italian': displayText = AppLocalizations.of(context)!.langItalian;
+                        case 'russian': displayText = AppLocalizations.of(context)!.langRussian;
+                        case 'chinese': displayText = AppLocalizations.of(context)!.langChinese;
+                        case 'japanese': displayText = AppLocalizations.of(context)!.langJapanese;
                       }
                       return DropdownMenuItem<String>(
                         value: value,

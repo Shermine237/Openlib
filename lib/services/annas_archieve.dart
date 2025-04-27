@@ -258,7 +258,7 @@ class AnnasArchieve {
     if (content == "" && sort == "" && fileType == "" && language == "") {
       return '$baseUrl/search?q=$searchQuery';
     }
-    return '$baseUrl/search?index=&q=$searchQuery&content=$content&ext=$fileType&sort=$sort&lang=$language';
+    return '$baseUrl/search?q=$searchQuery${content != "" ? "&content=$content" : ""}${fileType != "" ? "&ext=$fileType" : ""}${sort != "" ? "&sort=$sort" : ""}${language != "" ? "&lang=$language" : ""}';
   }
 
   Future<List<BookData>> searchBooks(
