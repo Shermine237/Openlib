@@ -15,33 +15,23 @@ abstract class TrendingBooksImpl {
 
   Future<List<TrendingBookData>> trendingBooks() async {
     try {
-      print("Fetching URL: $url");
       final dio = Dio();
       final response = await dio.get(url,
           options: Options(
               sendTimeout: Duration(seconds: timeOutDuration),
               receiveTimeout: Duration(seconds: timeOutDuration)));
       
-      print("Response status: ${response.statusCode}");
-      print("Response length: ${response.data?.toString().length}");
-      
       if (response.statusCode == 200) {
         var books = _parser(response.data.toString());
-        print("Parsed books count: ${books.length}");
         return books;
       } else {
-        print("Error status code: ${response.statusCode}");
         return [];
       }
     } on DioException catch (e) {
-      print("Dio error: ${e.message}");
-      print("Error type: ${e.type}");
       if (e.response != null) {
-        print("Error response: ${e.response?.statusCode}");
       }
       return [];
     } catch (e) {
-      print("Other error: $e");
       return [];
     }
   }
@@ -56,23 +46,18 @@ class GoodReads extends TrendingBooksImpl {
 
   @override
   List<TrendingBookData> _parser(data) {
-    print("Starting to parse data");
     var document = parse(data.toString());
     List<TrendingBookData> trendingBooks = [];
     
     if (url.contains("84164.Les_meilleurs_livres_d_origine_fran_aise")) {
       // Parser pour la page française
-      print("Parsing French page");
       var bookList = document.querySelectorAll('tr[itemscope]');
-      print("Found ${bookList.length} table rows");
       
       for (var element in bookList) {
         var titleElement = element.querySelector('a.bookTitle span[itemprop="name"]');
         var imageElement = element.querySelector('img.bookCover');
         var titleText = titleElement?.text;
         var imageUrl = imageElement?.attributes['src'];
-        
-        print("Found element - Title: $titleText, Image: $imageUrl");
         
         if (titleText != null && imageUrl != null) {
           // Remplacer les petites images par des plus grandes
@@ -109,7 +94,6 @@ class GoodReads extends TrendingBooksImpl {
       }
     }
     
-    print("Total books found: ${trendingBooks.length}");
     return trendingBooks;
   }
 }
