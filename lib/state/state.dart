@@ -183,24 +183,18 @@ final getSubCategoryTypeList = FutureProvider.family
 });
 
 //Provider for Trending Books
-
 final getTrendingBooks = FutureProvider<List<TrendingBookData>>((ref) async {
-  // OpenLibrary openLibrary = OpenLibrary();
-  GoodReads goodReads = GoodReads();
-  PenguinRandomHouse penguinTrending = PenguinRandomHouse();
-  BookDigits bookDigits = BookDigits();
-  List<TrendingBookData> trendingBooks =
-      await Future.wait<List<TrendingBookData>>([
-    goodReads.trendingBooks(),
-    penguinTrending.trendingBooks(),
-    // openLibrary.trendingBooks(),
-    bookDigits.trendingBooks(),
-  ]).then((List<List<TrendingBookData>> listOfData) =>
-          listOfData.expand((element) => element).toList());
+  // Get current locale
+  final locale = ref.watch(localeNotifierProvider);
+  final currentLanguage = locale?.languageCode ?? 'en';
 
+  GoodReads goodReads = GoodReads(language: currentLanguage);
+  List<TrendingBookData> trendingBooks = await goodReads.trendingBooks();
+  
   if (trendingBooks.isEmpty) {
     throw 'Nothing Trending Today :(';
   }
+  
   trendingBooks.shuffle();
   return trendingBooks;
 });

@@ -15,18 +15,106 @@ abstract class TrendingBooksImpl {
 
   Future<List<TrendingBookData>> trendingBooks() async {
     try {
+      print("Fetching URL: $url");
       final dio = Dio();
       final response = await dio.get(url,
           options: Options(
               sendTimeout: Duration(seconds: timeOutDuration),
               receiveTimeout: Duration(seconds: timeOutDuration)));
-      return _parser(response.data.toString());
-    } on DioException catch (_) {
+      
+      print("Response status: ${response.statusCode}");
+      print("Response length: ${response.data?.toString().length}");
+      
+      if (response.statusCode == 200) {
+        var books = _parser(response.data.toString());
+        print("Parsed books count: ${books.length}");
+        return books;
+      } else {
+        print("Error status code: ${response.statusCode}");
+        return [];
+      }
+    } on DioException catch (e) {
+      print("Dio error: ${e.message}");
+      print("Error type: ${e.type}");
+      if (e.response != null) {
+        print("Error response: ${e.response?.statusCode}");
+      }
+      return [];
+    } catch (e) {
+      print("Other error: $e");
       return [];
     }
   }
 }
 
+class GoodReads extends TrendingBooksImpl {
+  GoodReads({required String language}) {
+    url = language == 'fr' 
+        ? "https://www.goodreads.com/list/show/84164.Les_meilleurs_livres_d_origine_fran_aise?tab=all_votes"
+        : "https://www.goodreads.com/shelf/show/trending";
+  }
+
+  @override
+  List<TrendingBookData> _parser(data) {
+    print("Starting to parse data");
+    var document = parse(data.toString());
+    List<TrendingBookData> trendingBooks = [];
+    
+    if (url.contains("84164.Les_meilleurs_livres_d_origine_fran_aise")) {
+      // Parser pour la page française
+      print("Parsing French page");
+      var bookList = document.querySelectorAll('tr[itemscope]');
+      print("Found ${bookList.length} table rows");
+      
+      for (var element in bookList) {
+        var titleElement = element.querySelector('a.bookTitle span[itemprop="name"]');
+        var imageElement = element.querySelector('img.bookCover');
+        var titleText = titleElement?.text;
+        var imageUrl = imageElement?.attributes['src'];
+        
+        print("Found element - Title: $titleText, Image: $imageUrl");
+        
+        if (titleText != null && imageUrl != null) {
+          // Remplacer les petites images par des plus grandes
+          var largeImageUrl = imageUrl
+              .replaceAll("._SY75_.", "._SY225_.")
+              .replaceAll("._SX50_.", "._SX148_.");
+              
+          trendingBooks.add(
+            TrendingBookData(
+              title: titleText.trim(),
+              thumbnail: largeImageUrl,
+            ),
+          );
+        }
+      }
+    } else {
+      // Parser pour la page anglaise
+      var bookList = document.querySelectorAll('div[class="elementList"]');
+      for (var element in bookList) {
+        var titleElement = element.querySelector('a[class="leftAlignedImage"]');
+        var imageElement = element.querySelector('img');
+        var titleText = titleElement?.attributes['title'];
+        var imageUrl = imageElement?.attributes['src'];
+        
+        if (titleText != null && imageUrl != null) {
+          trendingBooks.add(
+            TrendingBookData(
+              title: titleText.trim(),
+              thumbnail: imageUrl.replaceAll("._SY75_.", "._SY225_.")
+                  .replaceAll("._SX50_.", "._SX148_."),
+            ),
+          );
+        }
+      }
+    }
+    
+    print("Total books found: ${trendingBooks.length}");
+    return trendingBooks;
+  }
+}
+
+/* Commented out as we're only using GoodReads for now
 class OpenLibrary extends TrendingBooksImpl {
   OpenLibrary() {
     super.url = "https://openlibrary.org/trending/daily";
@@ -73,41 +161,6 @@ class OpenLibrary extends TrendingBooksImpl {
     } on DioException catch (_) {
       return [];
     }
-  }
-}
-
-class GoodReads extends TrendingBooksImpl {
-  GoodReads() {
-    super.url = "https://www.goodreads.com/shelf/show/trending";
-  }
-
-  @override
-  List<TrendingBookData> _parser(data) {
-    var document = parse(data.toString());
-    var bookList = document.querySelectorAll('div[class="elementList"]');
-    List<TrendingBookData> trendingBooks = [];
-    for (var element in bookList) {
-      if (element
-                  .querySelector('a[class="leftAlignedImage"]')
-                  ?.attributes['title'] !=
-              null &&
-          element.querySelector('img')?.attributes['src'] != null) {
-        String? thumbnail = element.querySelector('img')?.attributes['src'];
-        trendingBooks.add(
-          TrendingBookData(
-              title: element
-                  .querySelector('a[class="leftAlignedImage"]')
-                  ?.attributes['title']
-                  .toString()
-                  .trim(),
-              thumbnail: thumbnail
-                  .toString()
-                  .replaceAll("._SY75_.", "._SY225_.")
-                  .replaceAll("._SX50_.", "._SX148_.")),
-        );
-      }
-    }
-    return trendingBooks;
   }
 }
 
@@ -175,3 +228,4 @@ class BookDigits extends TrendingBooksImpl {
     return trendingBooks;
   }
 }
+*/
