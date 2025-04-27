@@ -18,7 +18,9 @@ import 'package:openlib/state/state.dart'
         typeValues,
         fileType,
         sortValues,
-        enableFiltersState;
+        enableFiltersState,
+        selectedLanguageState,
+        languageValues;
 
 import 'package:openlib/l10n/app_localizations.dart';
 
@@ -42,6 +44,7 @@ class SearchPage extends ConsumerWidget {
     final dropdownTypeValue = ref.watch(selectedTypeState);
     final dropdownSortValue = ref.watch(selectedSortState);
     final dropDownFileTypeValue = ref.watch(selectedFileTypeState);
+    final dropDownLanguageValue = ref.watch(selectedLanguageState);
 
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
@@ -107,14 +110,12 @@ class SearchPage extends ConsumerWidget {
                       String displayText = '';
                       switch (value) {
                         case 'typeAll': displayText = AppLocalizations.of(context)!.typeAll;
-                        case 'typeAnyBooks': displayText = AppLocalizations.of(context)!.typeAnyBooks;
-                        case 'typeUnknownBooks': displayText = AppLocalizations.of(context)!.typeUnknownBooks;
-                        case 'typeFictionBooks': displayText = AppLocalizations.of(context)!.typeFictionBooks;
-                        case 'typeNonFictionBooks': displayText = AppLocalizations.of(context)!.typeNonFictionBooks;
-                        case 'typeComicBooks': displayText = AppLocalizations.of(context)!.typeComicBooks;
+                        case 'typeFiction': displayText = AppLocalizations.of(context)!.typeFiction;
+                        case 'typeNonFiction': displayText = AppLocalizations.of(context)!.typeNonFiction;
+                        case 'typeScientific': displayText = AppLocalizations.of(context)!.typeScientific;
                         case 'typeMagazine': displayText = AppLocalizations.of(context)!.typeMagazine;
-                        case 'typeStandardsDocument': displayText = AppLocalizations.of(context)!.typeStandardsDocument;
-                        case 'typeJournalArticle': displayText = AppLocalizations.of(context)!.typeJournalArticle;
+                        case 'typeComic': displayText = AppLocalizations.of(context)!.typeComic;
+                        case 'typeStandard': displayText = AppLocalizations.of(context)!.typeStandard;
                       }
                       return DropdownMenuItem<String>(
                         value: value,
@@ -190,6 +191,43 @@ class SearchPage extends ConsumerWidget {
                     onChanged: (String? value) {
                       if (value != null) {
                         ref.read(selectedFileTypeState.notifier).state = value;
+                      }
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 7, right: 7, top: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(AppLocalizations.of(context)!.filterByLanguage),
+                  const SizedBox(height: 8),
+                  DropdownButton<String>(
+                    value: dropDownLanguageValue,
+                    isExpanded: true,
+                    items: languageValues.keys.map<DropdownMenuItem<String>>((String value) {
+                      String displayText = '';
+                      switch (value) {
+                        case 'langAll': displayText = AppLocalizations.of(context)!.langAll;
+                        case 'langEnglish': displayText = AppLocalizations.of(context)!.langEnglish;
+                        case 'langFrench': displayText = AppLocalizations.of(context)!.langFrench;
+                        case 'langGerman': displayText = AppLocalizations.of(context)!.langGerman;
+                        case 'langSpanish': displayText = AppLocalizations.of(context)!.langSpanish;
+                        case 'langItalian': displayText = AppLocalizations.of(context)!.langItalian;
+                        case 'langRussian': displayText = AppLocalizations.of(context)!.langRussian;
+                        case 'langChinese': displayText = AppLocalizations.of(context)!.langChinese;
+                        case 'langJapanese': displayText = AppLocalizations.of(context)!.langJapanese;
+                      }
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(displayText),
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      if (value != null) {
+                        ref.read(selectedLanguageState.notifier).state = value;
                       }
                     },
                   ),

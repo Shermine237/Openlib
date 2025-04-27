@@ -22,14 +22,12 @@ MyLibraryDb dataBase = MyLibraryDb.instance;
 
 Map<String, String> typeValues = {
   'typeAll': '',
-  'typeAnyBooks': 'book_any',
-  'typeUnknownBooks': 'book_unknown',
-  'typeFictionBooks': 'book_fiction',
-  'typeNonFictionBooks': 'book_nonfiction',
-  'typeComicBooks': 'book_comic',
+  'typeFiction': 'book_fiction',
+  'typeNonFiction': 'book_nonfiction',
+  'typeScientific': 'scientific_article',
   'typeMagazine': 'magazine',
-  'typeStandardsDocument': 'standards_document',
-  'typeJournalArticle': 'journal_article'
+  'typeComic': 'comic',
+  'typeStandard': 'standards_document',
 };
 
 Map<String, String> sortValues = {
@@ -188,6 +186,7 @@ final searchProvider = FutureProvider.family
       content: ref.watch(getTypeValue),
       sort: ref.watch(getSortValue),
       fileType: ref.watch(getFileTypeValue),
+      language: ref.watch(getLanguageValue),
       enableFilters: ref.watch(enableFiltersState));
   return data;
 });
@@ -289,4 +288,22 @@ final filePathProvider =
     FutureProvider.family<String, String>((ref, fileName) async {
   String path = await getFilePath(fileName);
   return path;
+});
+
+Map<String, String> languageValues = {
+  'langAll': '',
+  'langEnglish': 'en',
+  'langFrench': 'fr',
+  'langGerman': 'de',
+  'langSpanish': 'es',
+  'langItalian': 'it',
+  'langRussian': 'ru',
+  'langChinese': 'zh',
+  'langJapanese': 'ja',
+};
+
+final selectedLanguageState = StateProvider<String>((ref) => "langAll");
+
+final getLanguageValue = Provider.autoDispose<String>((ref) {
+  return languageValues[ref.watch(selectedLanguageState)] ?? '';
 });

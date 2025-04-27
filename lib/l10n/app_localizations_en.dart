@@ -9,7 +9,7 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appName => 'Openlib';
+  String get appName => 'Megalib';
 
   @override
   String get home => 'Home';
@@ -90,6 +90,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get filterByFileType => 'File Type';
 
   @override
+  String get filterByLanguage => 'Filter by language';
+
+  @override
   String get typeAll => 'All';
 
   @override
@@ -108,13 +111,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get typeComicBooks => 'Comic Books';
 
   @override
-  String get typeMagazine => 'Magazine';
+  String get typeMagazine => 'Magazines';
 
   @override
   String get typeStandardsDocument => 'Standards Document';
 
   @override
   String get typeJournalArticle => 'Journal Article';
+
+  @override
+  String get typeFiction => 'Fiction';
+
+  @override
+  String get typeNonFiction => 'Non-fiction';
+
+  @override
+  String get typeScientific => 'Scientific articles';
+
+  @override
+  String get typeComic => 'Comics';
+
+  @override
+  String get typeStandard => 'Standards documents';
 
   @override
   String get sortMostRelevant => 'Most Relevant';
@@ -145,6 +163,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fileTypeCbz => 'CBZ';
+
+  @override
+  String get langAll => 'All languages';
+
+  @override
+  String get langEnglish => 'English';
+
+  @override
+  String get langFrench => 'French';
+
+  @override
+  String get langGerman => 'German';
+
+  @override
+  String get langSpanish => 'Spanish';
+
+  @override
+  String get langItalian => 'Italian';
+
+  @override
+  String get langRussian => 'Russian';
+
+  @override
+  String get langChinese => 'Chinese';
+
+  @override
+  String get langJapanese => 'Japanese';
 
   @override
   String get all => 'All';

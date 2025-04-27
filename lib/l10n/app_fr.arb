@@ -1,6 +1,6 @@
 {
   "@@locale": "fr",
-  "appName": "Openlib",
+  "appName": "Megalib",
   "home": "Accueil",
   "search": "Rechercher",
   "myLibrary": "Ma Bibliothèque",
@@ -221,5 +221,21 @@
   "series": "Séries",
   "seriesDescription": "Livres qui font partie d'une série.",
   "titleChallenge": "Défi des titres",
-  "titleChallengeDescription": "Livres participant au défi des titres."
+  "titleChallengeDescription": "Livres participant au défi des titres.",
+  "filterByLanguage": "Filtrer par langue",
+  "langAll": "Toutes les langues",
+  "langEnglish": "Anglais",
+  "langFrench": "Français",
+  "langGerman": "Allemand",
+  "langSpanish": "Espagnol",
+  "langItalian": "Italien",
+  "langRussian": "Russe",
+  "langChinese": "Chinois",
+  "langJapanese": "Japonais",
+  "typeFiction": "Fiction",
+  "typeNonFiction": "Non-fiction",
+  "typeScientific": "Articles scientifiques",
+  "typeMagazine": "Magazines",
+  "typeComic": "Comics",
+  "typeStandard": "Documents standards"
 }

@@ -250,13 +250,15 @@ class AnnasArchieve {
       required String content,
       required String sort,
       required String fileType,
+      required String language,
       required bool enableFilters}) {
     searchQuery = searchQuery.replaceAll(" ", "+");
     if (enableFilters == false) return '$baseUrl/search?q=$searchQuery';
-    if (content == "" && sort == "" && fileType == "") {
+    
+    if (content == "" && sort == "" && fileType == "" && language == "") {
       return '$baseUrl/search?q=$searchQuery';
     }
-    return '$baseUrl/search?index=&q=$searchQuery&content=$content&ext=$fileType&sort=$sort';
+    return '$baseUrl/search?index=&q=$searchQuery&content=$content&ext=$fileType&sort=$sort&lang=$language';
   }
 
   Future<List<BookData>> searchBooks(
@@ -264,6 +266,7 @@ class AnnasArchieve {
       String content = "",
       String sort = "",
       String fileType = "",
+      String language = "",
       bool enableFilters = true}) async {
     try {
       final String encodedURL = urlEncoder(
@@ -271,6 +274,7 @@ class AnnasArchieve {
           content: content,
           sort: sort,
           fileType: fileType,
+          language: language,
           enableFilters: enableFilters);
 
       final response = await dio.get(encodedURL,

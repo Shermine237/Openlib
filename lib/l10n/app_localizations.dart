@@ -98,7 +98,7 @@ abstract class AppLocalizations {
   /// No description provided for @appName.
   ///
   /// In en, this message translates to:
-  /// **'Openlib'**
+  /// **'Megalib'**
   String get appName;
 
   /// No description provided for @home.
@@ -257,6 +257,12 @@ abstract class AppLocalizations {
   /// **'File Type'**
   String get filterByFileType;
 
+  /// No description provided for @filterByLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter by language'**
+  String get filterByLanguage;
+
   /// No description provided for @typeAll.
   ///
   /// In en, this message translates to:
@@ -296,7 +302,7 @@ abstract class AppLocalizations {
   /// No description provided for @typeMagazine.
   ///
   /// In en, this message translates to:
-  /// **'Magazine'**
+  /// **'Magazines'**
   String get typeMagazine;
 
   /// No description provided for @typeStandardsDocument.
@@ -310,6 +316,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Journal Article'**
   String get typeJournalArticle;
+
+  /// No description provided for @typeFiction.
+  ///
+  /// In en, this message translates to:
+  /// **'Fiction'**
+  String get typeFiction;
+
+  /// No description provided for @typeNonFiction.
+  ///
+  /// In en, this message translates to:
+  /// **'Non-fiction'**
+  String get typeNonFiction;
+
+  /// No description provided for @typeScientific.
+  ///
+  /// In en, this message translates to:
+  /// **'Scientific articles'**
+  String get typeScientific;
+
+  /// No description provided for @typeComic.
+  ///
+  /// In en, this message translates to:
+  /// **'Comics'**
+  String get typeComic;
+
+  /// No description provided for @typeStandard.
+  ///
+  /// In en, this message translates to:
+  /// **'Standards documents'**
+  String get typeStandard;
 
   /// No description provided for @sortMostRelevant.
   ///
@@ -370,6 +406,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'CBZ'**
   String get fileTypeCbz;
+
+  /// No description provided for @langAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All languages'**
+  String get langAll;
+
+  /// No description provided for @langEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get langEnglish;
+
+  /// No description provided for @langFrench.
+  ///
+  /// In en, this message translates to:
+  /// **'French'**
+  String get langFrench;
+
+  /// No description provided for @langGerman.
+  ///
+  /// In en, this message translates to:
+  /// **'German'**
+  String get langGerman;
+
+  /// No description provided for @langSpanish.
+  ///
+  /// In en, this message translates to:
+  /// **'Spanish'**
+  String get langSpanish;
+
+  /// No description provided for @langItalian.
+  ///
+  /// In en, this message translates to:
+  /// **'Italian'**
+  String get langItalian;
+
+  /// No description provided for @langRussian.
+  ///
+  /// In en, this message translates to:
+  /// **'Russian'**
+  String get langRussian;
+
+  /// No description provided for @langChinese.
+  ///
+  /// In en, this message translates to:
+  /// **'Chinese'**
+  String get langChinese;
+
+  /// No description provided for @langJapanese.
+  ///
+  /// In en, this message translates to:
+  /// **'Japanese'**
+  String get langJapanese;
 
   /// No description provided for @all.
   ///
