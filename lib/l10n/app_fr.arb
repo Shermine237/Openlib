@@ -27,6 +27,8 @@
   "filterByType": "Filtrer par type",
   "filterBySort": "Trier par",
   "filterByFileType": "Type de fichier",
+  "filterByLanguage": "Filtrer par langue",
+  "filterBySource": "Filtrer par source",
   "typeAll": "Tous",
   "typeAnyBooks": "Tous les livres",
   "typeUnknownBooks": "Livres inconnus",
@@ -36,6 +38,11 @@
   "typeMagazine": "Magazine",
   "typeStandardsDocument": "Document standard",
   "typeJournalArticle": "Article de journal",
+  "typeFiction": "Fiction",
+  "typeNonFiction": "Non-fiction",
+  "typeScientific": "Articles scientifiques",
+  "typeComic": "Bandes dessinées",
+  "typeStandard": "Documents standards",
   "sortMostRelevant": "Plus pertinent",
   "sortNewest": "Plus récent",
   "sortOldest": "Plus ancien",
@@ -46,6 +53,17 @@
   "fileTypeEpub": "EPUB",
   "fileTypeCbr": "CBR",
   "fileTypeCbz": "CBZ",
+  "fileTypeDoc": "DOC",
+  "fileTypeDocx": "DOCX",
+  "langAll": "Toutes les langues",
+  "langEnglish": "Anglais",
+  "langFrench": "Français",
+  "langGerman": "Allemand",
+  "langSpanish": "Espagnol",
+  "langItalian": "Italien",
+  "langRussian": "Russe",
+  "langChinese": "Chinois",
+  "langJapanese": "Japonais",
   "all": "Tout",
   "mostRelevant": "Plus pertinent",
   "fileNotExists": "Le fichier n'existe pas",
@@ -99,13 +117,21 @@
   "resume": "Reprendre",
   "pause": "Pause",
   "loading": "Chargement...",
-  "bookmarks": "Marque-pages",
-  "addBookmark": "Ajouter un marque-page",
-  "removeBookmark": "Supprimer le marque-page",
-  "bookmarkAdded": "Marque-page ajouté",
-  "bookmarkRemoved": "Marque-page supprimé",
-  "openPdfWithExternalApp": "Ouvrir le PDF avec une application externe",
-  "openEpubWithExternalApp": "Ouvrir l'EPUB avec une application externe",
+  "sourceAll": "Toutes les sources",
+  "sourceZlib": "Z-Library",
+  "sourceZlibzh": "Z-Library Chinois",
+  "sourceLibgen": "Library Genesis",
+  "sourceLgli": "Libgen.li",
+  "sourceLgrs": "Libgen.rs",
+  "sourceScihub": "Sci-Hub",
+  "sourceMagzdb": "MagzDB",
+  "sourceDuxiu": "DuXiu 读秀",
+  "sourceNexusstc": "Nexus/STC",
+  "sourceHathi": "HathiTrust",
+  "sourceIa": "Archive Internet",
+  "sourceUpload": "Téléchargements vers AA",
+  "sourceIpfsInfura": "IPFS (Infura)",
+  "sourceIpfsCloudflare": "IPFS (Cloudflare)",
   "pageNumber": "Page {number}",
   "@pageNumber": {
     "placeholders": {
@@ -114,18 +140,7 @@
       }
     }
   },
-  "pageOf": "Page {current} sur {total}",
-  "@pageOf": {
-    "placeholders": {
-      "current": {
-        "type": "int"
-      },
-      "total": {
-        "type": "int"
-      }
-    }
-  },
-  "fontSize": "Taille de la police",
+  "fontSize": "Taille de police",
   "small": "Petit",
   "medium": "Moyen",
   "large": "Grand",
@@ -134,7 +149,14 @@
   "normal": "Normal",
   "fast": "Rapide",
   "veryFast": "Très rapide",
-  "systemDefault": "Système par défaut",
+  "systemDefault": "Par défaut du système",
+  "bookmarks": "Signets",
+  "addBookmark": "Ajouter un signet",
+  "removeBookmark": "Supprimer le signet",
+  "bookmarkAdded": "Signet ajouté",
+  "bookmarkRemoved": "Signet supprimé",
+  "openPdfWithExternalApp": "Ouvrir le PDF avec une application externe",
+  "openEpubWithExternalApp": "Ouvrir l'EPUB avec une application externe",
   "genres": "Genres",
   "fiction": "Fiction",
   "sciTech": "Science et Technologie",
@@ -222,20 +244,15 @@
   "seriesDescription": "Livres qui font partie d'une série.",
   "titleChallenge": "Défi des titres",
   "titleChallengeDescription": "Livres participant au défi des titres.",
-  "filterByLanguage": "Filtrer par langue",
-  "langAll": "Toutes les langues",
-  "langEnglish": "Anglais",
-  "langFrench": "Français",
-  "langGerman": "Allemand",
-  "langSpanish": "Espagnol",
-  "langItalian": "Italien",
-  "langRussian": "Russe",
-  "langChinese": "Chinois",
-  "langJapanese": "Japonais",
-  "typeFiction": "Fiction",
-  "typeNonFiction": "Non-fiction",
-  "typeScientific": "Articles scientifiques",
-  "typeMagazine": "Magazines",
-  "typeComic": "Comics",
-  "typeStandard": "Documents standards"
+  "pageOf": "Page {current} sur {total}",
+  "@pageOf": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  }
 }

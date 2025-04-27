@@ -93,6 +93,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get filterByLanguage => 'Filter by language';
 
   @override
+  String get filterBySource => 'Filter by source';
+
+  @override
   String get typeAll => 'All';
 
   @override
@@ -111,7 +114,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get typeComicBooks => 'Comic Books';
 
   @override
-  String get typeMagazine => 'Magazines';
+  String get typeMagazine => 'Magazine';
 
   @override
   String get typeStandardsDocument => 'Standards Document';
@@ -163,6 +166,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fileTypeCbz => 'CBZ';
+
+  @override
+  String get fileTypeDoc => 'DOC';
+
+  @override
+  String get fileTypeDocx => 'DOCX';
 
   @override
   String get langAll => 'All languages';
@@ -285,6 +294,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get searchByPublisher => 'Search by publisher';
 
   @override
+  String get searchByIsbn => 'Search by ISBN';
+
+  @override
+  String get searchByMd5 => 'Search by MD5';
+
+  @override
+  String get searchByIpfs => 'Search by IPFS';
+
+  @override
   String get sortBy => 'Sort by';
 
   @override
@@ -342,25 +360,49 @@ class AppLocalizationsEn extends AppLocalizations {
   String get loading => 'Loading...';
 
   @override
-  String get bookmarks => 'Bookmarks';
+  String get sourceAll => 'All sources';
 
   @override
-  String get addBookmark => 'Add bookmark';
+  String get sourceZlib => 'Z-Library';
 
   @override
-  String get removeBookmark => 'Remove bookmark';
+  String get sourceZlibzh => 'Z-Library Chinese';
 
   @override
-  String get bookmarkAdded => 'Bookmark added';
+  String get sourceLibgen => 'Library Genesis';
 
   @override
-  String get bookmarkRemoved => 'Bookmark removed';
+  String get sourceLgli => 'Libgen.li';
 
   @override
-  String get openPdfWithExternalApp => 'Open PDF with External App';
+  String get sourceLgrs => 'Libgen.rs';
 
   @override
-  String get openEpubWithExternalApp => 'Open EPUB with External App';
+  String get sourceScihub => 'Sci-Hub';
+
+  @override
+  String get sourceMagzdb => 'MagzDB';
+
+  @override
+  String get sourceDuxiu => 'DuXiu 读秀';
+
+  @override
+  String get sourceNexusstc => 'Nexus/STC';
+
+  @override
+  String get sourceHathi => 'HathiTrust';
+
+  @override
+  String get sourceIa => 'Internet Archive';
+
+  @override
+  String get sourceUpload => 'Uploads to AA';
+
+  @override
+  String get sourceIpfsInfura => 'IPFS (Infura)';
+
+  @override
+  String get sourceIpfsCloudflare => 'IPFS (Cloudflare)';
 
   @override
   String pageNumber(int number) {
@@ -656,4 +698,25 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get titleChallengeDescription => 'Books participating in the title challenge.';
+
+  @override
+  String get bookmarks => 'Bookmarks';
+
+  @override
+  String get addBookmark => 'Add bookmark';
+
+  @override
+  String get removeBookmark => 'Remove bookmark';
+
+  @override
+  String get bookmarkAdded => 'Bookmark added';
+
+  @override
+  String get bookmarkRemoved => 'Bookmark removed';
+
+  @override
+  String get openPdfWithExternalApp => 'Open PDF with External App';
+
+  @override
+  String get openEpubWithExternalApp => 'Open EPUB with External App';
 }

@@ -263,6 +263,12 @@ abstract class AppLocalizations {
   /// **'Filter by language'**
   String get filterByLanguage;
 
+  /// No description provided for @filterBySource.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter by source'**
+  String get filterBySource;
+
   /// No description provided for @typeAll.
   ///
   /// In en, this message translates to:
@@ -302,7 +308,7 @@ abstract class AppLocalizations {
   /// No description provided for @typeMagazine.
   ///
   /// In en, this message translates to:
-  /// **'Magazines'**
+  /// **'Magazine'**
   String get typeMagazine;
 
   /// No description provided for @typeStandardsDocument.
@@ -406,6 +412,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'CBZ'**
   String get fileTypeCbz;
+
+  /// No description provided for @fileTypeDoc.
+  ///
+  /// In en, this message translates to:
+  /// **'DOC'**
+  String get fileTypeDoc;
+
+  /// No description provided for @fileTypeDocx.
+  ///
+  /// In en, this message translates to:
+  /// **'DOCX'**
+  String get fileTypeDocx;
 
   /// No description provided for @langAll.
   ///
@@ -647,6 +665,24 @@ abstract class AppLocalizations {
   /// **'Search by publisher'**
   String get searchByPublisher;
 
+  /// No description provided for @searchByIsbn.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by ISBN'**
+  String get searchByIsbn;
+
+  /// No description provided for @searchByMd5.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by MD5'**
+  String get searchByMd5;
+
+  /// No description provided for @searchByIpfs.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by IPFS'**
+  String get searchByIpfs;
+
   /// No description provided for @sortBy.
   ///
   /// In en, this message translates to:
@@ -761,47 +797,95 @@ abstract class AppLocalizations {
   /// **'Loading...'**
   String get loading;
 
-  /// No description provided for @bookmarks.
+  /// No description provided for @sourceAll.
   ///
   /// In en, this message translates to:
-  /// **'Bookmarks'**
-  String get bookmarks;
+  /// **'All sources'**
+  String get sourceAll;
 
-  /// No description provided for @addBookmark.
+  /// No description provided for @sourceZlib.
   ///
   /// In en, this message translates to:
-  /// **'Add bookmark'**
-  String get addBookmark;
+  /// **'Z-Library'**
+  String get sourceZlib;
 
-  /// No description provided for @removeBookmark.
+  /// No description provided for @sourceZlibzh.
   ///
   /// In en, this message translates to:
-  /// **'Remove bookmark'**
-  String get removeBookmark;
+  /// **'Z-Library Chinese'**
+  String get sourceZlibzh;
 
-  /// No description provided for @bookmarkAdded.
+  /// No description provided for @sourceLibgen.
   ///
   /// In en, this message translates to:
-  /// **'Bookmark added'**
-  String get bookmarkAdded;
+  /// **'Library Genesis'**
+  String get sourceLibgen;
 
-  /// No description provided for @bookmarkRemoved.
+  /// No description provided for @sourceLgli.
   ///
   /// In en, this message translates to:
-  /// **'Bookmark removed'**
-  String get bookmarkRemoved;
+  /// **'Libgen.li'**
+  String get sourceLgli;
 
-  /// No description provided for @openPdfWithExternalApp.
+  /// No description provided for @sourceLgrs.
   ///
   /// In en, this message translates to:
-  /// **'Open PDF with External App'**
-  String get openPdfWithExternalApp;
+  /// **'Libgen.rs'**
+  String get sourceLgrs;
 
-  /// No description provided for @openEpubWithExternalApp.
+  /// No description provided for @sourceScihub.
   ///
   /// In en, this message translates to:
-  /// **'Open EPUB with External App'**
-  String get openEpubWithExternalApp;
+  /// **'Sci-Hub'**
+  String get sourceScihub;
+
+  /// No description provided for @sourceMagzdb.
+  ///
+  /// In en, this message translates to:
+  /// **'MagzDB'**
+  String get sourceMagzdb;
+
+  /// No description provided for @sourceDuxiu.
+  ///
+  /// In en, this message translates to:
+  /// **'DuXiu 读秀'**
+  String get sourceDuxiu;
+
+  /// No description provided for @sourceNexusstc.
+  ///
+  /// In en, this message translates to:
+  /// **'Nexus/STC'**
+  String get sourceNexusstc;
+
+  /// No description provided for @sourceHathi.
+  ///
+  /// In en, this message translates to:
+  /// **'HathiTrust'**
+  String get sourceHathi;
+
+  /// No description provided for @sourceIa.
+  ///
+  /// In en, this message translates to:
+  /// **'Internet Archive'**
+  String get sourceIa;
+
+  /// No description provided for @sourceUpload.
+  ///
+  /// In en, this message translates to:
+  /// **'Uploads to AA'**
+  String get sourceUpload;
+
+  /// No description provided for @sourceIpfsInfura.
+  ///
+  /// In en, this message translates to:
+  /// **'IPFS (Infura)'**
+  String get sourceIpfsInfura;
+
+  /// No description provided for @sourceIpfsCloudflare.
+  ///
+  /// In en, this message translates to:
+  /// **'IPFS (Cloudflare)'**
+  String get sourceIpfsCloudflare;
 
   /// No description provided for @pageNumber.
   ///
@@ -1384,6 +1468,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Books participating in the title challenge.'**
   String get titleChallengeDescription;
+
+  /// No description provided for @bookmarks.
+  ///
+  /// In en, this message translates to:
+  /// **'Bookmarks'**
+  String get bookmarks;
+
+  /// No description provided for @addBookmark.
+  ///
+  /// In en, this message translates to:
+  /// **'Add bookmark'**
+  String get addBookmark;
+
+  /// No description provided for @removeBookmark.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove bookmark'**
+  String get removeBookmark;
+
+  /// No description provided for @bookmarkAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Bookmark added'**
+  String get bookmarkAdded;
+
+  /// No description provided for @bookmarkRemoved.
+  ///
+  /// In en, this message translates to:
+  /// **'Bookmark removed'**
+  String get bookmarkRemoved;
+
+  /// No description provided for @openPdfWithExternalApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Open PDF with External App'**
+  String get openPdfWithExternalApp;
+
+  /// No description provided for @openEpubWithExternalApp.
+  ///
+  /// In en, this message translates to:
+  /// **'Open EPUB with External App'**
+  String get openEpubWithExternalApp;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
