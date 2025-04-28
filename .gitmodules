@@ -1,0 +1,3 @@
+[submodule "megalib-backend"]
+	path = megalib-backend
+	url = git@github.com:Shermine237/megalib-backend.git
