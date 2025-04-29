@@ -109,7 +109,8 @@ class EpubReader extends ConsumerStatefulWidget {
 }
 
 class _EpubReaderState extends ConsumerState<EpubReader> {
-  late EpubController _epubController;
+  EpubController? _epubController;
+  bool _isLoading = true;
   
   @override
   void initState() {
@@ -118,6 +119,10 @@ class _EpubReaderState extends ConsumerState<EpubReader> {
   }
 
   Future<void> _loadBook() async {
+    setState(() {
+      _isLoading = true;
+    });
+    
     MyLibraryDb dataBase = MyLibraryDb.instance;
     String? epubConfig = await dataBase.getBookState(widget.fileName);
     
@@ -125,21 +130,39 @@ class _EpubReaderState extends ConsumerState<EpubReader> {
       document: EpubDocument.openFile(File(widget.filePath)),
       epubCfi: epubConfig?.startsWith('epubcfi') == true ? epubConfig : null,
     );
+    
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
   void dispose() {
-    _epubController.dispose();
+    _epubController?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading || _epubController == null) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          title: Text(AppLocalizations.of(context)!.loading),
+        ),
+        body: const Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+    
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         title: EpubViewActualChapter(
-          controller: _epubController,
+          controller: _epubController!,
           builder: (chapterValue) => Text(
             chapterValue?.chapter?.Title?.replaceAll('\n', '') ?? 'Loading...',
             textAlign: TextAlign.start,
@@ -147,9 +170,10 @@ class _EpubReaderState extends ConsumerState<EpubReader> {
         ),
       ),
       body: EpubView(
-        controller: _epubController,
-        onChapterChanged: (chapter) {
-          saveEpubState(widget.fileName, _epubController.generateEpubCfi(), ref);
+        controller: _epubController!,
+        onChapterChanged: (chapter) async {
+          final position = _epubController!.generateEpubCfi() ?? '';
+          await saveEpubState(widget.fileName, position, ref);
         },
       ),
     );
