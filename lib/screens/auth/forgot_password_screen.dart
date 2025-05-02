@@ -48,13 +48,24 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final brightness = Theme.of(context).brightness;
+    final isDark = brightness == Brightness.dark;
+    
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(
         backgroundColor: theme.colorScheme.surface,
-        title: Text('Mot de passe oublié', style: theme.textTheme.displayLarge),
+        title: Text('Mot de passe oublié', style: theme.textTheme.displayLarge?.copyWith(
+          color: theme.colorScheme.tertiary,
+        )),
       ),
       body: SafeArea(
         child: Padding(
@@ -65,9 +76,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 32.0),
+                  child: Image.asset(
+                    'assets/icons/appIcon.png',
+                    height: 100,
+                    width: 100,
+                  ),
+                ),
                 Text(
                   'Réinitialisation du mot de passe',
-                  style: theme.textTheme.displayLarge,
+                  style: theme.textTheme.displayLarge?.copyWith(
+                    color: theme.colorScheme.tertiary,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
@@ -91,6 +112,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: theme.colorScheme.secondary),
                     ),
+                    fillColor: isDark ? Colors.black12 : Colors.white,
+                    filled: true,
                   ),
                   style: TextStyle(color: theme.colorScheme.tertiary),
                   keyboardType: TextInputType.emailAddress,
@@ -109,8 +132,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   onPressed: _isLoading ? null : _resetPassword,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: theme.colorScheme.secondary,
-                    foregroundColor: theme.colorScheme.primary,
+                    foregroundColor: theme.colorScheme.surface,
                     padding: const EdgeInsets.symmetric(vertical: 16),
+                    disabledBackgroundColor: theme.colorScheme.secondary.withOpacity(0.6),
                   ),
                   child: _isLoading
                       ? SizedBox(
@@ -119,7 +143,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              theme.colorScheme.primary,
+                              theme.colorScheme.surface,
                             ),
                           ),
                         )
@@ -147,11 +171,5 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    super.dispose();
   }
 }

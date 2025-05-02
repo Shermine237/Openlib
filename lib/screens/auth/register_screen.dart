@@ -38,7 +38,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           content: Text('Inscription réussie ! Vous pouvez maintenant vous connecter.'),
         ),
       );
-      navigator.pushReplacementNamed('/login');
+      navigator.pop();
     } catch (e) {
       if (!mounted) return;
       
@@ -53,13 +53,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   @override
+  void dispose() {
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final brightness = Theme.of(context).brightness;
+    final isDark = brightness == Brightness.dark;
+    
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(
         backgroundColor: theme.colorScheme.surface,
-        title: Text('Inscription', style: theme.textTheme.displayLarge),
+        title: Text('Inscription', style: theme.textTheme.displayLarge?.copyWith(
+          color: theme.colorScheme.tertiary,
+        )),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -69,6 +83,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 32.0),
+                  child: Image.asset(
+                    'assets/icons/appIcon.png',
+                    height: 100,
+                    width: 100,
+                  ),
+                ),
                 TextFormField(
                   controller: _usernameController,
                   decoration: InputDecoration(
@@ -83,6 +105,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: theme.colorScheme.secondary),
                     ),
+                    fillColor: isDark ? Colors.black12 : Colors.white,
+                    filled: true,
                   ),
                   style: TextStyle(color: theme.colorScheme.tertiary),
                   validator: (value) {
@@ -107,6 +131,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: theme.colorScheme.secondary),
                     ),
+                    fillColor: isDark ? Colors.black12 : Colors.white,
+                    filled: true,
                   ),
                   style: TextStyle(color: theme.colorScheme.tertiary),
                   keyboardType: TextInputType.emailAddress,
@@ -135,6 +161,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: theme.colorScheme.secondary),
                     ),
+                    fillColor: isDark ? Colors.black12 : Colors.white,
+                    filled: true,
                   ),
                   style: TextStyle(color: theme.colorScheme.tertiary),
                   obscureText: true,
@@ -163,6 +191,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: theme.colorScheme.secondary),
                     ),
+                    fillColor: isDark ? Colors.black12 : Colors.white,
+                    filled: true,
                   ),
                   style: TextStyle(color: theme.colorScheme.tertiary),
                   obscureText: true,
@@ -176,13 +206,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 32),
                 ElevatedButton(
                   onPressed: _isLoading ? null : _register,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: theme.colorScheme.secondary,
-                    foregroundColor: theme.colorScheme.primary,
+                    foregroundColor: theme.colorScheme.surface,
                     padding: const EdgeInsets.symmetric(vertical: 16),
+                    disabledBackgroundColor: theme.colorScheme.secondary.withOpacity(0.6),
                   ),
                   child: _isLoading
                       ? SizedBox(
@@ -191,7 +222,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              theme.colorScheme.primary,
+                              theme.colorScheme.surface,
                             ),
                           ),
                         )
@@ -206,7 +237,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/login');
+                    Navigator.pop(context);
                   },
                   child: Text(
                     'Déjà un compte ? Se connecter',
@@ -219,14 +250,5 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _usernameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    super.dispose();
   }
 }
