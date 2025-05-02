@@ -54,9 +54,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
+      backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(
-        title: const Text('Inscription'),
+        backgroundColor: theme.colorScheme.surface,
+        title: Text('Inscription', style: theme.textTheme.displayLarge),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -68,10 +71,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
               children: [
                 TextFormField(
                   controller: _usernameController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Nom d\'utilisateur',
-                    border: OutlineInputBorder(),
+                    labelStyle: TextStyle(color: theme.colorScheme.tertiary),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: theme.colorScheme.tertiary),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: theme.colorScheme.tertiary),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: theme.colorScheme.secondary),
+                    ),
                   ),
+                  style: TextStyle(color: theme.colorScheme.tertiary),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Veuillez entrer un nom d\'utilisateur';
@@ -82,10 +95,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _emailController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Email',
-                    border: OutlineInputBorder(),
+                    labelStyle: TextStyle(color: theme.colorScheme.tertiary),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: theme.colorScheme.tertiary),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: theme.colorScheme.tertiary),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: theme.colorScheme.secondary),
+                    ),
                   ),
+                  style: TextStyle(color: theme.colorScheme.tertiary),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -100,10 +123,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _passwordController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Mot de passe',
-                    border: OutlineInputBorder(),
+                    labelStyle: TextStyle(color: theme.colorScheme.tertiary),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: theme.colorScheme.tertiary),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: theme.colorScheme.tertiary),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: theme.colorScheme.secondary),
+                    ),
                   ),
+                  style: TextStyle(color: theme.colorScheme.tertiary),
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -118,10 +151,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _confirmPasswordController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Confirmer le mot de passe',
-                    border: OutlineInputBorder(),
+                    labelStyle: TextStyle(color: theme.colorScheme.tertiary),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: theme.colorScheme.tertiary),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: theme.colorScheme.tertiary),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: theme.colorScheme.secondary),
+                    ),
                   ),
+                  style: TextStyle(color: theme.colorScheme.tertiary),
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -136,16 +179,39 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 24),
                 ElevatedButton(
                   onPressed: _isLoading ? null : _register,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: theme.colorScheme.secondary,
+                    foregroundColor: theme.colorScheme.primary,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
                   child: _isLoading
-                      ? const CircularProgressIndicator()
-                      : const Text('S\'inscrire'),
+                      ? SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              theme.colorScheme.primary,
+                            ),
+                          ),
+                        )
+                      : const Text(
+                          'S\'inscrire',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                 ),
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () {
                     Navigator.pushReplacementNamed(context, '/login');
                   },
-                  child: const Text('Déjà un compte ? Se connecter'),
+                  child: Text(
+                    'Déjà un compte ? Se connecter',
+                    style: TextStyle(color: theme.colorScheme.secondary),
+                  ),
                 ),
               ],
             ),
