@@ -10,6 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 // Package imports:
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:openlib/l10n/app_localizations.dart';
+import 'package:openlib/routes/routes.dart';
+import 'package:openlib/services/api_service.dart';
 import 'package:openlib/ui/home_page.dart';
 import 'package:openlib/ui/mylibrary_page.dart';
 import 'package:openlib/ui/search_page.dart';
@@ -58,6 +60,10 @@ void main() async {
             isDarkMode ? Colors.black : Colors.grey.shade200));
   }
 
+  // Vérifier si l'utilisateur est connecté
+  final token = await ApiService().getToken();
+  final initialRoute = token != null ? Routes.home : Routes.login;
+
   runApp(
     ProviderScope(
       overrides: [
@@ -71,13 +77,15 @@ void main() async {
         userAgentProvider.overrideWith((ref) => browserUserAgent),
         cookieProvider.overrideWith((ref) => browserCookie),
       ],
-      child: const MyApp(),
+      child: MyApp(initialRoute: initialRoute),
     ),
   );
 }
 
 class MyApp extends ConsumerWidget {
-  const MyApp({super.key});
+  final String initialRoute;
+
+  const MyApp({required this.initialRoute, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -104,12 +112,13 @@ class MyApp extends ConsumerWidget {
         );
       },
       debugShowCheckedModeBanner: false,
-      title: 'Openlib', // Titre par défaut avant l'initialisation des localisations
+      title: 'Openlib',
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: themeMode,
       locale: locale,
-      home: const MainScreen(),
+      initialRoute: initialRoute,
+      routes: Routes.getRoutes(),
     );
   }
 }
@@ -132,7 +141,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
     final selectedIndex = ref.watch(selectedIndexProvider);
 
     return Scaffold(
@@ -156,7 +164,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           gap: 5,
           color: const Color.fromARGB(255, 255, 255, 255),
           activeColor: const Color.fromARGB(255, 255, 255, 255),
-          iconSize: 19, // tab button icon size
+          iconSize: 19,
           tabBackgroundColor: Theme.of(context).colorScheme.secondary,
           padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 6.5),
           tabs: [
