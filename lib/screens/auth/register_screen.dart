@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:openlib/services/api_service.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -15,6 +16,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   bool _isLoading = false;
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
+  PhoneNumber _phoneNumber = PhoneNumber(isoCode: 'CM');
 
   Future<void> _register() async {
     if (!_formKey.currentState!.validate()) return;
@@ -24,15 +28,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
     try {
       final navigator = Navigator.of(context);
       final messenger = ScaffoldMessenger.of(context);
-      
+
       await ApiService().register(
-        _usernameController.text,
-        _emailController.text,
-        _passwordController.text,
+        username: _usernameController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
+        phone: _phoneNumber.phoneNumber ?? '',
       );
-      
+
       if (!mounted) return;
-      
+
       messenger.showSnackBar(
         const SnackBar(
           content: Text('Inscription réussie ! Vous pouvez maintenant vous connecter.'),
@@ -41,7 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       navigator.pop();
     } catch (e) {
       if (!mounted) return;
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString())),
       );
@@ -66,14 +71,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final theme = Theme.of(context);
     final brightness = Theme.of(context).brightness;
     final isDark = brightness == Brightness.dark;
-    
+
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       appBar: AppBar(
         backgroundColor: theme.colorScheme.surface,
-        title: Text('Inscription', style: theme.textTheme.displayLarge?.copyWith(
-          color: theme.colorScheme.tertiary,
-        )),
+        title: Text(
+          'Inscription',
+          style: theme.textTheme.displayLarge?.copyWith(
+            color: theme.colorScheme.tertiary,
+          ),
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -81,6 +89,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Form(
             key: _formKey,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Padding(
@@ -147,6 +156,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                 ),
                 const SizedBox(height: 16),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: theme.colorScheme.tertiary,
+                    ),
+                    borderRadius: BorderRadius.circular(4),
+                    color: isDark ? Colors.black12 : Colors.white,
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: InternationalPhoneNumberInput(
+                    onInputChanged: (PhoneNumber number) {
+                      _phoneNumber = number;
+                    },
+                    selectorConfig: const SelectorConfig(
+                      selectorType: PhoneInputSelectorType.DROPDOWN,
+                    ),
+                    initialValue: _phoneNumber,
+                    formatInput: true,
+                    keyboardType: TextInputType.phone,
+                    inputDecoration: InputDecoration(
+                      labelText: 'Numéro de téléphone',
+                      labelStyle: TextStyle(color: theme.colorScheme.tertiary),
+                      border: InputBorder.none,
+                    ),
+                    selectorTextStyle: TextStyle(color: theme.colorScheme.tertiary),
+                    textStyle: TextStyle(color: theme.colorScheme.tertiary),
+                  ),
+                ),
+                const SizedBox(height: 16),
                 TextFormField(
                   controller: _passwordController,
                   decoration: InputDecoration(
@@ -163,12 +201,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     fillColor: isDark ? Colors.black12 : Colors.white,
                     filled: true,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword ? Icons.visibility : Icons.visibility_off,
+                        color: theme.colorScheme.tertiary,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                    ),
                   ),
                   style: TextStyle(color: theme.colorScheme.tertiary),
-                  obscureText: true,
+                  obscureText: _obscurePassword,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Veuillez entrer un mot de passe';
+                      return 'Veuillez entrer votre mot de passe';
                     }
                     if (value.length < 6) {
                       return 'Le mot de passe doit contenir au moins 6 caractères';
@@ -193,9 +242,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     fillColor: isDark ? Colors.black12 : Colors.white,
                     filled: true,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscureConfirmPassword ? Icons.visibility : Icons.visibility_off,
+                        color: theme.colorScheme.tertiary,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscureConfirmPassword = !_obscureConfirmPassword;
+                        });
+                      },
+                    ),
                   ),
                   style: TextStyle(color: theme.colorScheme.tertiary),
-                  obscureText: true,
+                  obscureText: _obscureConfirmPassword,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Veuillez confirmer votre mot de passe';
@@ -206,7 +266,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 24),
                 ElevatedButton(
                   onPressed: _isLoading ? null : _register,
                   style: ElevatedButton.styleFrom(
