@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:openlib/services/api_service.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:flutter/foundation.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -45,10 +46,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
       );
       navigator.pop();
     } catch (e) {
+      if (kDebugMode) {
+        print('REGISTER ERROR: $e');
+      }
+      
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
+        const SnackBar(
+          content: Text('Une erreur est survenue lors de l\'inscription. Veuillez réessayer.'),
+        ),
       );
     } finally {
       if (mounted) {
@@ -114,7 +121,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: theme.colorScheme.secondary),
                     ),
-                    fillColor: isDark ? Colors.black12 : Colors.white,
+                    fillColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0.1),
                     filled: true,
                   ),
                   style: TextStyle(color: theme.colorScheme.tertiary),
@@ -140,7 +147,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: theme.colorScheme.secondary),
                     ),
-                    fillColor: isDark ? Colors.black12 : Colors.white,
+                    fillColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0.1),
                     filled: true,
                   ),
                   style: TextStyle(color: theme.colorScheme.tertiary),
@@ -199,7 +206,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: theme.colorScheme.secondary),
                     ),
-                    fillColor: isDark ? Colors.black12 : Colors.white,
+                    fillColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0.1),
                     filled: true,
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -240,7 +247,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: theme.colorScheme.secondary),
                     ),
-                    fillColor: isDark ? Colors.black12 : Colors.white,
+                    fillColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0.1),
                     filled: true,
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -273,7 +280,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     backgroundColor: theme.colorScheme.secondary,
                     foregroundColor: theme.colorScheme.surface,
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    disabledBackgroundColor: theme.colorScheme.secondary.withOpacity(0.6),
+                    disabledBackgroundColor: theme.colorScheme.secondary.withValues(alpha: 0.6),
                   ),
                   child: _isLoading
                       ? SizedBox(

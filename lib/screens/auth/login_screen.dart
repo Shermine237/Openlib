@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:openlib/services/api_service.dart';
+import 'package:flutter/foundation.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -27,9 +28,15 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       navigator.pushReplacementNamed('/home');
     } catch (e) {
+      if (kDebugMode) {
+        print('LOGIN ERROR: $e');
+      }
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
+          const SnackBar(
+            content: Text('Échec de la connexion. Veuillez vérifier vos identifiants.'),
+          ),
         );
       }
     } finally {
@@ -49,8 +56,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final brightness = Theme.of(context).brightness;
-    final isDark = brightness == Brightness.dark;
     
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
@@ -93,8 +98,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: theme.colorScheme.secondary),
                     ),
-                    fillColor: isDark ? Colors.black12 : Colors.white,
                     filled: true,
+                    fillColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0.1),
                   ),
                   style: TextStyle(color: theme.colorScheme.tertiary),
                   keyboardType: TextInputType.emailAddress,
@@ -123,8 +128,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: theme.colorScheme.secondary),
                     ),
-                    fillColor: isDark ? Colors.black12 : Colors.white,
                     filled: true,
+                    fillColor: Theme.of(context).colorScheme.surface.withValues(alpha: 0.1),
                   ),
                   style: TextStyle(color: theme.colorScheme.tertiary),
                   obscureText: true,
@@ -155,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     backgroundColor: theme.colorScheme.secondary,
                     foregroundColor: theme.colorScheme.surface,
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    disabledBackgroundColor: theme.colorScheme.secondary.withOpacity(0.6),
+                    disabledBackgroundColor: theme.colorScheme.secondary.withValues(alpha: 0.6),
                   ),
                   child: _isLoading
                       ? SizedBox(

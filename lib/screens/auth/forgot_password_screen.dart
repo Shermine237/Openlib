@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:openlib/services/api_service.dart';
+import 'package:flutter/foundation.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -19,26 +20,27 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     setState(() => _isLoading = true);
 
     try {
-      final navigator = Navigator.of(context);
-      final messenger = ScaffoldMessenger.of(context);
-      
       await ApiService().forgotPassword(_emailController.text);
-      
+
       if (!mounted) return;
-      
-      messenger.showSnackBar(
+
+      ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text(
-            'Un email de réinitialisation a été envoyé à votre adresse email.',
-          ),
+          content: Text('Si votre email est valide, vous recevrez les instructions pour réinitialiser votre mot de passe.'),
         ),
       );
-      navigator.pop();
+      Navigator.of(context).pop();
     } catch (e) {
+      if (kDebugMode) {
+        print('RESET PASSWORD ERROR: $e');
+      }
+
       if (!mounted) return;
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
+        const SnackBar(
+          content: Text('Une erreur est survenue. Veuillez réessayer plus tard.'),
+        ),
       );
     } finally {
       if (mounted) {
@@ -134,7 +136,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     backgroundColor: theme.colorScheme.secondary,
                     foregroundColor: theme.colorScheme.surface,
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    disabledBackgroundColor: theme.colorScheme.secondary.withOpacity(0.6),
+                    disabledBackgroundColor: theme.colorScheme.secondary.withValues(alpha: 0.6),
                   ),
                   child: _isLoading
                       ? SizedBox(
