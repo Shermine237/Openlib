@@ -124,7 +124,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 TextFormField(
                   controller: _usernameController,
                   decoration: InputDecoration(
-                    labelText: 'Nom d\'utilisateur',
+                    labelText: 'Nom et Prenom',
                     labelStyle: TextStyle(color: theme.colorScheme.tertiary),
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: theme.colorScheme.tertiary),
