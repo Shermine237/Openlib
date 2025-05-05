@@ -27,9 +27,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     setState(() => _isLoading = true);
 
     try {
-      final navigator = Navigator.of(context);
-      final messenger = ScaffoldMessenger.of(context);
-
       // S'assurer que le numéro de téléphone est complet avec l'indicatif pays
       final phoneNumber = _phoneNumber.phoneNumber?.replaceAll(' ', '');
       if (phoneNumber == null || phoneNumber.isEmpty || !phoneNumber.startsWith('+')) {
@@ -48,14 +45,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
         phone: phoneNumber,
       );
 
-      if (!mounted) return;
-
-      messenger.showSnackBar(
-        const SnackBar(
-          content: Text('Inscription réussie ! Vous pouvez maintenant vous connecter.'),
-        ),
-      );
-      navigator.pop();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Inscription réussie ! Veuillez vérifier votre email pour confirmer votre compte.'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 5),
+          ),
+        );
+        Navigator.pushReplacementNamed(context, '/login');
+      }
     } catch (e) {
       if (kDebugMode) {
         print('REGISTER ERROR: $e');
