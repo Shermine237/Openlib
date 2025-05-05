@@ -30,11 +30,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
       final navigator = Navigator.of(context);
       final messenger = ScaffoldMessenger.of(context);
 
+      // S'assurer que le numéro de téléphone est complet avec l'indicatif pays
+      final phoneNumber = _phoneNumber.phoneNumber?.replaceAll(' ', '');
+      if (phoneNumber == null || phoneNumber.isEmpty || !phoneNumber.startsWith('+')) {
+        throw Exception('Le numéro de téléphone est requis et doit inclure l\'indicatif pays');
+      }
+
+      if (kDebugMode) {
+        print('Sending registration with phone: $phoneNumber');
+      }
+
+      // Envoyer le numéro au format international sans espaces
       await ApiService().register(
         username: _usernameController.text,
         email: _emailController.text,
         password: _passwordController.text,
-        phone: _phoneNumber.phoneNumber ?? '',
+        phone: phoneNumber,
       );
 
       if (!mounted) return;
@@ -49,12 +60,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (kDebugMode) {
         print('REGISTER ERROR: $e');
       }
-      
+
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Une erreur est survenue lors de l\'inscription. Veuillez réessayer.'),
+        SnackBar(
+          content: Text(
+            e.toString().contains('Le numéro de téléphone est requis')
+                ? 'Veuillez entrer un numéro de téléphone valide'
+                : 'Une erreur est survenue lors de l\'inscription. Veuillez réessayer.',
+          ),
         ),
       );
     } finally {

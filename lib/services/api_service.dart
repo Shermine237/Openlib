@@ -10,7 +10,9 @@ class ApiService {
   // Singleton pattern
   static final ApiService _instance = ApiService._internal();
   factory ApiService() => _instance;
-  ApiService._internal();
+  ApiService._internal() {
+    HttpOverrides.global = _DevHttpOverrides();
+  }
 
   Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
@@ -36,6 +38,41 @@ class ApiService {
   }
 
   // Authentication
+  Future<Map<String, dynamic>> register({
+    required String username,
+    required String email,
+    required String password,
+    required String phone,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/auth/register'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'username': username,
+          'email': email,
+          'password': password,
+          'phoneNumber': phone,  
+        }),
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        final error = jsonDecode(response.body);
+        throw Exception(error['message'] ?? error['error'] ?? 'Échec de l\'inscription');
+      }
+    } on SocketException {
+      throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet.');
+    } on HttpException {
+      throw Exception('Service non disponible. Veuillez réessayer plus tard.');
+    } on FormatException {
+      throw Exception('Réponse du serveur invalide. Veuillez contacter le support.');
+    } catch (e) {
+      throw Exception('Une erreur est survenue: ${e.toString()}');
+    }
+  }
+
   Future<Map<String, dynamic>> login(String email, String password) async {
     try {
       final response = await http.post(
@@ -53,45 +90,10 @@ class ApiService {
         return data;
       } else {
         final error = jsonDecode(response.body);
-        throw Exception(error['message'] ?? 'Échec de la connexion');
+        throw Exception(error['message'] ?? error['error'] ?? 'Échec de la connexion');
       }
     } on SocketException {
-      throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet ou que le serveur est en cours d\'exécution.');
-    } on HttpException {
-      throw Exception('Service non disponible. Veuillez réessayer plus tard.');
-    } on FormatException {
-      throw Exception('Réponse du serveur invalide. Veuillez contacter le support.');
-    } catch (e) {
-      throw Exception('Une erreur est survenue: ${e.toString()}');
-    }
-  }
-
-  Future<Map<String, dynamic>> register({
-    required String username,
-    required String email,
-    required String password,
-    required String phone,
-  }) async {
-    try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/auth/register'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'username': username,
-          'email': email,
-          'password': password,
-          'phone': phone,
-        }),
-      );
-
-      if (response.statusCode == 201 || response.statusCode == 200) {
-        return jsonDecode(response.body);
-      } else {
-        final error = jsonDecode(response.body);
-        throw Exception(error['message'] ?? 'Échec de l\'inscription');
-      }
-    } on SocketException {
-      throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet ou que le serveur est en cours d\'exécution.');
+      throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet.');
     } on HttpException {
       throw Exception('Service non disponible. Veuillez réessayer plus tard.');
     } on FormatException {
@@ -111,10 +113,10 @@ class ApiService {
 
       if (response.statusCode != 200) {
         final error = jsonDecode(response.body);
-        throw Exception(error['message'] ?? 'Échec de l\'envoi du mail de réinitialisation');
+        throw Exception(error['message'] ?? error['error'] ?? 'Échec de l\'envoi du mail de réinitialisation');
       }
     } on SocketException {
-      throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet ou que le serveur est en cours d\'exécution.');
+      throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet.');
     } on HttpException {
       throw Exception('Service non disponible. Veuillez réessayer plus tard.');
     } on FormatException {
@@ -137,10 +139,10 @@ class ApiService {
 
       if (response.statusCode != 200) {
         final error = jsonDecode(response.body);
-        throw Exception(error['message'] ?? 'Échec de la réinitialisation du mot de passe');
+        throw Exception(error['message'] ?? error['error'] ?? 'Échec de la réinitialisation du mot de passe');
       }
     } on SocketException {
-      throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet ou que le serveur est en cours d\'exécution.');
+      throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet.');
     } on HttpException {
       throw Exception('Service non disponible. Veuillez réessayer plus tard.');
     } on FormatException {
@@ -164,12 +166,6 @@ class ApiService {
         final error = jsonDecode(response.body);
         throw Exception(error['message'] ?? 'Échec de la récupération du profil');
       }
-    } on SocketException {
-      throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet ou que le serveur est en cours d\'exécution.');
-    } on HttpException {
-      throw Exception('Service non disponible. Veuillez réessayer plus tard.');
-    } on FormatException {
-      throw Exception('Réponse du serveur invalide. Veuillez contacter le support.');
     } catch (e) {
       throw Exception('Une erreur est survenue: ${e.toString()}');
     }
@@ -187,12 +183,6 @@ class ApiService {
         final error = jsonDecode(response.body);
         throw Exception(error['message'] ?? 'Échec de la mise à jour du profil');
       }
-    } on SocketException {
-      throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet ou que le serveur est en cours d\'exécution.');
-    } on HttpException {
-      throw Exception('Service non disponible. Veuillez réessayer plus tard.');
-    } on FormatException {
-      throw Exception('Réponse du serveur invalide. Veuillez contacter le support.');
     } catch (e) {
       throw Exception('Une erreur est survenue: ${e.toString()}');
     }
@@ -214,12 +204,6 @@ class ApiService {
         final error = jsonDecode(response.body);
         throw Exception(error['message'] ?? 'Échec de la mise à jour de la progression de lecture');
       }
-    } on SocketException {
-      throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet ou que le serveur est en cours d\'exécution.');
-    } on HttpException {
-      throw Exception('Service non disponible. Veuillez réessayer plus tard.');
-    } on FormatException {
-      throw Exception('Réponse du serveur invalide. Veuillez contacter le support.');
     } catch (e) {
       throw Exception('Une erreur est survenue: ${e.toString()}');
     }
@@ -238,12 +222,6 @@ class ApiService {
         final error = jsonDecode(response.body);
         throw Exception(error['message'] ?? 'Échec de la récupération des statistiques de lecture');
       }
-    } on SocketException {
-      throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet ou que le serveur est en cours d\'exécution.');
-    } on HttpException {
-      throw Exception('Service non disponible. Veuillez réessayer plus tard.');
-    } on FormatException {
-      throw Exception('Réponse du serveur invalide. Veuillez contacter le support.');
     } catch (e) {
       throw Exception('Une erreur est survenue: ${e.toString()}');
     }
@@ -262,12 +240,6 @@ class ApiService {
         final error = jsonDecode(response.body);
         throw Exception(error['message'] ?? 'Échec de l\'ajout du livre à la bibliothèque');
       }
-    } on SocketException {
-      throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet ou que le serveur est en cours d\'exécution.');
-    } on HttpException {
-      throw Exception('Service non disponible. Veuillez réessayer plus tard.');
-    } on FormatException {
-      throw Exception('Réponse du serveur invalide. Veuillez contacter le support.');
     } catch (e) {
       throw Exception('Une erreur est survenue: ${e.toString()}');
     }
@@ -287,12 +259,6 @@ class ApiService {
         final error = jsonDecode(response.body);
         throw Exception(error['message'] ?? 'Échec de la récupération des livres de la bibliothèque');
       }
-    } on SocketException {
-      throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet ou que le serveur est en cours d\'exécution.');
-    } on HttpException {
-      throw Exception('Service non disponible. Veuillez réessayer plus tard.');
-    } on FormatException {
-      throw Exception('Réponse du serveur invalide. Veuillez contacter le support.');
     } catch (e) {
       throw Exception('Une erreur est survenue: ${e.toString()}');
     }
@@ -309,14 +275,16 @@ class ApiService {
         final error = jsonDecode(response.body);
         throw Exception(error['message'] ?? 'Échec de la suppression du livre de la bibliothèque');
       }
-    } on SocketException {
-      throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet ou que le serveur est en cours d\'exécution.');
-    } on HttpException {
-      throw Exception('Service non disponible. Veuillez réessayer plus tard.');
-    } on FormatException {
-      throw Exception('Réponse du serveur invalide. Veuillez contacter le support.');
     } catch (e) {
       throw Exception('Une erreur est survenue: ${e.toString()}');
     }
+  }
+}
+
+class _DevHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
   }
 }
