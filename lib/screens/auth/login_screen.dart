@@ -28,14 +28,30 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       navigator.pushReplacementNamed('/home');
     } catch (e) {
-      if (kDebugMode) {
-        print('LOGIN ERROR: $e');
+      final error = e.toString();
+      
+      // Log les erreurs techniques
+      if (error.contains('TECHNICAL_ERROR:')) {
+        if (kDebugMode) {
+          print('LOGIN ERROR: $error');
+        }
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text('Une erreur est survenue. Veuillez réessayer plus tard.'),
+              backgroundColor: Theme.of(context).colorScheme.error,
+            ),
+          );
+        }
+        return;
       }
 
+      // Afficher les messages d'erreur métier
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Échec de la connexion. Veuillez vérifier vos identifiants.'),
+          SnackBar(
+            content: Text(error.replaceAll('Exception: ', '')),
+            backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );
       }

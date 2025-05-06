@@ -90,16 +90,31 @@ class ApiService {
         return data;
       } else {
         final error = jsonDecode(response.body);
-        throw Exception(error['message'] ?? error['error'] ?? 'Échec de la connexion');
+        final message = error['message'] ?? error['error'];
+        if (message == null) {
+          throw Exception('TECHNICAL_ERROR: Échec de la connexion');
+        }
+        // Messages d'erreur métier
+        if (message.contains('vérification d\'email') ||
+            message.contains('approbation par l\'administrateur') ||
+            message.contains('suspendu') ||
+            message.contains('mot de passe incorrect')) {
+          throw Exception(message);
+        }
+        // Erreur technique
+        throw Exception('TECHNICAL_ERROR: $message');
       }
     } on SocketException {
-      throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet.');
+      throw Exception('TECHNICAL_ERROR: Impossible de se connecter au serveur');
     } on HttpException {
-      throw Exception('Service non disponible. Veuillez réessayer plus tard.');
+      throw Exception('TECHNICAL_ERROR: Service non disponible');
     } on FormatException {
-      throw Exception('Réponse du serveur invalide. Veuillez contacter le support.');
+      throw Exception('TECHNICAL_ERROR: Réponse du serveur invalide');
     } catch (e) {
-      throw Exception('Une erreur est survenue: ${e.toString()}');
+      if (!e.toString().contains('Exception:')) {
+        throw Exception('TECHNICAL_ERROR: ${e.toString()}');
+      }
+      rethrow;
     }
   }
 
