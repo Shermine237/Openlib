@@ -21,36 +21,26 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() => _isLoading = true);
 
     try {
+      if (kDebugMode) {
+        print('Tentative de connexion...');
+      }
       final navigator = Navigator.of(context);
-      await ApiService().login(
+      final result = await ApiService().login(
         _emailController.text,
         _passwordController.text,
       );
+      if (kDebugMode) {
+        print('Résultat de connexion: $result');
+      }
       navigator.pushReplacementNamed('/home');
     } catch (e) {
-      final error = e.toString();
-      
-      // Log les erreurs techniques
-      if (error.contains('TECHNICAL_ERROR:')) {
-        if (kDebugMode) {
-          print('LOGIN ERROR: $error');
-        }
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: const Text('Une erreur est survenue. Veuillez réessayer plus tard.'),
-              backgroundColor: Theme.of(context).colorScheme.error,
-            ),
-          );
-        }
-        return;
+      if (kDebugMode) {
+        print('Erreur de connexion: $e');
       }
-
-      // Afficher les messages d'erreur métier
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(error.replaceAll('Exception: ', '')),
+            content: Text(e.toString().replaceAll('Exception: ', '')),
             backgroundColor: Theme.of(context).colorScheme.error,
           ),
         );

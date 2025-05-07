@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';
 
 class ApiService {
   static const String baseUrl = 'https://192.168.43.43:8000/api';  // Local backend
@@ -75,6 +76,9 @@ class ApiService {
 
   Future<Map<String, dynamic>> login(String email, String password) async {
     try {
+      if (kDebugMode) {
+        print('Tentative de connexion avec: $email');
+      }
       final response = await http.post(
         Uri.parse('$baseUrl/auth/login'),
         headers: {'Content-Type': 'application/json'},
@@ -84,37 +88,29 @@ class ApiService {
         }),
       );
 
+      if (kDebugMode) {
+        print('Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+      }
+
+      final data = jsonDecode(response.body);
+
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        await saveToken(data['token']);
+        if (data['accessToken'] != null) {
+          await saveToken(data['accessToken']);
+        }
         return data;
       } else {
-        final error = jsonDecode(response.body);
-        final message = error['message'] ?? error['error'];
-        if (message == null) {
-          throw Exception('TECHNICAL_ERROR: Échec de la connexion');
-        }
-        // Messages d'erreur métier
-        if (message.contains('vérification d\'email') ||
-            message.contains('approbation par l\'administrateur') ||
-            message.contains('suspendu') ||
-            message.contains('mot de passe incorrect')) {
-          throw Exception(message);
-        }
-        // Erreur technique
-        throw Exception('TECHNICAL_ERROR: $message');
+        throw Exception(data['message'] ?? data['error'] ?? 'Échec de la connexion');
       }
     } on SocketException {
-      throw Exception('TECHNICAL_ERROR: Impossible de se connecter au serveur');
+      throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet.');
     } on HttpException {
-      throw Exception('TECHNICAL_ERROR: Service non disponible');
+      throw Exception('Service non disponible. Veuillez réessayer plus tard.');
     } on FormatException {
-      throw Exception('TECHNICAL_ERROR: Réponse du serveur invalide');
+      throw Exception('Réponse du serveur invalide. Veuillez contacter le support.');
     } catch (e) {
-      if (!e.toString().contains('Exception:')) {
-        throw Exception('TECHNICAL_ERROR: ${e.toString()}');
-      }
-      rethrow;
+      throw Exception('Une erreur est survenue: ${e.toString()}');
     }
   }
 
