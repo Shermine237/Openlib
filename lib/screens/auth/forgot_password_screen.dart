@@ -72,102 +72,105 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 32.0),
-                  child: Image.asset(
-                    'assets/icons/appIcon.png',
-                    height: 100,
-                    width: 100,
-                  ),
-                ),
-                Text(
-                  'Réinitialisation du mot de passe',
-                  style: theme.textTheme.displayLarge?.copyWith(
-                    color: theme.colorScheme.tertiary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'Entrez votre adresse email pour recevoir les instructions de réinitialisation de mot de passe.',
-                  style: TextStyle(color: theme.colorScheme.tertiary),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 32),
-                TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    labelStyle: TextStyle(color: theme.colorScheme.tertiary),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: theme.colorScheme.tertiary),
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 32),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 32.0),
+                    child: Image.asset(
+                      'assets/icons/appIcon.png',
+                      height: 100,
+                      width: 100,
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: theme.colorScheme.tertiary),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: theme.colorScheme.secondary),
-                    ),
-                    fillColor: isDark ? Colors.black12 : Colors.white,
-                    filled: true,
                   ),
-                  style: TextStyle(color: theme.colorScheme.tertiary),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Veuillez entrer votre email';
-                    }
-                    if (!value.contains('@')) {
-                      return 'Veuillez entrer un email valide';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 24),
-                ElevatedButton(
-                  onPressed: _isLoading ? null : _resetPassword,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.colorScheme.secondary,
-                    foregroundColor: theme.colorScheme.surface,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    disabledBackgroundColor: theme.colorScheme.secondary.withValues(alpha: 0.6),
+                  Text(
+                    'Réinitialisation du mot de passe',
+                    style: theme.textTheme.displayLarge?.copyWith(
+                      color: theme.colorScheme.tertiary,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  child: _isLoading
-                      ? SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              theme.colorScheme.surface,
+                  const SizedBox(height: 16),
+                  Text(
+                    'Entrez votre adresse email pour recevoir les instructions de réinitialisation de mot de passe.',
+                    style: TextStyle(color: theme.colorScheme.tertiary),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 32),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      labelStyle: TextStyle(color: theme.colorScheme.tertiary),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.colorScheme.tertiary),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.colorScheme.tertiary),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: theme.colorScheme.secondary),
+                      ),
+                      fillColor: isDark ? Colors.black12 : Colors.white,
+                      filled: true,
+                    ),
+                    style: TextStyle(color: theme.colorScheme.tertiary),
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Veuillez entrer votre email';
+                      }
+                      if (!value.contains('@')) {
+                        return 'Veuillez entrer un email valide';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: _isLoading ? null : _resetPassword,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: theme.colorScheme.secondary,
+                      foregroundColor: theme.colorScheme.surface,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      disabledBackgroundColor: theme.colorScheme.secondary.withValues(alpha: 0.6),
+                    ),
+                    child: _isLoading
+                        ? SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                theme.colorScheme.surface,
+                              ),
+                            ),
+                          )
+                        : const Text(
+                            'Envoyer les instructions',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        )
-                      : const Text(
-                          'Envoyer les instructions',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                ),
-                const SizedBox(height: 16),
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    'Retour à la connexion',
-                    style: TextStyle(color: theme.colorScheme.secondary),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 16),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      'Retour à la connexion',
+                      style: TextStyle(color: theme.colorScheme.secondary),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
