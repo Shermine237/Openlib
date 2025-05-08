@@ -27,6 +27,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Si votre email est valide, vous recevrez les instructions pour réinitialiser votre mot de passe.'),
+          backgroundColor: Colors.green,
         ),
       );
       Navigator.of(context).pop();
@@ -38,8 +39,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Une erreur est survenue. Veuillez réessayer plus tard.'),
+        SnackBar(
+          content: Text(e.toString().replaceAll('Exception: ', '')),
+          backgroundColor: Colors.red,
         ),
       );
     } finally {

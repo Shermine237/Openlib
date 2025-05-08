@@ -116,41 +116,24 @@ class ApiService {
 
   Future<void> forgotPassword(String email) async {
     try {
+      if (kDebugMode) {
+        print('Tentative de réinitialisation du mot de passe pour: $email');
+      }
+
       final response = await http.post(
-        Uri.parse('$baseUrl/auth/forgot-password'),
+        Uri.parse('$baseUrl/auth/reset-password'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email}),
       );
 
-      if (response.statusCode != 200) {
-        final error = jsonDecode(response.body);
-        throw Exception(error['message'] ?? error['error'] ?? 'Échec de l\'envoi du mail de réinitialisation');
+      if (kDebugMode) {
+        print('Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
       }
-    } on SocketException {
-      throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet.');
-    } on HttpException {
-      throw Exception('Service non disponible. Veuillez réessayer plus tard.');
-    } on FormatException {
-      throw Exception('Réponse du serveur invalide. Veuillez contacter le support.');
-    } catch (e) {
-      throw Exception('Une erreur est survenue: ${e.toString()}');
-    }
-  }
-
-  Future<void> resetPassword(String token, String newPassword) async {
-    try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/auth/reset-password'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'token': token,
-          'newPassword': newPassword,
-        }),
-      );
 
       if (response.statusCode != 200) {
         final error = jsonDecode(response.body);
-        throw Exception(error['message'] ?? error['error'] ?? 'Échec de la réinitialisation du mot de passe');
+        throw Exception(error['message'] ?? error['error'] ?? 'Une erreur est survenue lors de la réinitialisation du mot de passe');
       }
     } on SocketException {
       throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet.');
