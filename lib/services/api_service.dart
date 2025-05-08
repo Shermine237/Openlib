@@ -121,9 +121,11 @@ class ApiService {
       }
 
       final response = await http.post(
-        Uri.parse('$baseUrl/auth/reset-password'),
+        Uri.parse('$baseUrl/auth/password/reset-request'),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'email': email}),
+        body: jsonEncode({
+          'email': email,
+        }),
       );
 
       if (kDebugMode) {
