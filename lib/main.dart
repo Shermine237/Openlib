@@ -142,6 +142,17 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         backgroundColor: Theme.of(context).colorScheme.surface,
         title: const Text("Megalib"),
         titleTextStyle: Theme.of(context).textTheme.displayLarge,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () async {
+              await ApiService().removeToken();
+              if (context.mounted) {
+                Navigator.pushReplacementNamed(context, Routes.login);
+              }
+            },
+          ),
+        ],
       ),
       body: _widgetOptions.elementAt(selectedIndex),
       bottomNavigationBar: SafeArea(
