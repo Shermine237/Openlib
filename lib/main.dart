@@ -12,6 +12,8 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:openlib/l10n/app_localizations.dart';
 import 'package:openlib/routes/routes.dart';
 import 'package:openlib/services/api_service.dart';
+import 'package:openlib/screens/auth/login_screen.dart';
+import 'package:openlib/screens/auth/register_screen.dart';
 import 'package:openlib/ui/home_page.dart';
 import 'package:openlib/ui/mylibrary_page.dart';
 import 'package:openlib/ui/search_page.dart';
@@ -99,26 +101,18 @@ class MyApp extends ConsumerWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('en'), // English
-        Locale('fr'), // French
-      ],
-      builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            textScaler: const TextScaler.linear(1.0),
-          ),
-          child: child!,
-        );
-      },
-      debugShowCheckedModeBanner: false,
-      title: 'Openlib',
+      supportedLocales: AppLocalizations.supportedLocales,
+      locale: locale,
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: themeMode,
-      locale: locale,
       initialRoute: initialRoute,
-      routes: Routes.getRoutes(),
+      routes: {
+        Routes.login: (context) => const LoginScreen(),
+        Routes.register: (context) => const RegisterScreen(),
+        Routes.home: (context) => const MainScreen(),
+      },
+      home: initialRoute == Routes.home ? const MainScreen() : null,
     );
   }
 }
