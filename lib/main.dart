@@ -18,6 +18,7 @@ import 'package:openlib/ui/home_page.dart';
 import 'package:openlib/ui/mylibrary_page.dart';
 import 'package:openlib/ui/search_page.dart';
 import 'package:openlib/ui/settings_page.dart';
+import 'package:openlib/ui/splash_screen.dart';
 import 'package:openlib/ui/themes.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
@@ -106,13 +107,13 @@ class MyApp extends ConsumerWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: themeMode,
-      initialRoute: initialRoute,
+      debugShowCheckedModeBanner: false,
+      home: SplashScreen(initialRoute: initialRoute),
       routes: {
         Routes.login: (context) => const LoginScreen(),
         Routes.register: (context) => const RegisterScreen(),
         Routes.home: (context) => const MainScreen(),
       },
-      home: initialRoute == Routes.home ? const MainScreen() : null,
     );
   }
 }
