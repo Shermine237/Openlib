@@ -1510,6 +1510,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open EPUB with External App'**
   String get openEpubWithExternalApp;
+
+  /// Error message shown when synchronization fails
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred during synchronization'**
+  String get errorMessage;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

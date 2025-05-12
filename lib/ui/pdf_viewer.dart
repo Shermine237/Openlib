@@ -12,7 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 // Project imports:
 import 'package:openlib/services/files.dart' show getFilePath;
-
+import 'package:openlib/services/stats_service.dart';
 import 'package:openlib/state/state.dart'
     show
         filePathProvider,
@@ -95,12 +95,15 @@ class PdfViewer extends ConsumerStatefulWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => _PdfViewerState();
 }
 
-class _PdfViewerState extends ConsumerState<PdfViewer> {
+class _PdfViewerState extends ConsumerState<PdfViewer> with WidgetsBindingObserver {
   late PDFViewController controller;
+  final StatsService _statsService = StatsService();
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _statsService.startReading(widget.fileName);
   }
 
   @override
@@ -113,7 +116,18 @@ class _PdfViewerState extends ConsumerState<PdfViewer> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _statsService.endReading();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      _statsService.pauseReading();
+    } else if (state == AppLifecycleState.resumed) {
+      _statsService.resumeReading();
+    }
   }
 
   Future<void> _openPdfWithDefaultViewer(String fileName) async {
@@ -130,6 +144,12 @@ class _PdfViewerState extends ConsumerState<PdfViewer> {
           textAlign: TextAlign.center,
         )),
       );
+    }
+  }
+
+  void _onPageChanged(int? page) {
+    if (page != null) {
+      _statsService.logPageRead(page);
     }
   }
 
@@ -195,6 +215,7 @@ class _PdfViewerState extends ConsumerState<PdfViewer> {
                   onPageChanged: (page, total) {
                     ref.read(pdfCurrentPage.notifier).state = page ?? 0;
                     ref.read(totalPdfPage.notifier).state = total ?? 0;
+                    _onPageChanged(page);
                   },
                 );
               },
@@ -210,6 +231,7 @@ class _PdfViewerState extends ConsumerState<PdfViewer> {
                   onPageChanged: (page, total) {
                     ref.read(pdfCurrentPage.notifier).state = page ?? 0;
                     ref.read(totalPdfPage.notifier).state = total ?? 0;
+                    _onPageChanged(page);
                   },
                 );
               },

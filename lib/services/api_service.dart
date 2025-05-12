@@ -275,6 +275,58 @@ class ApiService {
       throw Exception('Une erreur est survenue: ${e.toString()}');
     }
   }
+
+  // Nouvelles méthodes pour les rapports
+  Future<void> sendReadingStats(Map<String, dynamic> stats) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/reading-stats'),
+        headers: await _getHeaders(),
+        body: jsonEncode(stats),
+      );
+
+      if (response.statusCode != 200) {
+        final error = jsonDecode(response.body);
+        throw Exception(error['message'] ?? 'Échec de l\'envoi des statistiques');
+      }
+    } catch (e) {
+      throw Exception('Une erreur est survenue: ${e.toString()}');
+    }
+  }
+
+  Future<void> sendErrorReport(Map<String, dynamic> errorData) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/error-reports'),
+        headers: await _getHeaders(),
+        body: jsonEncode(errorData),
+      );
+
+      if (response.statusCode != 200) {
+        final error = jsonDecode(response.body);
+        throw Exception(error['message'] ?? 'Échec de l\'envoi du rapport d\'erreur');
+      }
+    } catch (e) {
+      throw Exception('Une erreur est survenue: ${e.toString()}');
+    }
+  }
+
+  Future<void> syncUserPreferences(Map<String, dynamic> preferences) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/users/preferences/sync'),
+        headers: await _getHeaders(),
+        body: jsonEncode(preferences),
+      );
+
+      if (response.statusCode != 200) {
+        final error = jsonDecode(response.body);
+        throw Exception(error['message'] ?? 'Échec de la synchronisation des préférences');
+      }
+    } catch (e) {
+      throw Exception('Une erreur est survenue: ${e.toString()}');
+    }
+  }
 }
 
 class _DevHttpOverrides extends HttpOverrides {

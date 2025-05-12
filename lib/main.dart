@@ -1,5 +1,6 @@
 // Dart imports:
 import 'dart:io';
+import 'dart:async';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:openlib/l10n/app_localizations.dart';
 import 'package:openlib/routes/routes.dart';
 import 'package:openlib/services/api_service.dart';
+import 'package:openlib/services/error_reporting_service.dart';
 import 'package:openlib/screens/auth/login_screen.dart';
 import 'package:openlib/screens/auth/register_screen.dart';
 import 'package:openlib/ui/home_page.dart';
@@ -36,64 +38,69 @@ import 'package:openlib/state/state.dart'
         databaseProvider;
 
 void main() async {
-  // S'assurer que les liaisons Flutter sont initialisées
-  WidgetsFlutterBinding.ensureInitialized();
+  // Initialiser le service de rapport d'erreur dès le début
+  final errorReporter = ErrorReportingService();
+  
+  runZonedGuarded(() async {
+    // S'assurer que les liaisons Flutter sont initialisées
+    WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialiser sqflite pour desktop
-  if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
-    sqfliteFfiInit();
-  }
+    // Initialiser sqflite pour desktop
+    if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
+      sqfliteFfiInit();
+    }
 
-  // Initialiser la base de données
-  final database = MyLibraryDb.instance;
-  await database.database;
+    // Initialiser la base de données
+    final database = MyLibraryDb.instance;
+    await database.database;
 
-  final darkModePref = await database.getPreference('darkMode');
-  final pdfExternalPref = await database.getPreference('openPdfwithExternalApp');
-  final epubExternalPref = await database.getPreference('openEpubwithExternalApp');
+    final darkModePref = await database.getPreference('darkMode');
+    final pdfExternalPref = await database.getPreference('openPdfwithExternalApp');
+    final epubExternalPref = await database.getPreference('openEpubwithExternalApp');
 
-  bool isDarkMode = darkModePref == 1;
-  bool openPdfwithExternalapp = pdfExternalPref == 1;
-  bool openEpubwithExternalapp = epubExternalPref == 1;
+    bool isDarkMode = darkModePref == 1;
+    bool openPdfwithExternalapp = pdfExternalPref == 1;
+    bool openEpubwithExternalapp = epubExternalPref == 1;
 
-  String browserUserAgent = await database.getBrowserOptions('userAgent');
-  String browserCookie = await database.getBrowserOptions('cookie');
+    String browserUserAgent = await database.getBrowserOptions('userAgent');
+    String browserCookie = await database.getBrowserOptions('cookie');
 
-  if (Platform.isAndroid) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        systemNavigationBarColor:
-            isDarkMode ? Colors.black : Colors.grey.shade200));
-  }
+    if (Platform.isAndroid) {
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+          systemNavigationBarColor:
+              isDarkMode ? Colors.black : Colors.grey.shade200));
+    }
 
-  // Configurer le style de la barre système
-  SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-    ),
-  );
+    // Configurer le style de la barre système
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
 
-  // Vérifier si l'utilisateur est connecté
-  final token = await ApiService().getToken();
-  final initialRoute = token != null ? Routes.home : Routes.login;
+    // Vérifier si l'utilisateur est connecté
+    final token = await ApiService().getToken();
+    final initialRoute = token != null ? Routes.home : Routes.login;
 
-  // Lancer l'application
-  runApp(
-    ProviderScope(
-      overrides: [
-        databaseProvider.overrideWithValue(await database.database),
-        themeModeProvider.overrideWith(
-            (ref) => isDarkMode ? ThemeMode.dark : ThemeMode.light),
-        openPdfWithExternalAppProvider
-            .overrideWith((ref) => openPdfwithExternalapp),
-        openEpubWithExternalAppProvider
-            .overrideWith((ref) => openEpubwithExternalapp),
-        userAgentProvider.overrideWith((ref) => browserUserAgent),
-        cookieProvider.overrideWith((ref) => browserCookie),
-      ],
-      child: MyApp(initialRoute: initialRoute),
-    ),
-  );
+    // Lancer l'application
+    runApp(
+      ProviderScope(
+        overrides: [
+          databaseProvider.overrideWithValue(await database.database),
+          themeModeProvider.overrideWith((ref) => isDarkMode ? ThemeMode.dark : ThemeMode.light),
+          openPdfWithExternalAppProvider.overrideWith((ref) => openPdfwithExternalapp),
+          openEpubWithExternalAppProvider.overrideWith((ref) => openEpubwithExternalapp),
+          userAgentProvider.overrideWith((ref) => browserUserAgent),
+          cookieProvider.overrideWith((ref) => browserCookie),
+        ],
+        child: MyApp(initialRoute: initialRoute),
+      ),
+    );
+  }, (error, stack) {
+    // Utiliser l'instance créée au début
+    errorReporter.reportError(error, stack);
+  });
 }
 
 class MyApp extends ConsumerWidget {

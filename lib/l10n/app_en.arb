@@ -252,5 +252,9 @@
   "bookmarkAdded": "Bookmark added",
   "bookmarkRemoved": "Bookmark removed",
   "openPdfWithExternalApp": "Open PDF with External App",
-  "openEpubWithExternalApp": "Open EPUB with External App"
+  "openEpubWithExternalApp": "Open EPUB with External App",
+  "errorMessage": "An error occurred during synchronization",
+  "@errorMessage": {
+    "description": "Error message shown when synchronization fails"
+  }
 }

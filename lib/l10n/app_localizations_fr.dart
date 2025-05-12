@@ -719,4 +719,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get openEpubWithExternalApp => 'Ouvrir l\'EPUB avec une application externe';
+
+  @override
+  String get errorMessage => 'Une erreur s\'est produite lors de la synchronisation';
 }

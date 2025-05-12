@@ -332,3 +332,48 @@ final selectedLanguageState = StateProvider<String>((ref) => "all");
 final getLanguageValue = Provider.autoDispose<String>((ref) {
   return languageValues[ref.watch(selectedLanguageState)] ?? '';
 });
+
+// Providers pour les statistiques de lecture
+final readingStatsProvider = StateNotifierProvider<ReadingStatsNotifier, Map<String, dynamic>>((ref) {
+  return ReadingStatsNotifier();
+});
+
+class ReadingStatsNotifier extends StateNotifier<Map<String, dynamic>> {
+  ReadingStatsNotifier() : super({});
+
+  void updateStats(Map<String, dynamic> newStats) {
+    state = {...state, ...newStats};
+  }
+
+  void clearStats() {
+    state = {};
+  }
+}
+
+final currentBookProvider = StateNotifierProvider<CurrentBookNotifier, String?>((ref) {
+  return CurrentBookNotifier();
+});
+
+class CurrentBookNotifier extends StateNotifier<String?> {
+  CurrentBookNotifier() : super(null);
+
+  void setCurrentBook(String? bookId) {
+    state = bookId;
+  }
+}
+
+final readingSessionProvider = StateNotifierProvider<ReadingSessionNotifier, bool>((ref) {
+  return ReadingSessionNotifier();
+});
+
+class ReadingSessionNotifier extends StateNotifier<bool> {
+  ReadingSessionNotifier() : super(false);
+
+  void startSession() {
+    state = true;
+  }
+
+  void endSession() {
+    state = false;
+  }
+}

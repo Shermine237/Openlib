@@ -94,7 +94,12 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: colorScheme.primary.withOpacity(0.3),
+                      color: Color.fromARGB(
+                        76,  // 0.3 * 255 ≈ 76
+                        colorScheme.primary.r.toInt(),
+                        colorScheme.primary.g.toInt(),
+                        colorScheme.primary.b.toInt(),
+                      ),
                       blurRadius: 20,
                       spreadRadius: 5,
                     ),
@@ -135,7 +140,12 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                           'Votre bibliothèque numérique',
                           style: TextStyle(
                             fontSize: 18,
-                            color: colorScheme.secondary.withAlpha(179),
+                            color: Color.fromARGB(
+                              179,
+                              colorScheme.secondary.r.toInt(),
+                              colorScheme.secondary.g.toInt(),
+                              colorScheme.secondary.b.toInt(),
+                            ),
                             letterSpacing: 0.5,
                           ),
                         ),

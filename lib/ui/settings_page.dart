@@ -11,6 +11,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:openlib/l10n/app_localizations.dart';
 import 'package:openlib/services/files.dart';
+import 'package:openlib/services/api_service.dart';
 import 'package:openlib/state/state.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -56,6 +57,35 @@ Future<void> requestStoragePermission() async {
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
+
+  Future<void> _syncPreferences(BuildContext context, WidgetRef ref) async {
+    final apiService = ApiService();
+    final themeMode = ref.read(themeModeProvider);
+    final openPdfWithExternalApp = ref.read(openPdfWithExternalAppProvider);
+    final openEpubWithExternalApp = ref.read(openEpubWithExternalAppProvider);
+    final locale = ref.read(localeNotifierProvider);
+
+    final preferences = {
+      'themeMode': themeMode.toString(),
+      'openPdfWithExternalApp': openPdfWithExternalApp,
+      'openEpubWithExternalApp': openEpubWithExternalApp,
+      'locale': locale?.toString(),
+    };
+
+    try {
+      await apiService.syncUserPreferences(preferences);
+    } catch (e) {
+      debugPrint('Erreur lors de la synchronisation des préférences: $e');
+      // Éviter d'utiliser le context après un await
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.errorMessage),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -130,15 +160,18 @@ class SettingsPage extends ConsumerWidget {
                 secondary: const Icon(Icons.dark_mode),
                 title: Text(l10n.darkMode),
                 value: themeMode == ThemeMode.dark,
-                onChanged: (bool value) {
-                  ref.read(themeModeProvider.notifier).state =
-                      value ? ThemeMode.dark : ThemeMode.light;
-                  dataBase.savePreference('darkMode', value);
+                onChanged: (bool value) async {
+                  final newThemeMode = value ? ThemeMode.dark : ThemeMode.light;
+                  ref.read(themeModeProvider.notifier).state = newThemeMode;
+                  await dataBase.savePreference('darkMode', value);
                   if (Platform.isAndroid) {
                     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
                         systemNavigationBarColor:
                             value ? Colors.black : Colors.grey.shade200));
                   }
+                  // Éviter d'utiliser le context après un await
+                  if (!context.mounted) return;
+                  await _syncPreferences(context, ref);
                 },
               ),
               SwitchListTile(
@@ -149,16 +182,21 @@ class SettingsPage extends ConsumerWidget {
                   debugPrint('Opening PDFs with external app: $value'); // Replaced print with debugPrint
                   ref.read(openPdfWithExternalAppProvider.notifier).state = value;
                   await dataBase.savePreference('openPdfwithExternalApp', value);
+                  // Éviter d'utiliser le context après un await
+                  if (!context.mounted) return;
+                  await _syncPreferences(context, ref);
                 },
               ),
               SwitchListTile(
                 secondary: const Icon(Icons.book),
                 title: Text(l10n.openEpubWithExternalApp),
                 value: ref.watch(openEpubWithExternalAppProvider),
-                onChanged: (bool value) {
-                  ref.read(openEpubWithExternalAppProvider.notifier).state =
-                      value;
-                  dataBase.savePreference('openEpubwithExternalApp', value);
+                onChanged: (bool value) async {
+                  ref.read(openEpubWithExternalAppProvider.notifier).state = value;
+                  await dataBase.savePreference('openEpubwithExternalApp', value);
+                  // Éviter d'utiliser le context après un await
+                  if (!context.mounted) return;
+                  await _syncPreferences(context, ref);
                 },
               ),
               ListTile(

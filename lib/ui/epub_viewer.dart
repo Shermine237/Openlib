@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:epub_view/epub_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:open_file/open_file.dart';
-import 'package:openlib/services/database.dart';
+import 'package:openlib/services/stats_service.dart';
 
 // Project imports:
 import 'package:openlib/services/files.dart' show getFilePath;
@@ -63,10 +63,26 @@ class EpubViewerWidget extends ConsumerStatefulWidget {
   final String fileName;
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _EpubViewState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _EpubViewerState();
 }
 
-class _EpubViewState extends ConsumerState<EpubViewerWidget> {
+class _EpubViewerState extends ConsumerState<EpubViewerWidget> {
+  final StatsService _statsService = StatsService();
+  
+  @override
+  void initState() {
+    super.initState();
+    // Démarrer le suivi de lecture
+    _statsService.startReading(widget.fileName);
+  }
+
+  @override
+  void dispose() {
+    // Terminer et envoyer les statistiques
+    _statsService.endReading();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final filePath = ref.watch(filePathProvider(widget.fileName));
@@ -110,72 +126,48 @@ class EpubReader extends ConsumerStatefulWidget {
 
 class _EpubReaderState extends ConsumerState<EpubReader> {
   EpubController? _epubController;
-  bool _isLoading = true;
-  
+  final StatsService _statsService = StatsService();
+  int _currentPage = 0;
+
   @override
   void initState() {
     super.initState();
     _loadBook();
+    _statsService.startReading(widget.fileName);
   }
 
   Future<void> _loadBook() async {
-    setState(() {
-      _isLoading = true;
-    });
-    
-    MyLibraryDb dataBase = MyLibraryDb.instance;
-    String? epubConfig = await dataBase.getBookState(widget.fileName);
-    
+    final filePath = await getFilePath(widget.fileName);
     _epubController = EpubController(
-      document: EpubDocument.openFile(File(widget.filePath)),
-      epubCfi: epubConfig?.startsWith('epubcfi') == true ? epubConfig : null,
+      document: EpubDocument.openFile(File(filePath)),
     );
-    
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
-      });
-    }
   }
 
   @override
   void dispose() {
     _epubController?.dispose();
+    _statsService.endReading();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading || _epubController == null) {
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          title: Text(AppLocalizations.of(context)!.loading),
-        ),
-        body: const Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
-    
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        title: EpubViewActualChapter(
-          controller: _epubController!,
-          builder: (chapterValue) => Text(
-            chapterValue?.chapter?.Title?.replaceAll('\n', '') ?? 'Loading...',
-            textAlign: TextAlign.start,
-          ),
-        ),
+        title: Text(widget.fileName),
       ),
-      body: EpubView(
-        controller: _epubController!,
-        onChapterChanged: (chapter) async {
-          final position = _epubController!.generateEpubCfi() ?? '';
-          await saveEpubState(widget.fileName, position, ref);
-        },
-      ),
+      body: _epubController == null
+          ? const Center(child: CircularProgressIndicator())
+          : EpubView(
+              controller: _epubController!,
+              onChapterChanged: (chapter) async {
+                final position = _epubController!.generateEpubCfi() ?? '';
+                await saveEpubState(widget.fileName, position, ref);
+                // Incrémenter le compteur de pages
+                _currentPage++;
+                _statsService.logPageRead(_currentPage);
+              },
+            ),
     );
   }
 }

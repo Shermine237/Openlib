@@ -254,5 +254,9 @@
         "type": "int"
       }
     }
+  },
+  "errorMessage": "Une erreur s'est produite lors de la synchronisation",
+  "@errorMessage": {
+    "description": "Message d'erreur affiché lors de l'échec de la synchronisation"
   }
 }
