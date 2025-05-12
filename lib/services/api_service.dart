@@ -327,6 +327,128 @@ class ApiService {
       throw Exception('Une erreur est survenue: ${e.toString()}');
     }
   }
+
+  // Méthodes pour l'administration et les rapports
+  Future<Map<String, dynamic>> getAdminDashboardStats() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/admin/dashboard/stats'),
+        headers: await _getHeaders(),
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        final error = jsonDecode(response.body);
+        throw Exception(error['message'] ?? 'Échec de la récupération des statistiques du tableau de bord');
+      }
+    } catch (e) {
+      throw Exception('Une erreur est survenue: ${e.toString()}');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getReadingReports({
+    String? startDate,
+    String? endDate,
+    String? userId,
+  }) async {
+    try {
+      final queryParams = {
+        if (startDate != null) 'startDate': startDate,
+        if (endDate != null) 'endDate': endDate,
+        if (userId != null) 'userId': userId,
+      };
+
+      final uri = Uri.parse('$baseUrl/admin/reports/reading').replace(
+        queryParameters: queryParams,
+      );
+
+      final response = await http.get(
+        uri,
+        headers: await _getHeaders(),
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data.cast<Map<String, dynamic>>();
+      } else {
+        final error = jsonDecode(response.body);
+        throw Exception(error['message'] ?? 'Échec de la récupération des rapports de lecture');
+      }
+    } catch (e) {
+      throw Exception('Une erreur est survenue: ${e.toString()}');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getErrorReports({
+    String? startDate,
+    String? endDate,
+    String? errorType,
+  }) async {
+    try {
+      final queryParams = {
+        if (startDate != null) 'startDate': startDate,
+        if (endDate != null) 'endDate': endDate,
+        if (errorType != null) 'type': errorType,
+      };
+
+      final uri = Uri.parse('$baseUrl/admin/reports/errors').replace(
+        queryParameters: queryParams,
+      );
+
+      final response = await http.get(
+        uri,
+        headers: await _getHeaders(),
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data.cast<Map<String, dynamic>>();
+      } else {
+        final error = jsonDecode(response.body);
+        throw Exception(error['message'] ?? 'Échec de la récupération des rapports d\'erreurs');
+      }
+    } catch (e) {
+      throw Exception('Une erreur est survenue: ${e.toString()}');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getUserPreferencesReport() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/admin/reports/preferences'),
+        headers: await _getHeaders(),
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data.cast<Map<String, dynamic>>();
+      } else {
+        final error = jsonDecode(response.body);
+        throw Exception(error['message'] ?? 'Échec de la récupération des préférences utilisateurs');
+      }
+    } catch (e) {
+      throw Exception('Une erreur est survenue: ${e.toString()}');
+    }
+  }
+
+  Future<Map<String, dynamic>> getBookAnalytics(String bookId) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/admin/analytics/books/$bookId'),
+        headers: await _getHeaders(),
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        final error = jsonDecode(response.body);
+        throw Exception(error['message'] ?? 'Échec de la récupération des analyses du livre');
+      }
+    } catch (e) {
+      throw Exception('Une erreur est survenue: ${e.toString()}');
+    }
+  }
 }
 
 class _DevHttpOverrides extends HttpOverrides {
