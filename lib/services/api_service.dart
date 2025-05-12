@@ -332,7 +332,7 @@ class ApiService {
   Future<Map<String, dynamic>> getAdminDashboardStats() async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/admin/dashboard/stats'),
+        Uri.parse('$baseUrl/admin/stats'),
         headers: await _getHeaders(),
       );
 
@@ -356,12 +356,47 @@ class ApiService {
       final queryParams = {
         if (startDate != null) 'startDate': startDate,
         if (endDate != null) 'endDate': endDate,
-        if (userId != null) 'userId': userId,
       };
 
-      final uri = Uri.parse('$baseUrl/admin/reports/reading').replace(
-        queryParameters: queryParams,
+      final uri = userId != null 
+          ? Uri.parse('$baseUrl/admin/user-stats/$userId')
+          : Uri.parse('$baseUrl/admin/stats/period').replace(queryParameters: queryParams);
+
+      final response = await http.get(
+        uri,
+        headers: await _getHeaders(),
       );
+
+      if (response.statusCode == 200) {
+        if (userId != null) {
+          // Pour les statistiques d'un utilisateur spécifique
+          final data = jsonDecode(response.body);
+          return [data];
+        } else {
+          // Pour les statistiques sur une période
+          return [jsonDecode(response.body)];
+        }
+      } else {
+        final error = jsonDecode(response.body);
+        throw Exception(error['message'] ?? 'Échec de la récupération des rapports de lecture');
+      }
+    } catch (e) {
+      throw Exception('Une erreur est survenue: ${e.toString()}');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getDailyStats({
+    required String startDate,
+    required String endDate,
+  }) async {
+    try {
+      final queryParams = {
+        'startDate': startDate,
+        'endDate': endDate,
+      };
+
+      final uri = Uri.parse('$baseUrl/admin/stats/daily')
+          .replace(queryParameters: queryParams);
 
       final response = await http.get(
         uri,
@@ -373,7 +408,7 @@ class ApiService {
         return data.cast<Map<String, dynamic>>();
       } else {
         final error = jsonDecode(response.body);
-        throw Exception(error['message'] ?? 'Échec de la récupération des rapports de lecture');
+        throw Exception(error['message'] ?? 'Échec de la récupération des statistiques quotidiennes');
       }
     } catch (e) {
       throw Exception('Une erreur est survenue: ${e.toString()}');
