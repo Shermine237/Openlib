@@ -11,31 +11,21 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<double> _animation;
-  late Animation<double> _scaleAnimation;
+  late Animation<double> _fadeAnimation;
 
   @override
   void initState() {
     super.initState();
     
-    // Initialiser les animations immédiatement
     _controller = AnimationController(
       duration: const Duration(seconds: 4),
       vsync: this,
     );
 
-    _animation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    );
-
-    _scaleAnimation = Tween<double>(
-      begin: 0.5,
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
       end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
-    ));
+    ).animate(_controller);
 
     // Démarrer l'animation immédiatement
     _controller.forward();
@@ -58,72 +48,41 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: AnimatedBuilder(
-        animation: _controller,
-        builder: (context, child) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Logo avec animation de scale
-                Transform.scale(
-                  scale: _scaleAnimation.value,
-                  child: Icon(
-                    Icons.library_books,
-                    size: 100,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+      body: Center(
+        child: FadeTransition(
+          opacity: _fadeAnimation,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Logo de l'application
+              Image.asset(
+                'assets/icons/appIcon.png',
+                width: 120,
+                height: 120,
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(height: 30),
+              // Titre
+              Text(
+                'Megalib',
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
-                const SizedBox(height: 20),
-                // Titre avec animation de slide
-                SlideTransition(
-                  position: Tween<Offset>(
-                    begin: const Offset(0, 0.5),
-                    end: Offset.zero,
-                  ).animate(CurvedAnimation(
-                    parent: _controller,
-                    curve: const Interval(0.3, 0.7, curve: Curves.easeOut),
-                  )),
-                  child: FadeTransition(
-                    opacity: Tween<double>(
-                      begin: 0.0,
-                      end: 1.0,
-                    ).animate(CurvedAnimation(
-                      parent: _controller,
-                      curve: const Interval(0.3, 0.7, curve: Curves.easeIn),
-                    )),
-                    child: Text(
-                      'Megalib',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    ),
-                  ),
+              ),
+              const SizedBox(height: 15),
+              // Sous-titre
+              Text(
+                'Votre bibliothèque numérique',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Theme.of(context).colorScheme.secondary.withAlpha(179),
                 ),
-                const SizedBox(height: 10),
-                // Sous-titre avec animation de fade
-                FadeTransition(
-                  opacity: Tween<double>(
-                    begin: 0.0,
-                    end: 1.0,
-                  ).animate(CurvedAnimation(
-                    parent: _controller,
-                    curve: const Interval(0.5, 1.0, curve: Curves.easeIn),
-                  )),
-                  child: Text(
-                    'Votre bibliothèque numérique',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Theme.of(context).colorScheme.secondary.withAlpha(179),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
