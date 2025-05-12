@@ -36,13 +36,15 @@ import 'package:openlib/state/state.dart'
         databaseProvider;
 
 void main() async {
+  // S'assurer que les liaisons Flutter sont initialisées
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (Platform.isWindows || Platform.isLinux) {
+  // Initialiser sqflite pour desktop
+  if (Platform.isLinux || Platform.isWindows || Platform.isMacOS) {
     sqfliteFfiInit();
-    databaseFactory = databaseFactoryFfi;
   }
 
+  // Initialiser la base de données
   final database = MyLibraryDb.instance;
   await database.database;
 
@@ -63,10 +65,19 @@ void main() async {
             isDarkMode ? Colors.black : Colors.grey.shade200));
   }
 
+  // Configurer le style de la barre système
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+    ),
+  );
+
   // Vérifier si l'utilisateur est connecté
   final token = await ApiService().getToken();
   final initialRoute = token != null ? Routes.home : Routes.login;
 
+  // Lancer l'application
   runApp(
     ProviderScope(
       overrides: [
@@ -92,6 +103,7 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Récupérer les préférences de l'utilisateur
     final themeMode = ref.watch(themeModeProvider);
     final locale = ref.watch(localeNotifierProvider);
 
