@@ -9,30 +9,60 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin {
+  late AnimationController _scaleController;
+  late AnimationController _fadeController;
+  late Animation<double> _scaleAnimation;
   late Animation<double> _fadeAnimation;
+  late Animation<double> _slideAnimation;
 
   @override
   void initState() {
     super.initState();
     
-    _controller = AnimationController(
-      duration: const Duration(seconds: 4),
+    // Animation du logo
+    _scaleController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    );
+
+    _scaleAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(
+      parent: _scaleController,
+      curve: Curves.elasticOut,
+    ));
+
+    // Animation du texte
+    _fadeController = AnimationController(
+      duration: const Duration(milliseconds: 2500),
       vsync: this,
     );
 
     _fadeAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
-    ).animate(_controller);
+    ).animate(CurvedAnimation(
+      parent: _fadeController,
+      curve: const Interval(0.4, 1.0, curve: Curves.easeInOut),
+    ));
 
-    // Démarrer l'animation immédiatement
-    _controller.forward();
+    _slideAnimation = Tween<double>(
+      begin: 50.0,
+      end: 0.0,
+    ).animate(CurvedAnimation(
+      parent: _fadeController,
+      curve: const Interval(0.4, 1.0, curve: Curves.easeOutCubic),
+    ));
+
+    // Démarrer les animations
+    _scaleController.forward();
+    _fadeController.forward();
 
     // Navigation après l'animation
-    _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed && mounted) {
+    Future.delayed(const Duration(milliseconds: 3000), () {
+      if (mounted) {
         Navigator.pushReplacementNamed(context, widget.initialRoute);
       }
     });
@@ -40,48 +70,82 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
   @override
   void dispose() {
-    _controller.dispose();
+    _scaleController.dispose();
+    _fadeController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: colorScheme.surface,
       body: Center(
-        child: FadeTransition(
-          opacity: _fadeAnimation,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Logo de l'application
-              Image.asset(
-                'assets/icons/appIcon.png',
-                width: 120,
-                height: 120,
-                fit: BoxFit.contain,
-              ),
-              const SizedBox(height: 30),
-              // Titre
-              Text(
-                'Megalib',
-                style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.secondary,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Logo avec animation d'échelle élastique
+            ScaleTransition(
+              scale: _scaleAnimation,
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: colorScheme.primary.withOpacity(0.3),
+                      blurRadius: 20,
+                      spreadRadius: 5,
+                    ),
+                  ],
+                ),
+                child: Image.asset(
+                  'assets/icons/appIcon.png',
+                  width: 120,
+                  height: 120,
+                  fit: BoxFit.contain,
                 ),
               ),
-              const SizedBox(height: 15),
-              // Sous-titre
-              Text(
-                'Votre bibliothèque numérique',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Theme.of(context).colorScheme.secondary.withAlpha(179),
-                ),
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 40),
+            // Titre avec animation de slide et fade
+            AnimatedBuilder(
+              animation: _fadeController,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(0, _slideAnimation.value),
+                  child: Opacity(
+                    opacity: _fadeAnimation.value,
+                    child: Column(
+                      children: [
+                        // Titre
+                        Text(
+                          'Megalib',
+                          style: TextStyle(
+                            fontSize: 44,
+                            fontWeight: FontWeight.bold,
+                            color: colorScheme.secondary,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        // Sous-titre
+                        Text(
+                          'Votre bibliothèque numérique',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: colorScheme.secondary.withAlpha(179),
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
