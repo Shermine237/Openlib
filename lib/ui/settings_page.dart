@@ -76,14 +76,6 @@ class SettingsPage extends ConsumerWidget {
       await apiService.syncUserPreferences(preferences);
     } catch (e) {
       debugPrint('Erreur lors de la synchronisation des préférences: $e');
-      // Éviter d'utiliser le context après un await
-      if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(AppLocalizations.of(context)!.errorMessage),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        ),
-      );
     }
   }
 
