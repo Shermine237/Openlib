@@ -120,25 +120,31 @@ class SettingsPage extends ConsumerWidget {
                             // Option langue système
                             ListTile(
                               title: Text(l10n.systemDefault),
-                              onTap: () {
+                              onTap: () async {
                                 ref.read(localeNotifierProvider.notifier).setLocale(null);
                                 Navigator.pop(context);
+                                if (!context.mounted) return;
+                                await _syncPreferences(context, ref);
                               },
                             ),
                             // Option anglais
                             ListTile(
                               title: Text(l10n.english),
-                              onTap: () {
+                              onTap: () async {
                                 ref.read(localeNotifierProvider.notifier).setLocale(const Locale('en'));
                                 Navigator.pop(context);
+                                if (!context.mounted) return;
+                                await _syncPreferences(context, ref);
                               },
                             ),
                             // Option français
                             ListTile(
                               title: Text(l10n.french),
-                              onTap: () {
+                              onTap: () async {
                                 ref.read(localeNotifierProvider.notifier).setLocale(const Locale('fr'));
                                 Navigator.pop(context);
+                                if (!context.mounted) return;
+                                await _syncPreferences(context, ref);
                               },
                             ),
                           ],
