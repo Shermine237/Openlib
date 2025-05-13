@@ -38,8 +38,46 @@ class ApiService {
   }
 
   // Authentication
+  Future<Map<String, dynamic>> register({
+    required String username,
+    required String email,
+    required String password,
+    required String phone,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/auth/register'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'username': username,
+          'email': email,
+          'password': password,
+          'phoneNumber': phone,
+        }),
+      );
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        final error = jsonDecode(response.body);
+        throw Exception(error['message'] ?? error['error'] ?? 'Échec de l\'inscription');
+      }
+    } on SocketException {
+      throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet.');
+    } on HttpException {
+      throw Exception('Service non disponible. Veuillez réessayer plus tard.');
+    } on FormatException {
+      throw Exception('Réponse du serveur invalide. Veuillez contacter le support.');
+    } catch (e) {
+      throw Exception('Une erreur est survenue: ${e.toString()}');
+    }
+  }
+
   Future<Map<String, dynamic>> login(String email, String password) async {
     try {
+      if (kDebugMode) {
+        print('Tentative de connexion avec: $email');
+      }
       final response = await http.post(
         Uri.parse('$baseUrl/auth/login'),
         headers: {'Content-Type': 'application/json'},
@@ -48,6 +86,11 @@ class ApiService {
           'password': password,
         }),
       );
+
+      if (kDebugMode) {
+        print('Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+      }
 
       final data = jsonDecode(response.body);
 
@@ -59,6 +102,46 @@ class ApiService {
       } else {
         throw Exception(data['message'] ?? data['error'] ?? 'Échec de la connexion');
       }
+    } on SocketException {
+      throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet.');
+    } on HttpException {
+      throw Exception('Service non disponible. Veuillez réessayer plus tard.');
+    } on FormatException {
+      throw Exception('Réponse du serveur invalide. Veuillez contacter le support.');
+    } catch (e) {
+      throw Exception('Une erreur est survenue: ${e.toString()}');
+    }
+  }
+
+  Future<void> forgotPassword(String email) async {
+    try {
+      if (kDebugMode) {
+        print('Tentative de réinitialisation du mot de passe pour: $email');
+      }
+
+      final response = await http.post(
+        Uri.parse('$baseUrl/auth/password/reset-request'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': email,
+        }),
+      );
+
+      if (kDebugMode) {
+        print('Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+      }
+
+      if (response.statusCode != 200) {
+        final error = jsonDecode(response.body);
+        throw Exception(error['message'] ?? error['error'] ?? 'Une erreur est survenue lors de la réinitialisation du mot de passe');
+      }
+    } on SocketException {
+      throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet.');
+    } on HttpException {
+      throw Exception('Service non disponible. Veuillez réessayer plus tard.');
+    } on FormatException {
+      throw Exception('Réponse du serveur invalide. Veuillez contacter le support.');
     } catch (e) {
       throw Exception('Une erreur est survenue: ${e.toString()}');
     }
