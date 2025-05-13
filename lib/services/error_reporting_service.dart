@@ -1,21 +1,68 @@
-import 'dart:io';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:openlib/services/api_service.dart';
+import 'package:openlib/services/local_storage_service.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'dart:io';
 
 class ErrorReportingService {
-  static final ErrorReportingService _instance = ErrorReportingService._internal();
-  factory ErrorReportingService() => _instance;
-  ErrorReportingService._internal();
+  final ApiService _apiService;
+  final LocalStorageService _storage;
+  static const int _syncBatchSize = 5;
+  String? _currentAction;
+  List<String> _recentLogs = [];
+  static const int _maxLogs = 50;
 
-  final ApiService _apiService = ApiService();
-  final DeviceInfoPlugin _deviceInfo = DeviceInfoPlugin();
+  ErrorReportingService(this._apiService, this._storage);
+
+  static Future<ErrorReportingService> getInstance() async {
+    return ErrorReportingService(
+      ApiService(),
+      await LocalStorageService.getInstance(),
+    );
+  }
+
+  void setCurrentAction(String action) {
+    _currentAction = action;
+  }
+
+  void addLog(String log) {
+    _recentLogs.add('${DateTime.now().toIso8601String()}: $log');
+    if (_recentLogs.length > _maxLogs) {
+      _recentLogs.removeAt(0);
+    }
+  }
+
+  Future<Map<String, dynamic>> _buildErrorReport(dynamic error, StackTrace stackTrace) async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    
+    return {
+      'error': {
+        'timestamp': DateTime.now().toIso8601String(),
+        'type': error.runtimeType.toString(),
+        'message': error.toString(),
+        'stackTrace': stackTrace.toString(),
+        'currentAction': _currentAction,
+        'recentLogs': _recentLogs,
+      },
+      'deviceInfo': {
+        'platform': Platform.operatingSystem,
+        'version': Platform.operatingSystemVersion,
+        'locale': Platform.localeName,
+        'appVersion': packageInfo.version,
+        'buildNumber': packageInfo.buildNumber,
+      }
+    };
+  }
 
   Future<void> reportError(dynamic error, StackTrace stackTrace) async {
     try {
       final errorReport = await _buildErrorReport(error, stackTrace);
-      await _apiService.sendErrorReport(errorReport);
+      
+      // Sauvegarder l'erreur localement d'abord
+      await _storage.queueError(errorReport);
+      
+      // Tenter de synchroniser les erreurs en attente
+      await _syncPendingErrors();
     } catch (e) {
       if (kDebugMode) {
         print('Erreur lors de l\'envoi du rapport: $e');
@@ -23,46 +70,33 @@ class ErrorReportingService {
     }
   }
 
-  Future<Map<String, dynamic>> _buildErrorReport(dynamic error, StackTrace stackTrace) async {
-    final packageInfo = await PackageInfo.fromPlatform();
-    final Map<String, dynamic> deviceData = await _getDeviceInfo();
+  Future<void> _syncPendingErrors() async {
+    try {
+      final errors = await _storage.getErrorQueue();
+      if (errors.isEmpty) return;
 
-    return {
-      'error': error.toString(),
-      'stackTrace': stackTrace.toString(),
-      'timestamp': DateTime.now().toIso8601String(),
-      'appInfo': {
-        'appName': packageInfo.appName,
-        'packageName': packageInfo.packageName,
-        'version': packageInfo.version,
-        'buildNumber': packageInfo.buildNumber,
-      },
-      'deviceInfo': deviceData,
-    };
+      // Synchroniser par lots
+      final batchSize = _syncBatchSize;
+      for (var i = 0; i < errors.length; i += batchSize) {
+        final batch = errors.skip(i).take(batchSize).toList();
+        await _apiService.sendErrorReport({'errors': batch});
+        await _storage.clearSyncedErrors(batch.length);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Erreur lors de la synchronisation des erreurs: $e');
+      }
+    }
   }
 
-  Future<Map<String, dynamic>> _getDeviceInfo() async {
-    if (Platform.isAndroid) {
-      final androidInfo = await _deviceInfo.androidInfo;
-      return {
-        'platform': 'Android',
-        'version': androidInfo.version.release,
-        'sdkInt': androidInfo.version.sdkInt,
-        'manufacturer': androidInfo.manufacturer,
-        'model': androidInfo.model,
-      };
-    } else if (Platform.isIOS) {
-      final iosInfo = await _deviceInfo.iosInfo;
-      return {
-        'platform': 'iOS',
-        'systemName': iosInfo.systemName,
-        'systemVersion': iosInfo.systemVersion,
-        'model': iosInfo.model,
-        'localizedModel': iosInfo.localizedModel,
-      };
+  // Synchronisation périodique
+  Future<void> periodicSync() async {
+    final lastSync = await _storage.getLastSyncTime();
+    final now = DateTime.now();
+    
+    // Synchroniser si pas de sync depuis 1h
+    if (lastSync == null || now.difference(lastSync).inHours >= 1) {
+      await _syncPendingErrors();
     }
-    return {
-      'platform': 'Unknown',
-    };
   }
 }
