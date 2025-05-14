@@ -280,35 +280,67 @@ class AnnasArchieve {
           source: source,
           enableFilters: enableFilters);
 
-      final response = await dio.get(encodedURL,
-          options: Options(headers: defaultDioHeaders));
-      if (!enableFilters) {
-        return _parser(response.data, "");
+      final response = await dio.get(
+        encodedURL,
+        options: Options(
+          headers: defaultDioHeaders,
+          validateStatus: (status) {
+            return status != null && status < 500;
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        if (!enableFilters) {
+          return _parser(response.data, "");
+        }
+        return _parser(response.data, fileType);
+      } else {
+        throw "Erreur HTTP ${response.statusCode}";
       }
-      return _parser(response.data, fileType);
     } on DioException catch (e) {
       if (e.type == DioExceptionType.unknown) {
-        throw "socketException";
+        throw "Erreur de connexion";
+      } else if (e.response?.statusCode == 500) {
+        throw "Le serveur Anna's Archive est temporairement indisponible. Veuillez réessayer plus tard.";
       }
-      rethrow;
+      throw "Erreur lors de la recherche : ${e.message}";
+    } catch (e) {
+      throw "Erreur inattendue : $e";
     }
   }
 
   Future<BookInfoData> bookInfo({required String url}) async {
     try {
-      final response =
-          await dio.get(url, options: Options(headers: defaultDioHeaders));
-      BookInfoData? data = await _bookInfoParser(response.data, url);
-      if (data != null) {
-        return data;
+      final response = await dio.get(
+        url,
+        options: Options(
+          headers: defaultDioHeaders,
+          validateStatus: (status) {
+            return status != null && status < 500;
+          },
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        BookInfoData? data = await _bookInfoParser(response.data, url);
+        if (data != null) {
+          return data;
+        } else {
+          throw "Impossible de récupérer les informations du livre";
+        }
       } else {
-        throw 'unable to get data';
+        throw "Erreur HTTP ${response.statusCode}";
       }
     } on DioException catch (e) {
       if (e.type == DioExceptionType.unknown) {
-        throw "socketException";
+        throw "Erreur de connexion";
+      } else if (e.response?.statusCode == 500) {
+        throw "Le serveur Anna's Archive est temporairement indisponible. Veuillez réessayer plus tard.";
       }
-      rethrow;
+      throw "Erreur lors de la récupération des informations : ${e.message}";
+    } catch (e) {
+      throw "Erreur inattendue : $e";
     }
   }
 }
