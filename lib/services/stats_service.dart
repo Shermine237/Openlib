@@ -102,7 +102,7 @@ class StatsService {
       if (stats.isEmpty) return;
 
       // Synchroniser par lots
-      final batchSize = _syncBatchSize;
+      const batchSize = _syncBatchSize;
       for (var i = 0; i < stats.length; i += batchSize) {
         final batch = stats.skip(i).take(batchSize).toList();
         await _apiService.sendReadingStats({'stats': batch});

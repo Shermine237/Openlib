@@ -1,4 +1,5 @@
 // Dart imports:
+import 'dart:io';
 import 'dart:io' show Platform;
 
 // Flutter imports:
@@ -13,6 +14,8 @@ import 'package:url_launcher/url_launcher.dart';
 // Project imports:
 import 'package:openlib/services/files.dart' show getFilePath;
 import 'package:openlib/services/stats_service.dart';
+import 'package:openlib/services/api_service.dart';
+import 'package:openlib/services/local_storage_service.dart';
 import 'package:openlib/state/state.dart'
     show
         filePathProvider,
@@ -97,12 +100,18 @@ class PdfViewer extends ConsumerStatefulWidget {
 
 class _PdfViewerState extends ConsumerState<PdfViewer> with WidgetsBindingObserver {
   late PDFViewController controller;
-  final StatsService _statsService = StatsService();
+  late final StatsService _statsService;
 
   @override
   void initState() {
     super.initState();
+    _initializeServices();
     WidgetsBinding.instance.addObserver(this);
+  }
+
+  Future<void> _initializeServices() async {
+    final storage = await LocalStorageService.getInstance();
+    _statsService = StatsService(ApiService(), storage);
     _statsService.startReading(widget.fileName);
   }
 
@@ -149,7 +158,7 @@ class _PdfViewerState extends ConsumerState<PdfViewer> with WidgetsBindingObserv
 
   void _onPageChanged(int? page) {
     if (page != null) {
-      _statsService.logPageRead(page);
+      _statsService.logPageRead(page, const Duration(seconds: 30).inSeconds);
     }
   }
 

@@ -9,6 +9,8 @@ import 'package:epub_view/epub_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:open_file/open_file.dart';
 import 'package:openlib/services/stats_service.dart';
+import 'package:openlib/services/api_service.dart';
+import 'package:openlib/services/local_storage_service.dart';
 
 // Project imports:
 import 'package:openlib/services/files.dart' show getFilePath;
@@ -67,12 +69,17 @@ class EpubViewerWidget extends ConsumerStatefulWidget {
 }
 
 class _EpubViewerState extends ConsumerState<EpubViewerWidget> {
-  final StatsService _statsService = StatsService();
+  late final StatsService _statsService;
   
   @override
   void initState() {
     super.initState();
-    // Démarrer le suivi de lecture
+    _initializeServices();
+  }
+
+  Future<void> _initializeServices() async {
+    final storage = await LocalStorageService.getInstance();
+    _statsService = StatsService(ApiService(), storage);
     _statsService.startReading(widget.fileName);
   }
 
@@ -126,13 +133,19 @@ class EpubReader extends ConsumerStatefulWidget {
 
 class _EpubReaderState extends ConsumerState<EpubReader> {
   EpubController? _epubController;
-  final StatsService _statsService = StatsService();
+  late final StatsService _statsService;
   int _currentPage = 0;
 
   @override
   void initState() {
     super.initState();
+    _initializeServices();
     _loadBook();
+  }
+
+  Future<void> _initializeServices() async {
+    final storage = await LocalStorageService.getInstance();
+    _statsService = StatsService(ApiService(), storage);
     _statsService.startReading(widget.fileName);
   }
 
@@ -165,7 +178,7 @@ class _EpubReaderState extends ConsumerState<EpubReader> {
                 await saveEpubState(widget.fileName, position, ref);
                 // Incrémenter le compteur de pages
                 _currentPage++;
-                _statsService.logPageRead(_currentPage);
+                _statsService.logPageRead(_currentPage, const Duration(seconds: 30).inSeconds);
               },
             ),
     );

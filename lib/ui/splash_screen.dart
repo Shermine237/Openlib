@@ -144,7 +144,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                 'Votre bibliothèque numérique',
                 style: TextStyle(
                   fontSize: 16,
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.7),  // Version plus claire
+                  color: Theme.of(context).colorScheme.onSurface.withAlpha((255 * 0.7).round()),  // Version plus claire
                   letterSpacing: 0.8,
                 ),
               ),

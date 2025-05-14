@@ -8,9 +8,9 @@ class ErrorReportingService {
   final ApiService _apiService;
   final LocalStorageService _storage;
   static const int _syncBatchSize = 5;
-  String? _currentAction;
-  List<String> _recentLogs = [];
   static const int _maxLogs = 50;
+  String? _currentAction;
+  final List<String> _recentLogs = [];
 
   ErrorReportingService(this._apiService, this._storage);
 
@@ -76,7 +76,7 @@ class ErrorReportingService {
       if (errors.isEmpty) return;
 
       // Synchroniser par lots
-      final batchSize = _syncBatchSize;
+      const batchSize = _syncBatchSize;
       for (var i = 0; i < errors.length; i += batchSize) {
         final batch = errors.skip(i).take(batchSize).toList();
         await _apiService.sendErrorReport({'errors': batch});

@@ -1,76 +1,84 @@
 import 'dart:convert';
-import 'package:shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorageService {
-  static const String _statsKey = 'reading_stats';
-  static const String _preferencesKey = 'user_preferences';
-  static const String _errorQueueKey = 'error_queue';
-  static const String _lastSyncKey = 'last_sync';
-  
-  final SharedPreferences _prefs;
+  static LocalStorageService? _instance;
+  late SharedPreferences _prefs;
 
-  LocalStorageService(this._prefs);
+  LocalStorageService._();
 
   static Future<LocalStorageService> getInstance() async {
-    final prefs = await SharedPreferences.getInstance();
-    return LocalStorageService(prefs);
+    if (_instance == null) {
+      _instance = LocalStorageService._();
+      _instance!._prefs = await SharedPreferences.getInstance();
+    }
+    return _instance!;
   }
 
-  // Statistiques de lecture
   Future<void> saveReadingStats(Map<String, dynamic> stats) async {
-    final storedStats = await getReadingStats();
-    storedStats.add(stats);
-    await _prefs.setString(_statsKey, jsonEncode(storedStats));
+    final statsJson = json.encode(stats);
+    await _prefs.setString('reading_stats_${DateTime.now().toIso8601String()}', statsJson);
   }
 
   Future<List<Map<String, dynamic>>> getReadingStats() async {
-    final String? stats = _prefs.getString(_statsKey);
-    if (stats == null) return [];
-    return List<Map<String, dynamic>>.from(jsonDecode(stats));
+    final stats = <Map<String, dynamic>>[];
+    final keys = _prefs.getKeys().where((key) => key.startsWith('reading_stats_'));
+    
+    for (final key in keys) {
+      final statsJson = _prefs.getString(key);
+      if (statsJson != null) {
+        stats.add(json.decode(statsJson));
+      }
+    }
+    
+    return stats;
   }
 
   Future<void> clearSyncedStats(int count) async {
-    final stats = await getReadingStats();
-    await _prefs.setString(_statsKey, jsonEncode(stats.skip(count).toList()));
+    final keys = _prefs.getKeys()
+        .where((key) => key.startsWith('reading_stats_'))
+        .take(count);
+    
+    for (final key in keys) {
+      await _prefs.remove(key);
+    }
   }
 
-  // Préférences utilisateur
-  Future<void> savePreferences(Map<String, dynamic> preferences) async {
-    await _prefs.setString(_preferencesKey, jsonEncode(preferences));
-  }
-
-  Future<Map<String, dynamic>?> getPreferences() async {
-    final String? prefs = _prefs.getString(_preferencesKey);
-    if (prefs == null) return null;
-    return Map<String, dynamic>.from(jsonDecode(prefs));
-  }
-
-  // File d'attente des erreurs
-  Future<void> queueError(Map<String, dynamic> error) async {
-    final errors = await getErrorQueue();
-    errors.add(error);
-    await _prefs.setString(_errorQueueKey, jsonEncode(errors));
-  }
-
-  Future<List<Map<String, dynamic>>> getErrorQueue() async {
-    final String? errors = _prefs.getString(_errorQueueKey);
-    if (errors == null) return [];
-    return List<Map<String, dynamic>>.from(jsonDecode(errors));
-  }
-
-  Future<void> clearSyncedErrors(int count) async {
-    final errors = await getErrorQueue();
-    await _prefs.setString(_errorQueueKey, jsonEncode(errors.skip(count).toList()));
-  }
-
-  // Gestion de la synchronisation
   Future<DateTime?> getLastSyncTime() async {
-    final String? timestamp = _prefs.getString(_lastSyncKey);
-    if (timestamp == null) return null;
-    return DateTime.parse(timestamp);
+    final timeStr = _prefs.getString('last_sync_time');
+    return timeStr != null ? DateTime.parse(timeStr) : null;
   }
 
   Future<void> updateLastSyncTime() async {
-    await _prefs.setString(_lastSyncKey, DateTime.now().toIso8601String());
+    await _prefs.setString('last_sync_time', DateTime.now().toIso8601String());
+  }
+
+  Future<void> queueError(Map<String, dynamic> error) async {
+    final errorJson = json.encode(error);
+    await _prefs.setString('error_${DateTime.now().toIso8601String()}', errorJson);
+  }
+
+  Future<List<Map<String, dynamic>>> getErrorQueue() async {
+    final errors = <Map<String, dynamic>>[];
+    final keys = _prefs.getKeys().where((key) => key.startsWith('error_'));
+    
+    for (final key in keys) {
+      final errorJson = _prefs.getString(key);
+      if (errorJson != null) {
+        errors.add(json.decode(errorJson));
+      }
+    }
+    
+    return errors;
+  }
+
+  Future<void> clearSyncedErrors(int count) async {
+    final keys = _prefs.getKeys()
+        .where((key) => key.startsWith('error_'))
+        .take(count);
+    
+    for (final key in keys) {
+      await _prefs.remove(key);
+    }
   }
 }
