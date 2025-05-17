@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../state/auth_state.dart';
 
 class ApiService {
   static const String baseUrl = 'https://192.168.43.43:8000/api';
@@ -12,6 +14,15 @@ class ApiService {
   factory ApiService() => _instance;
   ApiService._internal() {
     HttpOverrides.global = _DevHttpOverrides();
+  }
+
+  final _ref = ProviderContainer();
+
+  Future<void> _handleTokenExpired(BuildContext? context) async {
+    await removeToken();
+    if (context != null) {
+      _ref.read(authStateProvider.notifier).logout(context);
+    }
   }
 
   Future<String?> getToken() async {
@@ -92,15 +103,14 @@ class ApiService {
         print('Response body: ${response.body}');
       }
 
-      final data = jsonDecode(response.body);
-
       if (response.statusCode == 200) {
-        if (data['accessToken'] != null) {
-          await saveToken(data['accessToken']);
-        }
+        final data = jsonDecode(response.body);
+        await saveToken(data['token']);
+        _ref.read(authStateProvider.notifier).setAuthenticated(true);
         return data;
       } else {
-        throw Exception(data['message'] ?? data['error'] ?? 'Échec de la connexion');
+        final error = jsonDecode(response.body);
+        throw Exception(error['message'] ?? error['error'] ?? 'Échec de la connexion');
       }
     } on SocketException {
       throw Exception('Impossible de se connecter au serveur. Vérifiez votre connexion internet.');
@@ -109,7 +119,7 @@ class ApiService {
     } on FormatException {
       throw Exception('Réponse du serveur invalide. Veuillez contacter le support.');
     } catch (e) {
-      throw Exception('Une erreur est survenue: ${e.toString()}');
+      throw Exception('Erreur de connexion: ${e.toString()}');
     }
   }
 
@@ -148,18 +158,24 @@ class ApiService {
   }
 
   // Envoi des statistiques de lecture
-  Future<void> sendReadingStats(Map<String, dynamic> stats) async {
+  Future<void> sendReadingStats(Map<String, dynamic> stats, [BuildContext? context]) async {
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/reading-stats'),
+        Uri.parse('$baseUrl/reading/stats'),
         headers: await _getHeaders(),
         body: jsonEncode(stats),
       );
 
-      if (response.statusCode != 200) {
+      if (response.statusCode == 401) {
+        // Token expiré, déconnexion de l'utilisateur
+        await _handleTokenExpired(context);
+        throw TokenExpiredException('Session expirée. Veuillez vous reconnecter.');
+      } else if (response.statusCode != 200) {
         final error = jsonDecode(response.body);
         throw Exception(error['message'] ?? 'Échec de l\'envoi des statistiques');
       }
+    } on http.ClientException catch (e) {
+      throw Exception('Erreur de connexion: ${e.message}');
     } catch (e) {
       throw Exception('Une erreur est survenue: ${e.toString()}');
     }
@@ -234,6 +250,14 @@ class ApiService {
       throw 'Erreur inattendue: $e';
     }
   }
+}
+
+// Exception personnalisée pour le token expiré
+class TokenExpiredException implements Exception {
+  final String message;
+  TokenExpiredException(this.message);
+  @override
+  String toString() => message;
 }
 
 class _DevHttpOverrides extends HttpOverrides {

@@ -37,7 +37,8 @@ import 'package:openlib/state/state.dart'
         userAgentProvider,
         cookieProvider,
         localeNotifierProvider,
-        databaseProvider;
+        databaseProvider,
+        authStateProvider;
 
 Future<void> _initializeApp() async {
   // S'assurer que les liaisons Flutter sont initialisées avant tout
@@ -143,6 +144,7 @@ class MyApp extends ConsumerWidget {
     // Récupérer les préférences de l'utilisateur
     final themeMode = ref.watch(themeModeProvider);
     final locale = ref.watch(localeNotifierProvider);
+    final isAuthenticated = ref.watch(authStateProvider);
 
     return MaterialApp(
       localizationsDelegates: const [
@@ -157,7 +159,7 @@ class MyApp extends ConsumerWidget {
       darkTheme: darkTheme,
       themeMode: themeMode,
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(initialRoute: initialRoute),
+      home: isAuthenticated ? const MainScreen() : const LoginScreen(),
       routes: {
         Routes.login: (context) => const LoginScreen(),
         Routes.register: (context) => const RegisterScreen(),
