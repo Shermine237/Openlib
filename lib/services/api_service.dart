@@ -21,7 +21,7 @@ class ApiService {
 
   Future<void> _handleTokenExpired(BuildContext? context) async {
     await removeToken();
-    if (context != null) {
+    if (context != null && context.mounted) {  
       _ref.read(authStateProvider.notifier).logout(context);
     }
   }
@@ -169,7 +169,11 @@ class ApiService {
 
       if (response.statusCode == 401) {
         // Token expiré, déconnexion de l'utilisateur
-        await _handleTokenExpired(context);
+        if (context == null || !context.mounted) {
+          await removeToken();  
+        } else {
+          await _handleTokenExpired(context);
+        }
         throw TokenExpiredException('Session expirée. Veuillez vous reconnecter.');
       } else if (response.statusCode != 200) {
         final error = jsonDecode(response.body);
