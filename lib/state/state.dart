@@ -16,6 +16,8 @@ import 'package:openlib/services/files.dart';
 import 'package:openlib/services/open_library.dart';
 import 'package:openlib/services/goodreads.dart';
 
+export './auth_state.dart' show authStateProvider;
+
 MyLibraryDb dataBase = MyLibraryDb.instance;
 
 //Provider for dropdownbutton in search page

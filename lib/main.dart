@@ -22,7 +22,6 @@ import 'package:openlib/ui/home_page.dart';
 import 'package:openlib/ui/mylibrary_page.dart';
 import 'package:openlib/ui/search_page.dart';
 import 'package:openlib/ui/settings_page.dart';
-import 'package:openlib/ui/splash_screen.dart';
 import 'package:openlib/ui/themes.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
