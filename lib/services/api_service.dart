@@ -199,20 +199,39 @@ class ApiService {
   }
 
   // Envoi des rapports d'erreur
-  Future<void> sendErrorReport(Map<String, dynamic> report) async {
+  Future<void> sendErrorReport(Map<String, dynamic> errorReport) async {
+    final token = await getToken();
+    if (token == null) {
+      throw 'Non authentifié';
+    }
+
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/error-reports'),
-        headers: await _getHeaders(),
-        body: jsonEncode(report),
+        Uri.parse('$baseUrl/errors'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode(errorReport),
       );
 
-      if (response.statusCode != 200) {
-        final error = jsonDecode(response.body);
-        throw Exception(error['message'] ?? 'Échec de l\'envoi du rapport d\'erreur');
+      if (response.statusCode >= 500) {
+        throw 'Erreur serveur temporaire, réessayez plus tard';
+      } else if (response.statusCode != 200) {
+        String message;
+        try {
+          final error = json.decode(response.body);
+          message = error['message'] ?? 'Erreur inconnue';
+        } catch (_) {
+          message = 'Erreur HTTP ${response.statusCode}';
+        }
+        throw message;
       }
+    } on http.ClientException catch (e) {
+      throw 'Erreur de connexion: ${e.message}';
     } catch (e) {
-      throw Exception('Une erreur est survenue: ${e.toString()}');
+      if (e is String) rethrow;
+      throw 'Erreur inattendue: $e';
     }
   }
 }
