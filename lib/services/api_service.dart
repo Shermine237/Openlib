@@ -43,6 +43,9 @@ class ApiService {
 
   Future<Map<String, String>> _getHeaders() async {
     final token = await getToken();
+    if (kDebugMode) {
+      print('Token utilisé pour les headers: $token');
+    }
     return {
       'Content-Type': 'application/json',
       if (token != null) 'Authorization': 'Bearer $token',
@@ -106,7 +109,14 @@ class ApiService {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        await saveToken(data['token']);
+        if (kDebugMode) {
+          print('Token reçu: ${data['accessToken']}');
+          print('Email reçu: ${data['email']}');
+        }
+        await saveToken(data['accessToken']);
+        // Sauvegarder l'email
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('user_email', data['email']);
         _ref.read(authStateProvider.notifier).setAuthenticated(true);
         return data;
       } else {
@@ -161,11 +171,31 @@ class ApiService {
   // Envoi des statistiques de lecture
   Future<void> sendReadingStats(Map<String, dynamic> stats, [BuildContext? context]) async {
     try {
+      final headers = await _getHeaders();
+      final prefs = await SharedPreferences.getInstance();
+      final userEmail = prefs.getString('user_email');
+      
+      // Ajouter l'email aux statistiques
+      stats = {
+        ...stats,
+        'userId': userEmail,
+      };
+
+      if (kDebugMode) {
+        print('Headers pour sendReadingStats: $headers');
+        print('Stats envoyées: $stats');
+      }
+
       final response = await http.post(
         Uri.parse('$baseUrl/reading/stats'),
-        headers: await _getHeaders(),
+        headers: headers,
         body: jsonEncode(stats),
       );
+
+      if (kDebugMode) {
+        print('Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+      }
 
       if (response.statusCode == 401) {
         // Token expiré, déconnexion de l'utilisateur
@@ -219,6 +249,19 @@ class ApiService {
     }
   }
 
+  // Envoi des informations de l'appareil
+  Future<void> sendDeviceInfo(String userId, Map<String, String> deviceInfo) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/api/users/$userId/device'),
+      headers: await _getHeaders(),
+      body: jsonEncode(deviceInfo),
+    );
+    
+    if (response.statusCode != 200) {
+      throw Exception('Échec de l\'envoi des informations de l\'appareil');
+    }
+  }
+
   // Envoi des rapports d'erreur
   Future<void> sendErrorReport(Map<String, dynamic> errorReport) async {
     final token = await getToken();
@@ -253,6 +296,74 @@ class ApiService {
     } catch (e) {
       if (e is String) rethrow;
       throw 'Erreur inattendue: $e';
+    }
+  }
+
+  // Envoi d'une session de lecture
+  Future<void> sendReadingSession(Map<String, dynamic> sessionData) async {
+    try {
+      final headers = await _getHeaders();
+      final prefs = await SharedPreferences.getInstance();
+      final userEmail = prefs.getString('user_email');
+      
+      if (userEmail == null) {
+        throw Exception('Utilisateur non authentifié');
+      }
+
+      if (kDebugMode) {
+        print('Headers pour sendReadingSession: $headers');
+        print('Session data envoyée: $sessionData');
+      }
+
+      final response = await http.post(
+        Uri.parse('$baseUrl/reading/sessions'),
+        headers: headers,
+        body: jsonEncode(sessionData),
+      );
+
+      if (kDebugMode) {
+        print('Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+      }
+      
+      if (response.statusCode == 401) {
+        await removeToken();
+        throw TokenExpiredException('Session expirée. Veuillez vous reconnecter.');
+      } else if (response.statusCode != 200 && response.statusCode != 201) {
+        final error = jsonDecode(response.body);
+        throw Exception(error['message'] ?? 'Échec de l\'envoi de la session de lecture');
+      }
+    } on http.ClientException catch (e) {
+      throw Exception('Erreur de connexion: ${e.message}');
+    } catch (e) {
+      if (e is TokenExpiredException) rethrow;
+      throw Exception('Une erreur est survenue: ${e.toString()}');
+    }
+  }
+
+  // Mise à jour de la progression de lecture
+  Future<void> updateReadingProgress(Map<String, dynamic> progressData) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/api/reading/progress'),
+      headers: await _getHeaders(),
+      body: jsonEncode(progressData),
+    );
+    
+    if (response.statusCode != 200) {
+      throw Exception('Échec de la mise à jour de la progression');
+    }
+  }
+
+  // Mise à jour de l'activité quotidienne
+  Future<void> updateDailyActivity(Map<String, dynamic> activityData) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/api/reading/activity'),
+      headers: await _getHeaders(),
+      body: jsonEncode(activityData),
+    );
+    
+    if (response.statusCode != 200) {
+      throw Exception('Échec de la mise à jour de l\'activité quotidienne');
     }
   }
 }

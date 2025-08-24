@@ -146,14 +146,24 @@ class _EpubReaderState extends ConsumerState<EpubReader> {
   Future<void> _initializeServices() async {
     final storage = await LocalStorageService.getInstance();
     _statsService = StatsService(ApiService(), storage);
-    _statsService.startReading(widget.fileName);
   }
 
   Future<void> _loadBook() async {
     final filePath = await getFilePath(widget.fileName);
-    _epubController = EpubController(
-      document: EpubDocument.openFile(File(filePath)),
+    final document = await EpubDocument.openFile(File(filePath));
+    _epubController = EpubController(document: document);
+
+    final totalPages = document.chapters.length;
+    _statsService.startReading(
+      widget.fileName,
+      totalPages: totalPages,
     );
+    setState(() {});
+  }
+
+  void _onPageChanged() {
+    _currentPage++;
+    _statsService.logPageRead(_currentPage);
   }
 
   @override
@@ -176,9 +186,7 @@ class _EpubReaderState extends ConsumerState<EpubReader> {
               onChapterChanged: (chapter) async {
                 final position = _epubController!.generateEpubCfi() ?? '';
                 await saveEpubState(widget.fileName, position, ref);
-                // Incrémenter le compteur de pages
-                _currentPage++;
-                _statsService.logPageRead(_currentPage, const Duration(seconds: 30).inSeconds);
+                _onPageChanged();
               },
             ),
     );

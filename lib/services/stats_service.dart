@@ -1,17 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'dart:io';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:openlib/services/api_service.dart';
 import 'package:openlib/services/local_storage_service.dart';
 
 class StatsService {
   final ApiService _apiService;
   final LocalStorageService _storage;
-  static const int _syncBatchSize = 10;
 
-  DateTime? _startTime;
   String? _currentBookId;
-  final Map<String, int> _pageReadDuration = {};
-  final Map<String, int> _dailyReadingTime = {};
+  bool _isReading = false;
+  int _startPage = 0;
+  int _currentPage = 0;
+  int _totalPages = 0;
 
   StatsService(this._apiService, this._storage);
 
@@ -22,122 +23,108 @@ class StatsService {
     );
   }
 
-  void startReading(String bookId) {
-    _startTime = DateTime.now();
+  Future<void> startReading(String bookId, {int initialPage = 0, int totalPages = 0}) async {
     _currentBookId = bookId;
-    _pageReadDuration.clear();
-  }
-
-  void logPageRead(int pageNumber, int duration) {
-    if (_startTime == null || _currentBookId == null) return;
-    _pageReadDuration[pageNumber.toString()] = duration;
-  }
-
-  void _updateDailyReadingTime(int duration) {
-    final today = DateTime.now().toIso8601String().split('T')[0];
-    _dailyReadingTime[today] = (_dailyReadingTime[today] ?? 0) + duration;
+    _isReading = true;
+    _startPage = initialPage;
+    _currentPage = initialPage;
+    _totalPages = totalPages;
   }
 
   Future<void> endReading() async {
-    if (_startTime == null || _currentBookId == null) return;
+    if (_isReading && _currentBookId != null) {
+      await _sendSessionData();
+      _isReading = false;
+      _currentBookId = null;
+    }
+  }
 
-    final totalDuration = _pageReadDuration.values.fold(0, (sum, duration) => sum + duration);
-    _updateDailyReadingTime(totalDuration);
+  Future<void> logPageRead(int page) async {
+    _currentPage = page;
+  }
 
-    final stats = {
-      'session': {
-        'bookId': _currentBookId,
-        'startTime': _startTime!.toIso8601String(),
-        'endTime': DateTime.now().toIso8601String(),
-        'pagesRead': _pageReadDuration.length,
-        'totalDuration': totalDuration,
-        'pageDetails': _pageReadDuration,
-      },
-      'userStats': {
-        'totalSessions': 1,
-        'totalBooks': 1,
-        'averageSessionDuration': totalDuration.toDouble(),
-        'completedBooks': _pageReadDuration.length == 100 ? 1 : 0,
-        'currentBooks': [
-          {
-            'title': _currentBookId,
-            'progress': (_pageReadDuration.length / 100 * 100).round(),
-            'lastRead': DateTime.now().toIso8601String(),
-            'totalTime': totalDuration
-          }
-        ]
-      },
-      'deviceInfo': {
-        'platform': Platform.operatingSystem,
-        'version': Platform.operatingSystemVersion,
-        'locale': Platform.localeName,
-        'appVersion': '1.0.0',
-      },
-      'activity': {
-        'dates': _dailyReadingTime.keys.toList(),
-        'readingTime': _dailyReadingTime.values.toList(),
-      }
+  Future<void> _sendSessionData() async {
+    if (_currentBookId == null) return;
+
+    final sessionData = {
+      'bookId': _currentBookId,
+      'pagesRead': _currentPage - _startPage,
+      'currentPage': _currentPage,
+      'totalPages': _totalPages,
+      'deviceInfo': await _getDeviceInfo(),
     };
 
     try {
-      // Sauvegarder localement d'abord
-      await _storage.saveReadingStats(stats);
-      
-      // Tenter de synchroniser les statistiques en attente
-      await _syncPendingStats();
+      await _apiService.sendReadingSession(sessionData);
+      if (kDebugMode) {
+        print('Session envoyée avec succès');
+      }
     } catch (e) {
       if (kDebugMode) {
-        print('Erreur lors de l\'envoi des statistiques: $e');
+        print('Erreur lors de l\'envoi des données: $e');
+        print('Sauvegarde en local pour synchronisation ultérieure');
       }
+      await _storage.savePendingSession(sessionData);
     }
-
-    _startTime = null;
-    _currentBookId = null;
-    _pageReadDuration.clear();
   }
 
-  Future<void> _syncPendingStats() async {
+  Future<Map<String, String>> _getDeviceInfo() async {
     try {
-      final stats = await _storage.getReadingStats();
-      if (stats.isEmpty) return;
-
-      // Synchroniser par lots
-      const batchSize = _syncBatchSize;
-      for (var i = 0; i < stats.length; i += batchSize) {
-        final batch = stats.skip(i).take(batchSize).toList();
-        await _apiService.sendReadingStats({'stats': batch});
-        await _storage.clearSyncedStats(batch.length);
+      final deviceInfo = DeviceInfoPlugin();
+      
+      if (Platform.isAndroid) {
+        final androidInfo = await deviceInfo.androidInfo;
+        return {
+          'deviceModel': '${androidInfo.brand} ${androidInfo.model}',
+          'platform': 'Android',
+          'osVersion': androidInfo.version.release,
+          'appVersion': '1.0.0',
+        };
+      } else if (Platform.isIOS) {
+        final iosInfo = await deviceInfo.iosInfo;
+        return {
+          'deviceModel': '${iosInfo.name} ${iosInfo.model}',
+          'platform': 'iOS',
+          'osVersion': iosInfo.systemVersion,
+          'appVersion': '1.0.0',
+        };
+      } else {
+        return {
+          'deviceModel': 'Desktop',
+          'platform': Platform.operatingSystem,
+          'osVersion': Platform.operatingSystemVersion,
+          'appVersion': '1.0.0',
+        };
       }
-
-      await _storage.updateLastSyncTime();
     } catch (e) {
       if (kDebugMode) {
-        print('Erreur lors de la synchronisation des statistiques: $e');
+        print('Erreur lors de la récupération des informations de l\'appareil: $e');
       }
+      return {
+        'deviceModel': 'Unknown',
+        'platform': Platform.operatingSystem,
+        'osVersion': 'Unknown',
+        'appVersion': '1.0.0',
+      };
     }
   }
 
-  // Synchronisation périodique
-  Future<void> periodicSync() async {
-    final lastSync = await _storage.getLastSyncTime();
-    final now = DateTime.now();
-    
-    // Synchroniser si pas de sync depuis 24h
-    if (lastSync == null || now.difference(lastSync).inHours >= 24) {
-      await _syncPendingStats();
-    }
-  }
-
-  void pauseReading() {
-    // Sauvegarder l'état actuel pour une reprise ultérieure
-    if (_startTime != null && _currentBookId != null) {
-      logPageRead(_pageReadDuration.length, 0); // Enregistrer la dernière page
-    }
-  }
-
-  void resumeReading() {
-    if (_currentBookId != null) {
-      _startTime = DateTime.now();
+  Future<void> syncPendingData() async {
+    try {
+      // 1. Synchroniser les sessions en attente
+      final pendingSessions = await _storage.getPendingSessions();
+      for (var session in pendingSessions) {
+        try {
+          await _apiService.sendReadingSession(session);
+        } catch (e) {
+          continue;
+        }
+      }
+      await _storage.clearSyncedSessions(pendingSessions.length);
+    } catch (e) {
+      if (kDebugMode) {
+        print('Erreur lors de la synchronisation: $e');
+      }
     }
   }
 }

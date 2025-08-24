@@ -112,7 +112,18 @@ class _PdfViewerState extends ConsumerState<PdfViewer> with WidgetsBindingObserv
   Future<void> _initializeServices() async {
     final storage = await LocalStorageService.getInstance();
     _statsService = StatsService(ApiService(), storage);
-    _statsService.startReading(widget.fileName);
+    final pdfController = controller;
+    final totalPages = await pdfController.getPageCount() ?? 0;
+    _statsService.startReading(
+      widget.fileName,
+      totalPages: totalPages,
+    );
+  }
+
+  void _onPageChanged(int? page) {
+    if (page != null) {
+      _statsService.logPageRead(page);
+    }
   }
 
   @override
@@ -132,11 +143,8 @@ class _PdfViewerState extends ConsumerState<PdfViewer> with WidgetsBindingObserv
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused) {
-      _statsService.pauseReading();
-    } else if (state == AppLifecycleState.resumed) {
-      _statsService.resumeReading();
-    }
+    // La gestion du cycle de vie de l'application pour la pause/reprise
+    // n'est plus nécessaire car nous ne suivons pas la durée.
   }
 
   Future<void> _openPdfWithDefaultViewer(String fileName) async {
@@ -153,12 +161,6 @@ class _PdfViewerState extends ConsumerState<PdfViewer> with WidgetsBindingObserv
           textAlign: TextAlign.center,
         )),
       );
-    }
-  }
-
-  void _onPageChanged(int? page) {
-    if (page != null) {
-      _statsService.logPageRead(page, const Duration(seconds: 30).inSeconds);
     }
   }
 

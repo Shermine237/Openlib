@@ -18,8 +18,15 @@ class SyncService {
 
   Future<void> _sync() async {
     try {
-      await _statsService.periodicSync();
+      // Synchroniser les sessions de lecture en attente
+      await _statsService.syncPendingData();
+      
+      // Synchroniser les rapports d'erreur
       await _errorService.periodicSync();
+      
+      if (kDebugMode) {
+        debugPrint('Synchronisation terminée avec succès');
+      }
     } catch (e) {
       if (kDebugMode) {
         debugPrint('Erreur lors de la synchronisation: $e');
