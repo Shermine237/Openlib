@@ -220,18 +220,16 @@ class ApiService {
   Future<void> syncUserPreferences(Map<String, dynamic> preferences) async {
     try {
       final userPrefs = {
-        'preferences': {
-          'theme': preferences['theme'] ?? 'light',
-          'language': preferences['language'] ?? 'fr',
-          'pdfReader': preferences['pdfReader'] ?? 'default',
-          'epubReader': preferences['epubReader'] ?? 'default'
-        },
-        'deviceInfo': {
-          'platform': Platform.operatingSystem,
-          'version': Platform.operatingSystemVersion,
-          'locale': Platform.localeName,
-          'appVersion': '1.0.0',
-        }
+        // Format attendu par le backend UserController
+        'themeMode': preferences['theme'] ?? preferences['themeMode'] ?? 'system',
+        'locale': preferences['language'] ?? preferences['locale'] ?? 'fr',
+        'openPdfWithExternalApp': preferences['openPdfWithExternalApp'] ?? false,
+        'openEpubWithExternalApp': preferences['openEpubWithExternalApp'] ?? false,
+        // Champs optionnels supportés par le backend
+        'fontSize': preferences['fontSize'],
+        'lineSpacing': preferences['lineSpacing'],
+        'nightMode': preferences['nightMode'],
+        'notificationsEnabled': preferences['notificationsEnabled'],
       };
 
       final response = await http.post(

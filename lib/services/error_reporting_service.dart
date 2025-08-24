@@ -35,22 +35,21 @@ class ErrorReportingService {
   Future<Map<String, dynamic>> _buildErrorReport(dynamic error, StackTrace stackTrace) async {
     final packageInfo = await PackageInfo.fromPlatform();
     
+    // Format attendu par le backend ErrorReportController
     return {
-      'error': {
-        'timestamp': DateTime.now().toIso8601String(),
-        'type': error.runtimeType.toString(),
-        'message': error.toString(),
-        'stackTrace': stackTrace.toString(),
+      'type': error.runtimeType.toString(),
+      'message': error.toString(),
+      'stackTrace': stackTrace.toString(),
+      'device': '${Platform.operatingSystem} ${Platform.operatingSystemVersion}',
+      'os': Platform.operatingSystem,
+      'appVersion': packageInfo.version,
+      // Ajouter des informations supplémentaires dans le message si nécessaire
+      'additionalInfo': {
         'currentAction': _currentAction,
         'recentLogs': _recentLogs,
-      },
-      'deviceInfo': {
-        'platform': Platform.operatingSystem,
-        'version': Platform.operatingSystemVersion,
-        'locale': Platform.localeName,
-        'appVersion': packageInfo.version,
         'buildNumber': packageInfo.buildNumber,
-      }
+        'locale': Platform.localeName,
+      }.toString(),
     };
   }
 
@@ -87,8 +86,10 @@ class ErrorReportingService {
 
         while (retryCount < maxRetries) {
           try {
-            // Envoyer le lot au backend
-            await _apiService.sendErrorReport({'errors': batch});
+            // Envoyer chaque erreur individuellement au backend
+            for (final errorReport in batch) {
+              await _apiService.sendErrorReport(errorReport);
+            }
             
             // Supprimer les erreurs synchronisées avec succès
             await _storage.clearSyncedErrors(batch.length);
