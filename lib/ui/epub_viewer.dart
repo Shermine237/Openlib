@@ -149,16 +149,42 @@ class _EpubReaderState extends ConsumerState<EpubReader> {
   }
 
   Future<void> _loadBook() async {
-    final filePath = await getFilePath(widget.fileName);
-    final document = await EpubDocument.openFile(File(filePath));
-    _epubController = EpubController(document: document);
+    try {
+      final filePath = await getFilePath(widget.fileName);
+      final document = EpubDocument.openFile(File(filePath));
+      _epubController = EpubController(document: document);
 
-    final totalPages = document.chapters.length;
-    _statsService.startReading(
-      widget.fileName,
-      totalPages: totalPages,
-    );
-    setState(() {});
+      // Attendre que le document soit chargé pour obtenir les informations
+      final loadedDocument = await document;
+      
+      // Dans epub_view 3.2.0, utiliser une approche simple et robuste
+      // Commencer avec une valeur par défaut et l'ajuster si possible
+      int totalPages = 1; // Valeur par défaut sécurisée
+      
+      try {
+        // Essayer d'obtenir le nombre d'éléments dans le spine
+        final spineItems = loadedDocument.Schema?.Package?.Spine?.Items;
+        if (spineItems != null && spineItems.isNotEmpty) {
+          totalPages = spineItems.length;
+        }
+      } catch (e) {
+        // En cas d'erreur, garder la valeur par défaut
+        totalPages = 1;
+      }
+      
+      _statsService.startReading(
+        widget.fileName,
+        totalPages: totalPages,
+      );
+      setState(() {});
+    } catch (e) {
+      // En cas d'erreur, initialiser avec des valeurs par défaut
+      _statsService.startReading(
+        widget.fileName,
+        totalPages: 0,
+      );
+      setState(() {});
+    }
   }
 
   void _onPageChanged() {
