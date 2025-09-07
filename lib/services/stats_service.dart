@@ -79,6 +79,7 @@ class StatsService {
           'platform': 'Android',
           'osVersion': androidInfo.version.release,
           'appVersion': '1.0.0',
+          // Champs optionnels non requis côté backend (retirés sur demande)
         };
       } else if (Platform.isIOS) {
         final iosInfo = await deviceInfo.iosInfo;
@@ -87,6 +88,7 @@ class StatsService {
           'platform': 'iOS',
           'osVersion': iosInfo.systemVersion,
           'appVersion': '1.0.0',
+          // Champs optionnels non requis côté backend (retirés sur demande)
         };
       } else {
         return {
@@ -105,22 +107,28 @@ class StatsService {
         'platform': Platform.operatingSystem,
         'osVersion': 'Unknown',
         'appVersion': '1.0.0',
+        // Champs optionnels non requis côté backend (retirés sur demande)
       };
-    }
   }
 
   Future<void> syncPendingData() async {
     try {
-      // 1. Synchroniser les sessions en attente
+      // 1. Synchroniser les sessions en attente (sans perte de données)
       final pendingSessions = await _storage.getPendingSessions();
-      for (var session in pendingSessions) {
+      if (pendingSessions.isEmpty) return;
+
+      final remaining = <Map<String, dynamic>>[];
+      for (final session in pendingSessions) {
         try {
           await _apiService.sendReadingSession(session);
         } catch (e) {
-          continue;
+          // Garder la session pour une tentative ultérieure
+          remaining.add(session);
         }
       }
-      await _storage.clearSyncedSessions(pendingSessions.length);
+
+      // Remplacer la file par les sessions restantes
+      await _storage.replacePendingSessions(remaining);
     } catch (e) {
       if (kDebugMode) {
         print('Erreur lors de la synchronisation: $e');

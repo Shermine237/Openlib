@@ -125,6 +125,15 @@ class LocalStorageService {
     }
   }
 
+  // Remplacer la file des sessions en attente par une nouvelle liste (sécurisé)
+  Future<void> replacePendingSessions(List<Map<String, dynamic>> sessions) async {
+    if (sessions.isEmpty) {
+      await _prefs.remove(_pendingSessionsKey);
+    } else {
+      await _prefs.setString(_pendingSessionsKey, jsonEncode(sessions));
+    }
+  }
+
   Future<int> getPendingSessionsCount() async {
     final sessions = await getPendingSessions();
     return sessions.length;

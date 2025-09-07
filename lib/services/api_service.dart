@@ -172,14 +172,7 @@ class ApiService {
   Future<void> sendReadingStats(Map<String, dynamic> stats, [BuildContext? context]) async {
     try {
       final headers = await _getHeaders();
-      final prefs = await SharedPreferences.getInstance();
-      final userEmail = prefs.getString('user_email');
-      
-      // Ajouter l'email aux statistiques
-      stats = {
-        ...stats,
-        'userId': userEmail,
-      };
+      // Laisser le backend résoudre l'utilisateur via le JWT (pas d'override userId ici)
 
       if (kDebugMode) {
         print('Headers pour sendReadingStats: $headers');
@@ -250,7 +243,7 @@ class ApiService {
   // Envoi des informations de l'appareil
   Future<void> sendDeviceInfo(String userId, Map<String, String> deviceInfo) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/api/users/$userId/device'),
+      Uri.parse('$baseUrl/users/$userId/device'),
       headers: await _getHeaders(),
       body: jsonEncode(deviceInfo),
     );
@@ -342,7 +335,7 @@ class ApiService {
   // Mise à jour de la progression de lecture
   Future<void> updateReadingProgress(Map<String, dynamic> progressData) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/api/reading/progress'),
+      Uri.parse('$baseUrl/reading/progress'),
       headers: await _getHeaders(),
       body: jsonEncode(progressData),
     );
@@ -355,7 +348,7 @@ class ApiService {
   // Mise à jour de l'activité quotidienne
   Future<void> updateDailyActivity(Map<String, dynamic> activityData) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/api/reading/activity'),
+      Uri.parse('$baseUrl/reading/activity'),
       headers: await _getHeaders(),
       body: jsonEncode(activityData),
     );

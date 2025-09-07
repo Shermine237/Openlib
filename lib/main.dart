@@ -16,6 +16,7 @@ import 'package:openlib/routes/routes.dart';
 import 'package:openlib/services/api_service.dart';
 import 'package:openlib/services/error_reporting_service.dart';
 import 'package:openlib/services/local_storage_service.dart';
+import 'package:openlib/services/stats_service.dart';
 import 'package:openlib/screens/auth/login_screen.dart';
 import 'package:openlib/screens/auth/register_screen.dart';
 import 'package:openlib/ui/home_page.dart';
@@ -24,6 +25,7 @@ import 'package:openlib/ui/search_page.dart';
 import 'package:openlib/ui/settings_page.dart';
 import 'package:openlib/ui/themes.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 // Project imports:
 import 'package:openlib/services/database.dart' show MyLibraryDb;
@@ -94,6 +96,22 @@ Future<void> _initializeApp() async {
   // Vérifier si l'utilisateur est connecté
   final token = await ApiService().getToken();
   final initialRoute = token != null ? Routes.home : Routes.login;
+
+  // Déclencher immédiatement une tentative de synchronisation des données en attente
+  try {
+    final stats = await StatsService.getInstance();
+    await stats.syncPendingData();
+  } catch (_) {}
+
+  // Écouter les changements de connectivité pour relancer la synchronisation
+  Connectivity().onConnectivityChanged.listen((status) async {
+    if (status != ConnectivityResult.none) {
+      try {
+        final stats = await StatsService.getInstance();
+        await stats.syncPendingData();
+      } catch (_) {}
+    }
+  });
 
   // Lancer l'application
   runApp(
