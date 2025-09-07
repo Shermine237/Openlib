@@ -103,9 +103,10 @@ Future<void> _initializeApp() async {
     await stats.syncPendingData();
   } catch (_) {}
 
-  // Écouter les changements de connectivité pour relancer la synchronisation
-  Connectivity().onConnectivityChanged.listen((status) async {
-    if (status != ConnectivityResult.none) {
+  // Écouter les changements de connectivité pour relancer la synchronisation (v6: List<ConnectivityResult>)
+  Connectivity().onConnectivityChanged.listen((results) async {
+    final hasConnection = results.isNotEmpty && !results.contains(ConnectivityResult.none);
+    if (hasConnection) {
       try {
         final stats = await StatsService.getInstance();
         await stats.syncPendingData();

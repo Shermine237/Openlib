@@ -109,6 +109,7 @@ class StatsService {
         'appVersion': '1.0.0',
         // Champs optionnels non requis côté backend (retirés sur demande)
       };
+    }
   }
 
   Future<void> syncPendingData() async {
